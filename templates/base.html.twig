@@ -1,12 +1,100 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+              crossorigin="anonymous">
+        <link rel="stylesheet " href="{{ asset('style.css') }}">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+              integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+              crossorigin="anonymous"/>
+    {% endblock %}
+</head>
+<body>
+{% block header %}
+    <nav class="navbar navbar-expand-lg shadow p-2 mb-3">
+        <a class="navbar-brand" href="{{ path('home') }}"><i class="fal fa-beer"></i> SORTIR.COM</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fal fa-bars" style="color: #fffffe"></i></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <button class="btn m-0 p-0 btn-custom" style="background-color: #ff8906; color:#fffffe"><a
+                            class="nav-item nav-link active" href="#">Proposer une sortie</a></button>
+                <a class="nav-item nav-link active" href="#">Mes sorties</a>
+                <a class="nav-item nav-link active" href="#">Toutes les sorties</a>
+                <a class="nav-item nav-link active" href="#">S'inscrire</a>
+                <a class="nav-item nav-link active" href="#">Se Connecter</a>
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
+
+
+{% block main %}
+
+{% endblock %}
+
+
+{% block footer %}
+    <footer class="sticky-bottom" style="margin-top: 3em">
+        <div class="container-fluid text-center text-md-left">
+            <div class="row p-3 ">
+                <div class="col-md-4 mt-md-0 mt-3 ">
+                    <h5 class="text-uppercase text-center">A propos de Sortir.com</h5>
+
+                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis finibus feugiat. Ut in
+                        neque sed ante finibus tempor vitae eu augue.</p>
+                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis finibus feugiat. Ut in
+                        neque sed ante finibus tempor vitae eu augue.</p>
+                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis finibus feugiat. Ut in
+                        neque sed ante finibus tempor vitae eu augue.</p>
+
+                </div>
+                <hr class="clearfix w-100 d-md-none pb-3">
+                <div class="col-md-4 mb-md-0 mb-3">
+                    <h5 class="text-uppercase text-center">Informations Légals</h5>
+                    <ul class="list-unstyled">
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">CGU</a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">Mentions Légales</a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">Nous contacter </a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <hr class="clearfix w-100 d-md-none pb-3">
+                <div class="col-md-4 mb-md-0 mb-3">
+                    <h5 class="text-uppercase text-center">Nous retrouver</h5>
+                    <ul class="list-unstyled">
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="https://github.com/De70x/SortirGroupeB"><i class="fab fa-github"></i> GitHub</a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Copyright -->
+        <hr style="background-color:#fffffe">
+            <div class="text-center py-3">
+                <p>© 2020 Copyright: By le Groupe B</p>
+            </div>
+    </footer>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+{% endblock %}
+</body>
 </html>
