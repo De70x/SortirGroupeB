@@ -62,7 +62,9 @@ class UserController extends AbstractController
     /**
      * @Route("/profile", name="profile")
      */
-    public function profile(){
+    public function profile(EntityManagerInterface $em){
+
+
 
         return $this->render("user/profile.html.twig");
     }
