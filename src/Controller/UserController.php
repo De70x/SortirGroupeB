@@ -36,6 +36,7 @@ class UserController extends AbstractController
 
         $user = new User();
         $registerForm = $this->createForm(RegisterType::class, $user);
+        $user->setAdministrateur(false);
 
         $registerForm->handleRequest($request);
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {

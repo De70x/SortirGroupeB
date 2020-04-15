@@ -55,7 +55,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $administrateur;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $actif;
 
