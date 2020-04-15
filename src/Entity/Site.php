@@ -24,7 +24,7 @@ class Site
     private $nom;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Participant", mappedBy="site")
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="site")
      */
     private $participants;
 
@@ -51,14 +51,14 @@ class Site
     }
 
     /**
-     * @return Collection|Participant[]
+     * @return Collection|User[]
      */
     public function getParticipants(): Collection
     {
         return $this->participants;
     }
 
-    public function addParticipant(Participant $participant): self
+    public function addParticipant(User $participant): self
     {
         if (!$this->participants->contains($participant)) {
             $this->participants[] = $participant;
@@ -68,7 +68,7 @@ class Site
         return $this;
     }
 
-    public function removeParticipant(Participant $participant): self
+    public function removeParticipant(User $participant): self
     {
         if ($this->participants->contains($participant)) {
             $this->participants->removeElement($participant);
