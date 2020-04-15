@@ -20,7 +20,7 @@ class RegisterType extends AbstractType
                 'label' => 'Nom'
             ])
             ->add('prenom', TextType::class, [
-                'label' => 'Prenom'
+                'label' => 'Prénom'
             ])
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur'
