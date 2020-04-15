@@ -3,18 +3,34 @@
 {% block title %}Liste des sorties{% endblock %}
 
 {% block main %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="table table-striped table-light">
+        <thead>
+        <tr>
+            <th scope="col">Nom de la sortie</th>
+            <th scope="col">Date de la sortie</th>
+            <th scope="col">Clôture</th>
+            <th scope="col">Inscrits / Places</th>
+            <th scope="col">Etat</th>
+            <th scope="col">Inscsrit</th>
+            <th scope="col">Organisateur</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+    {% for sortie in sorties %}
+        <tr>
+            <th scope="row">{{ sortie.nom }}</th>
+            <td>{{ sortie.dateHeureDebut|date("d/m/Y") }}</td>
+            <td>{{ sortie.dateLimiteInscription|date("d/m/Y") }}</td>
+            <td>{{ sortie.nbInscriptionsMax }}</td>
+            <td>{{ sortie.etat }}</td>
+            <td>estInscrit ?</td>
+            <td>{{ sortie.organisateur.nom }}</td>
+            <td>Actions</td>
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/wamp64/www/SortirGroupeB/src/Controller/SortieController.php'|file_link(0) }}">src/Controller/SortieController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/wamp64/www/SortirGroupeB/templates/sortie/liste.html.twig'|file_link(0) }}">templates/sortie/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}
