@@ -34,7 +34,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $username;
 
     /**
-     * ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $password;
 
@@ -240,6 +240,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     {
         $this->sorties = $sorties;
     }
+
 
 
 
