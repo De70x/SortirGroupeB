@@ -57,7 +57,7 @@ class Sortie
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="sortiesOuJeSuisInscrit")
      */
-    private $estInscrit;
+    private $ListeInscrit;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="sorties")
@@ -71,7 +71,7 @@ class Sortie
 
     public function __construct()
     {
-        $this->estInscrit = new ArrayCollection();
+        $this->ListeInscrit = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,15 +166,15 @@ class Sortie
     /**
      * @return Collection|User[]
      */
-    public function getEstInscrit(): Collection
+    public function getListeInscrit(): Collection
     {
-        return $this->estInscrit;
+        return $this->ListeInscrit;
     }
 
     public function addEstInscrit(User $estInscrit): self
     {
-        if (!$this->estInscrit->contains($estInscrit)) {
-            $this->estInscrit[] = $estInscrit;
+        if (!$this->ListeInscrit->contains($estInscrit)) {
+            $this->ListeInscrit[] = $estInscrit;
         }
 
         return $this;
@@ -182,8 +182,8 @@ class Sortie
 
     public function removeEstInscrit(User $estInscrit): self
     {
-        if ($this->estInscrit->contains($estInscrit)) {
-            $this->estInscrit->removeElement($estInscrit);
+        if ($this->ListeInscrit->contains($estInscrit)) {
+            $this->ListeInscrit->removeElement($estInscrit);
         }
 
         return $this;
