@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Sortie;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,11 +20,11 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    public function listeSortieParSite($site)
+    public function listeSortieParSite($idSite)
     {
-        $maintenant = time();
+        $maintenant = new DateTime();
         // test
-        if($site == null or $site=="tous_les_sites"){
+        if($idSite == null or $idSite==-1){
             return $this->createQueryBuilder('s')
                 ->andWhere('s.dateLimiteInscription > :maintenant')
                 ->orderBy('s.dateHeureDebut', 'DESC')
@@ -33,13 +34,14 @@ class SortieRepository extends ServiceEntityRepository
         }
         else{
             return $this->createQueryBuilder('s')
+                ->leftJoin('s.organisateur', 'org')
+                ->leftJoin('org.site', 'siteOrg')
                 ->andWhere('s.dateLimiteInscription > :maintenant')
-                ->andWhere('s.organisateur.site = :site')
+                ->andWhere('siteOrg.id = :idSite')
                 ->orderBy('s.dateHeureDebut', 'DESC')
-                ->setParameters(array('site' => $site, 'maintenant'=>$maintenant))
+                ->setParameters(array('idSite' => $idSite, 'maintenant'=>$maintenant))
                 ->getQuery()
                 ->getResult();
         }
     }
-
 }

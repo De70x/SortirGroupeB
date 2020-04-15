@@ -34,7 +34,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $username;
 
     /**
-     * ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $password;
 
@@ -73,6 +73,18 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="participants")
      */
     private $site;
+
+    /**
+     * @ORM\Column(type="blob", nullable=true)
+     */
+    private $photo;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $roles;
+
+
 
     public function __construct()
     {
@@ -243,6 +255,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
 
 
+
     public function addSorty(Sortie $sorty): self
     {
         if (!$this->sorties->contains($sorty)) {
@@ -311,12 +324,9 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     public function getRoles()
     {
-        if ($this->getAdministrateur() == true){
-            return 'ROLE_ADMIN';
-        }else{
-            return 'ROLE_USER';
-        }
+        return $this->roles;
     }
+
 
     /**
      * @inheritDoc
@@ -331,5 +341,17 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto($photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
     }
 }

@@ -23,12 +23,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <button class="btn m-0 p-0 btn-custom" style="background-color: #ff8906; color:#fffffe"><a
                             class="nav-item nav-link active" href="#">Proposer une sortie</a></button>
-                <a class="nav-item nav-link active" href="#">Mes sorties</a>
+                <a class="nav-item nav-link active" href="#">Mon profil</a>
+                {% endif %}
                 <a class="nav-item nav-link active" href="{{ path('sorties') }}">Toutes les sorties</a>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <a class="nav-item nav-link active" href="{{ path('logout') }}">Se deconnecter</a>
+                {% else %}
                 <a class="nav-item nav-link active" href="{{ path('register') }}">S'inscrire</a>
-                <a class="nav-item nav-link active" href="#">Se Connecter</a>
+                <a class="nav-item nav-link active" href="{{path('login')}}">Se connecter</a>
+                {% endif %}
             </ul>
         </div>
     </nav>
@@ -51,13 +57,13 @@
                         neque sed ante finibus tempor vitae eu augue.</p>
                     <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis finibus feugiat. Ut in
                         neque sed ante finibus tempor vitae eu augue.</p>
-                    <p class="text-justify p-2 secm-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis finibus feugiat. Ut in
+                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis finibus feugiat. Ut in
                         neque sed ante finibus tempor vitae eu augue.</p>
 
                 </div>
                 <hr class="clearfix w-100 d-md-none pb-3">
                 <div class="col-md-4 mb-md-0 mb-3">
-                    <h5 class="text-uppercase text-center">Informations Légals</h5>
+                    <h5 class="text-uppercase text-center">Informations Légales</h5>
                     <ul class="list-unstyled">
                         <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">CGU</a></li>
                         <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">Mentions Légales</a></li>
