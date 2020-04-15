@@ -22,6 +22,7 @@ class SortieRepository extends ServiceEntityRepository
     public function listeSortieParSite($site)
     {
         $maintenant = time();
+        // test
         if($site == null or $site=="tous_les_sites"){
             return $this->createQueryBuilder('s')
                 ->andWhere('s.dateLimiteInscription > :maintenant')
