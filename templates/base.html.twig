@@ -23,12 +23,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <button class="btn m-0 p-0 btn-custom" style="background-color: #ff8906; color:#fffffe"><a
                             class="nav-item nav-link active" href="#">Proposer une sortie</a></button>
-                <a class="nav-item nav-link active" href="#">Mes sorties</a>
+                <a class="nav-item nav-link active" href="#">Mon profil</a>
+                {% endif %}
                 <a class="nav-item nav-link active" href="{{ path('sorties') }}">Toutes les sorties</a>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <a class="nav-item nav-link active" href="{{ path('logout') }}">Se deconnecter</a>
+                {% else %}
                 <a class="nav-item nav-link active" href="{{ path('register') }}">S'inscrire</a>
-                <a class="nav-item nav-link active" href="{{path('login')}}">Se Connecter</a>
+                <a class="nav-item nav-link active" href="{{path('login')}}">Se connecter</a>
+                {% endif %}
             </ul>
         </div>
     </nav>
