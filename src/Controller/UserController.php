@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Participant;
 use App\Entity\User;
+use App\Form\RegisterType;
 use App\Form\UserFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,10 +35,11 @@ class UserController extends AbstractController
     public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder) {
 
         $user = new User();
-        $userForm = $this->createForm(UserFormType::class, $user);
+        $registerForm = $this->createForm(RegisterType::class, $user);
+        $user->setAdministrateur(false);
 
-        $userForm->handleRequest($request);
-        if ($userForm->isSubmitted() && $userForm->isValid()) {
+        $registerForm->handleRequest($request);
+        if ($registerForm->isSubmitted() && $registerForm->isValid()) {
 
             $hashed = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hashed);
@@ -48,7 +50,7 @@ class UserController extends AbstractController
             $this->addFlash("success", "Votre compte à bien été créé !");
         }
         return $this->render('user/register.html.twig', [
-            'userForm' => $userForm->createView()
+            'registerForm' => $registerForm->createView()
         ]);
     }
 

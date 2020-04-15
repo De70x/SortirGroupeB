@@ -27,6 +27,7 @@ class SortieRepository extends ServiceEntityRepository
             return $this->createQueryBuilder('s')
                 ->andWhere('s.dateLimiteInscription > :maintenant')
                 ->orderBy('s.dateHeureDebut', 'DESC')
+                ->setParameters(array('maintenant'=>$maintenant))
                 ->getQuery()
                 ->getResult();
         }
