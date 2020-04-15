@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User extends Participant
 {
     /**
      * @ORM\Id()
@@ -25,6 +25,8 @@ class User
      * @ORM\Column(type="string", length=50)
      */
     private $Password;
+
+
 
     public function getId(): ?int
     {
@@ -54,4 +56,6 @@ class User
 
         return $this;
     }
+
+
 }
