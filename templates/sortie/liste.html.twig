@@ -12,7 +12,7 @@
             <th scope="col">Clôture</th>
             <th scope="col">Inscrits / Places</th>
             <th scope="col">Etat</th>
-            <th scope="col">Inscsrit</th>
+            <th scope="col">Inscrit ?</th>
             <th scope="col">Organisateur</th>
             <th scope="col">Actions</th>
         </tr>
@@ -25,7 +25,11 @@
             <td>{{ sortie.dateLimiteInscription|date("d/m/Y") }}</td>
             <td>{{ sortie.nbInscriptionsMax }}</td>
             <td>{{ sortie.etat }}</td>
-            <td>estInscrit ?</td>
+            <td>
+            {% if sortie in sortiesUtilisateur %}
+            X
+            {% endif %}
+            </td>
             <td>{{ sortie.organisateur.nom }}</td>
             <td>Actions</td>
         </tr>

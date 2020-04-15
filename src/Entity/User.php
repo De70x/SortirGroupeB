@@ -324,7 +324,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     public function getRoles()
     {
-        return $this->roles;
+        return array('ROLE_USER');
     }
 
 
@@ -351,7 +351,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     public function setPhoto($photo): self
     {
         $this->photo = $photo;
-
         return $this;
     }
 }

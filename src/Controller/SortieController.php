@@ -14,10 +14,13 @@ class SortieController extends AbstractController
     public function listeSorties(SortieRepository $repoSorties , $site=-1)
     {
         $sorties = $repoSorties->listeSortieParSite($site);
-        dump($sorties);
+        $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($this->getUser()->getId());
+
+        dump($sortiesUtilisateur);
         return $this->render('sortie/liste.html.twig', [
             'sorties' => $sorties,
             'site' => $site,
+            'sortiesUtilisateur' => $sortiesUtilisateur,
             'controller_name' => 'SortieController',
         ]);
     }
