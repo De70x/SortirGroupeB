@@ -46,7 +46,6 @@ class UserController extends AbstractController
         $registerForm = $this->createForm(RegisterType::class, $user);
         $user->setAdministrateur(false);
 
-
         $registerForm->handleRequest($request);
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
 
@@ -68,5 +67,17 @@ class UserController extends AbstractController
      * @Route("/logout", name="logout")
      */
     public function logout(){}
+
+    /**
+     * @Route("/profile", name="profile")
+     */
+    public function profile(EntityManagerInterface $em){
+
+
+
+        return $this->render("user/profile.html.twig");
+    }
+
+
 
 }

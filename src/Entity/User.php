@@ -255,6 +255,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
 
 
+
     public function addSorty(Sortie $sorty): self
     {
         if (!$this->sorties->contains($sorty)) {
