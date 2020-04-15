@@ -24,6 +24,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <a class="nav-link font-weight-bold" style="color:#e53170; margin-right: 0.5em">Hello {{ app.user.username }}</a>
                 <button class="btn m-0 p-0 btn-custom" style="background-color: #ff8906; color:#fffffe"><a
                             class="nav-item nav-link active" href="#">Proposer une sortie</a></button>
                 <a class="nav-item nav-link active" href="#">Mon profil</a>
