@@ -54,23 +54,23 @@ class Sortie
     private $organisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", inversedBy="sortiesOuJeSuisInscrit")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", inversedBy="sortiesOuJeSuisInscrit", nullable=true)
      */
-    private $estInscrit;
+    private $ListeInscrit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="sorties")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="sorties", nullable=true)
      */
     private $etat;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Lieu", inversedBy="sorties")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Lieu", inversedBy="sorties" ,  nullable=true)
      */
     private $lieu;
 
     public function __construct()
     {
-        $this->estInscrit = new ArrayCollection();
+        $this->ListeInscrit = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,15 +165,15 @@ class Sortie
     /**
      * @return Collection|Participant[]
      */
-    public function getEstInscrit(): Collection
+    public function getListeInscrit(): Collection
     {
-        return $this->estInscrit;
+        return $this->ListeInscrit;
     }
 
     public function addEstInscrit(Participant $estInscrit): self
     {
-        if (!$this->estInscrit->contains($estInscrit)) {
-            $this->estInscrit[] = $estInscrit;
+        if (!$this->ListeInscrit->contains($estInscrit)) {
+            $this->ListeInscrit[] = $estInscrit;
         }
 
         return $this;
@@ -181,8 +181,8 @@ class Sortie
 
     public function removeEstInscrit(Participant $estInscrit): self
     {
-        if ($this->estInscrit->contains($estInscrit)) {
-            $this->estInscrit->removeElement($estInscrit);
+        if ($this->ListeInscrit->contains($estInscrit)) {
+            $this->ListeInscrit->removeElement($estInscrit);
         }
 
         return $this;
