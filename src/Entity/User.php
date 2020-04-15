@@ -29,6 +29,17 @@ class User
     private $prenom;
 
     /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $username;
+
+    /**
+     * ORM\Column(type="string", length=255)
+     */
+    private $password;
+
+
+    /**
      * @ORM\Column(type="string", length=10)
      */
     private $telephone;
@@ -116,6 +127,39 @@ class User
     {
         $this->prenom = $prenom;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param mixed $username
+     */
+    public function setUsername($username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password): void
+    {
+        $this->password = $password;
+    }
+
 
     /**
      * @return mixed
