@@ -26,7 +26,7 @@ class SortieRepository extends ServiceEntityRepository
         if($site == null or $site=="tous_les_sites"){
             return $this->createQueryBuilder('s')
                 ->andWhere('s.dateLimiteInscription > :maintenant')
-                ->orderBy('s.dateCreated', 'DESC')
+                ->orderBy('s.dateHeureDebut', 'DESC')
                 ->getQuery()
                 ->getResult();
         }
@@ -34,7 +34,7 @@ class SortieRepository extends ServiceEntityRepository
             return $this->createQueryBuilder('s')
                 ->andWhere('s.dateLimiteInscription > :maintenant')
                 ->andWhere('s.organisateur.site = :site')
-                ->orderBy('s.dateCreated', 'DESC')
+                ->orderBy('s.dateHeureDebut', 'DESC')
                 ->setParameters(array('site' => $site, 'maintenant'=>$maintenant))
                 ->getQuery()
                 ->getResult();
