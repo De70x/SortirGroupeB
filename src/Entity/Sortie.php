@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,12 +50,12 @@ class Sortie
     private $infosSortie;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="sorties")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="sorties")
      */
     private $organisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", inversedBy="sortiesOuJeSuisInscrit")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="sortiesOuJeSuisInscrit")
      */
     private $estInscrit;
 
@@ -90,12 +91,12 @@ class Sortie
         return $this;
     }
 
-    public function getDateHeureDebut(): ?\DateTimeInterface
+    public function getDateHeureDebut(): ?DateTimeInterface
     {
         return $this->dateHeureDebut;
     }
 
-    public function setDateHeureDebut(\DateTimeInterface $dateHeureDebut): self
+    public function setDateHeureDebut(DateTimeInterface $dateHeureDebut): self
     {
         $this->dateHeureDebut = $dateHeureDebut;
 
@@ -114,12 +115,12 @@ class Sortie
         return $this;
     }
 
-    public function getDateLimiteInscription(): ?\DateTimeInterface
+    public function getDateLimiteInscription(): ?DateTimeInterface
     {
         return $this->dateLimiteInscription;
     }
 
-    public function setDateLimiteInscription(\DateTimeInterface $dateLimiteInscription): self
+    public function setDateLimiteInscription(DateTimeInterface $dateLimiteInscription): self
     {
         $this->dateLimiteInscription = $dateLimiteInscription;
 
@@ -150,12 +151,12 @@ class Sortie
         return $this;
     }
 
-    public function getOrganisateur(): ?Participant
+    public function getOrganisateur(): ?User
     {
         return $this->organisateur;
     }
 
-    public function setOrganisateur(?Participant $organisateur): self
+    public function setOrganisateur(?User $organisateur): self
     {
         $this->organisateur = $organisateur;
 
@@ -163,14 +164,14 @@ class Sortie
     }
 
     /**
-     * @return Collection|Participant[]
+     * @return Collection|User[]
      */
     public function getEstInscrit(): Collection
     {
         return $this->estInscrit;
     }
 
-    public function addEstInscrit(Participant $estInscrit): self
+    public function addEstInscrit(User $estInscrit): self
     {
         if (!$this->estInscrit->contains($estInscrit)) {
             $this->estInscrit[] = $estInscrit;
@@ -179,7 +180,7 @@ class Sortie
         return $this;
     }
 
-    public function removeEstInscrit(Participant $estInscrit): self
+    public function removeEstInscrit(User $estInscrit): self
     {
         if ($this->estInscrit->contains($estInscrit)) {
             $this->estInscrit->removeElement($estInscrit);

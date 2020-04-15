@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ParticipantRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class Participant
+class User implements \Symfony\Component\Security\Core\User\UserInterface
 {
     /**
      * @ORM\Id()
@@ -29,6 +29,17 @@ class Participant
     private $prenom;
 
     /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $username;
+
+    /**
+     * ORM\Column(type="string", length=255)
+     */
+    private $password;
+
+
+    /**
      * @ORM\Column(type="string", length=10)
      */
     private $telephone;
@@ -44,7 +55,7 @@ class Participant
     private $administrateur;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $actif;
 
@@ -69,90 +80,168 @@ class Participant
         $this->sortiesOuJeSuisInscrit = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    /**
+     * @return mixed
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getNom(): ?string
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNom()
     {
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    /**
+     * @param mixed $nom
+     */
+    public function setNom($nom): void
     {
         $this->nom = $nom;
-
-        return $this;
     }
 
-    public function getPrenom(): ?string
+    /**
+     * @return mixed
+     */
+    public function getPrenom()
     {
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): self
+    /**
+     * @param mixed $prenom
+     */
+    public function setPrenom($prenom): void
     {
         $this->prenom = $prenom;
-
-        return $this;
     }
 
-    public function getTelephone(): ?string
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param mixed $username
+     */
+    public function setUsername($username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password): void
+    {
+        $this->password = $password;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getTelephone()
     {
         return $this->telephone;
     }
 
-    public function setTelephone(string $telephone): self
+    /**
+     * @param mixed $telephone
+     */
+    public function setTelephone($telephone): void
     {
         $this->telephone = $telephone;
-
-        return $this;
     }
 
-    public function getMail(): ?string
+    /**
+     * @return mixed
+     */
+    public function getMail()
     {
         return $this->mail;
     }
 
-    public function setMail(string $mail): self
+    /**
+     * @param mixed $mail
+     */
+    public function setMail($mail): void
     {
         $this->mail = $mail;
-
-        return $this;
     }
 
-    public function getAdministrateur(): ?bool
+    /**
+     * @return mixed
+     */
+    public function getAdministrateur()
     {
         return $this->administrateur;
     }
 
-    public function setAdministrateur(bool $administrateur): self
+    /**
+     * @param mixed $administrateur
+     */
+    public function setAdministrateur($administrateur): void
     {
         $this->administrateur = $administrateur;
-
-        return $this;
     }
 
-    public function getActif(): ?bool
+    /**
+     * @return mixed
+     */
+    public function getActif()
     {
         return $this->actif;
     }
 
-    public function setActif(bool $actif): self
+    /**
+     * @param mixed $actif
+     */
+    public function setActif($actif): void
     {
         $this->actif = $actif;
-
-        return $this;
     }
 
     /**
-     * @return Collection|Sortie[]
+     * @return ArrayCollection
      */
-    public function getSorties(): Collection
+    public function getSorties(): ArrayCollection
     {
         return $this->sorties;
     }
+
+    /**
+     * @param ArrayCollection $sorties
+     */
+    public function setSorties(ArrayCollection $sorties): void
+    {
+        $this->sorties = $sorties;
+    }
+
+
 
     public function addSorty(Sortie $sorty): self
     {
@@ -215,5 +304,32 @@ class Participant
         $this->site = $site;
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        if ($this->getAdministrateur() == true){
+            return 'ROLE_ADMIN';
+        }else{
+            return 'ROLE_USER';
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
     }
 }
