@@ -79,6 +79,13 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     private $photo;
 
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $roles;
+
+
+
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
@@ -316,12 +323,9 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     public function getRoles()
     {
-        $role = 'ROLE_USER';
-        if ($this->getAdministrateur() == true){
-            $role='ROLE_ADMIN';
-        }
-        return $role;
+        return $this->roles;
     }
+
 
     /**
      * @inheritDoc
