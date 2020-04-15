@@ -12,14 +12,13 @@ security:
             form_login:
                 login_path: login
                 check_path: login
-            logout_on_user_change: true
+
             logout:
                 path: logout
                 target: home
-
-        encoders:
-            App\Entity\User:
-                algorithm: bcrypt
+    encoders:
+         App\Entity\User:
+             algorithm: bcrypt
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
