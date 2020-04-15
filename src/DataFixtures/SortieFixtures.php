@@ -4,20 +4,23 @@ namespace App\DataFixtures;
 
 use App\Entity\Sortie;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class SortieFixtures extends Fixture
+class SortieFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+        UserFixtures::getReference("user");
         for ($i = 0; $i < 25; $i++) {
             $sortie = new Sortie();
             $sortie->setNom("nom" . $i);
-            $sortie->setDateHeureDebut(new \DateTime(now));
-            $sortie->setDuree(random(1, 100));
+            $sortie->setDateHeureDebut(new \DateTime('now'));
+            $sortie->setDuree(rand(1, 100));
             $sortie->setDateLimiteInscription((new \DateTime()));
-            $sortie->setNbInscriptionsMax(random_int(10, 100));
-            $sortie->setOrganisateur($this->getReference("user" . rand(0, 4)));
+            $sortie->setNbInscriptionsMax(rand(10, 100));
+            $sortie->setOrganisateur($this->getReference("user1"));
+
 
             $manager->persist($sortie);
         }

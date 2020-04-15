@@ -55,17 +55,17 @@ class Sortie
     private $organisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", inversedBy="sortiesOuJeSuisInscrit", nullable=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="sortiesOuJeSuisInscrit")
      */
     private $ListeInscrit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="sorties", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="sorties")
      */
     private $etat;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Lieu", inversedBy="sorties" ,  nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Lieu", inversedBy="sorties")
      */
     private $lieu;
 
