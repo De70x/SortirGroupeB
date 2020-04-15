@@ -74,6 +74,11 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     private $site;
 
+    /**
+     * @ORM\Column(type="blob", nullable=true)
+     */
+    private $photo;
+
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
@@ -331,5 +336,17 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto($photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
     }
 }
