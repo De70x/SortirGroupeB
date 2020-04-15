@@ -73,6 +73,7 @@ class UserController extends AbstractController
      */
     public function profile(EntityManagerInterface $em){
 
+        $user = new User();
 
 
         return $this->render("user/profile.html.twig");
