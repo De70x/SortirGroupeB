@@ -8,7 +8,9 @@ use App\Form\RegisterType;
 use App\Form\UserFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -17,6 +19,8 @@ class UserController extends AbstractController
 {
     /**
      * @Route("/login", name="login")
+     * @param AuthenticationUtils $authUtils
+     * @return Response
      */
     public function login(AuthenticationUtils $authUtils) {
 
@@ -31,6 +35,10 @@ class UserController extends AbstractController
 
     /**
      * @Route("/register", name="register")
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @param UserPasswordEncoderInterface $encoder
+     * @return RedirectResponse|Response
      */
     public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder) {
 
@@ -46,8 +54,9 @@ class UserController extends AbstractController
 
             $em->persist($user);
             $em->flush();
-
             $this->addFlash("success", "Votre compte à bien été créé !");
+            return $this->redirectToRoute("home");
+
         }
         return $this->render('user/register.html.twig', [
             'registerForm' => $registerForm->createView()
@@ -58,7 +67,5 @@ class UserController extends AbstractController
      * @Route("/logout", name="logout")
      */
     public function logout(){}
-
-
 
 }

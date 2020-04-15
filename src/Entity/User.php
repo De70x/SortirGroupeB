@@ -316,11 +316,11 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     public function getRoles()
     {
+        $role = 'ROLE_USER';
         if ($this->getAdministrateur() == true){
-            return 'ROLE_ADMIN';
-        }else{
-            return 'ROLE_USER';
+            $role='ROLE_ADMIN';
         }
+        return $role;
     }
 
     /**
