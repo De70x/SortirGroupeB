@@ -39,4 +39,12 @@ class SortieController extends AbstractController
             'controller_name' => 'SortieController',
         ]);
     }
+
+    /**
+     * @Route("/nouvelle-sortie", name="nouvelleSortie")
+     *
+     */
+    public function nouvelleSortie(){
+        return $this->render('sortie/nouvelleSortie.html.twig');
+    }
 }
