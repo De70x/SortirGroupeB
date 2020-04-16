@@ -19,10 +19,14 @@ class SortieController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function listeSorties(SortieRepository $repoSorties , $site=-1, SiteRepository $repoSites)
+    public function listeSorties(SortieRepository $repoSorties, SiteRepository $repoSites, $site=-1)
     {
         $sorties = $repoSorties->listeSortieParSite($site);
-        $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($this->getUser()->getId());
+        $user=0;
+        if($this->getUser() != null){
+            $user = $this->getUser()->getId();
+        }
+        $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($user);
         $nbInscritsParSortie = [];
         $listeSites = $repoSites->findAll();
 
