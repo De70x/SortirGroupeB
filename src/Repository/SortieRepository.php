@@ -44,4 +44,15 @@ class SortieRepository extends ServiceEntityRepository
                 ->getResult();
         }
     }
+
+    public function listeSortieUtilisateur($user)
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.inscriptions', 'i')
+            ->andWhere('i.id = :user')
+            ->orderBy('s.dateHeureDebut', 'DESC')
+            ->setParameters(array('user' => $user))
+            ->getQuery()
+            ->getResult();
+    }
 }
