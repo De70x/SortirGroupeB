@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Nouvelle Sortie
+{% endblock %}
+
+{% form_theme newSortieForm 'bootstrap_4_layout.html.twig' %}
+
+{% block main %}
+    <style>
+        label {
+            color: #fffffe;
+        }
+    </style>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">Nouvelle Sortie </h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 m-5 p-3">
+                {% block form %}
+                    {{ form_start(newSortieForm) }}
+                    {{ form_widget(newSortieForm) }}
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <button class="btn" type="button" style="background: #e53170; color:#fffffe"><a href="{{ path('nouveauLieu') }}"></a><i class="fal fa-plus"></i></button>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelect03" aria-label="Example select with button addon">
+                            <option selected>Choose...</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+
+
+                    <br>
+                    <br>
+                    <div>
+                        <button type="submit" class="btn " style="background-color: #ff8906; color:#fffffe">Enregistrer
+                        </button>
+                        <button type="submit" class="btn " style="background-color: #ff8906; color:#fffffe">Publier la
+                            Sortie
+                        </button>
+                    </div>
+                    {{ form_end(newSortieForm) }}
+                {% endblock %}
+                <a href="{{ path('home') }}">Annuler</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
