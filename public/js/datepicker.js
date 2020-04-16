@@ -1,12 +1,12 @@
 $(function () {
-    $('#datetimepickerDebut').datetimepicker();
-    $('#datetimepickerFin').datetimepicker({
+    $('#form_dateDebut').datetimepicker();
+    $('#form_dateFin').datetimepicker({
         useCurrent: false
     });
-    $("#datetimepickerDebut").on("change.datetimepicker", function (e) {
-        $('#datetimepickerFin').datetimepicker('minDate', e.date);
+    $("#form_dateDebut").on("change.datetimepicker", function (e) {
+        $('#form_dateFin').datetimepicker('minDate', e.date);
     });
-    $("#datetimepickerFin").on("change.datetimepicker", function (e) {
-        $('#datetimepickerDebut').datetimepicker('maxDate', e.date);
+    $("#form_dateFin").on("change.datetimepicker", function (e) {
+        $('#form_dateDebut').datetimepicker('maxDate', e.date);
     });
 });
