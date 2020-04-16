@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Modifier profile
+{% endblock %}
+
+
+{% block main %}
+    <style>
+        label{
+            color:#fffffe;
+        }
+    </style>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">Mon profil</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 m-5 p-3">
+                {% block form %}
+                    {{ form_start(profileForm) }}
+                    {{ form_widget(profileForm) }}
+
+                    <br>
+                    <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">Enregistrer</button>
+                    <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">Annuler</button>
+                    {{ form_end(profileForm) }}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
