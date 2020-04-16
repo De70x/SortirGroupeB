@@ -11,7 +11,7 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        UserFixtures::getReference("user");
+        
         for ($i = 0; $i < 25; $i++) {
             $sortie = new Sortie();
             $sortie->setNom("nom" . $i);

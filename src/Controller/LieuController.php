@@ -20,7 +20,7 @@ class LieuController extends AbstractController
         $newLieuForm = $this->createForm(NewLieuType::class);
 
 
-        if ($newLieuForm->isValid() && $newLieuForm->isSubmitted()){
+        if ($newLieuForm->isSubmitted() && $newLieuForm->isValid()){
             $entityManager->persist($lieu);
             $entityManager->flush();
         }
