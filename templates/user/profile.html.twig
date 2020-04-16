@@ -1,34 +1,46 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Profile
+    {{ app.user.username }}
 {% endblock %}
 
-
 {% block main %}
-    <style>
-        label{
-            color:#fffffe;
-        }
-    </style>
+<style>
+    label{
+        color:#fffffe;
+    }
+</style>
+
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
-                <h1 class="text-center">Mon profil</h1>
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">{{ app.user.username }}</h1>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6 m-5 p-3">
-                {% block form %}
-                    {{ form_start(profileForm) }}
-                    {{ form_widget(profileForm) }}
-
-                    <br>
-                    <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">Enregistrer</button>
-                    <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">Annuler</button>
-                    {{ form_end(profileForm) }}
-                {% endblock %}
-            </div>
+            <div class="row justify-content-center">
+                <table class="table table-borderless p-5">
+                    <tr>
+                        <td align="right" class="profile">Prénom :</td>
+                        <td align="left" class="profile">{{ app.user.prenom }}</td>
+                    </tr>
+                    <tr>
+                        <td align="right" class="profile">Nom :</td>
+                        <td align="left" class="profile">{{ app.user.nom }}</td>
+                    </tr>
+                    <tr>
+                        <td align="right" class="profile">Téléphone :</td>
+                        <td align="left" class="profile">{{ app.user.telephone }}</td>
+                    </tr>
+                    <tr>
+                        <td align="right" class="profile">Email :</td>
+                        <td align="left" class="profile">{{ app.user.mail }}</td>
+                    </tr>
+                    <tr>
+                        <td align="right" class="profile">Site de rattachement :</td>
+                        <td align="left" class="profile">{{ app.user.site }}</td>
+                    </tr>
+                </table>
         </div>
     </div>
+
 {% endblock %}

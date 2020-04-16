@@ -56,3 +56,13 @@ form{
 .datesLiees{
     display: flex;
 }
+
+.profile {
+    color: #FFFFFF;
+    padding: 0px 50px 10px 0px;
+}
+/**
+table {
+    border-collapse: separate;
+}
+*/

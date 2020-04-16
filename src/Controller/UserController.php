@@ -71,7 +71,7 @@ class UserController extends AbstractController
     public function logout(){}
 
     /**
-     * @Route("/profile", name="profile")
+     * @Route("/Change_profile", name="change_profile")
      * @param Request $request
      * @param EntityManagerInterface $em
      * @return RedirectResponse|Response
@@ -79,14 +79,22 @@ class UserController extends AbstractController
     public function profile(Request $request, EntityManagerInterface $em){
 
         $user = new User();
-        $profileForm = $this->createForm(ProfileFormType::class, $user);
+        $profileForm = $this->createForm(profileForm::class, $user);
 
         $profileForm->handleRequest($request);
 
 
-        return $this->render("user/profile.html.twig", [
+        return $this->render("changeProfile.html.twig", [
             'profileForm' => $profileForm->createView()
         ]);
+    }
+
+    /**
+     * @Route("/profile", name="profile")
+     */
+    public function userProfile() {
+
+        return $this->render("user/profile.html.twig");
     }
 
 
