@@ -4,6 +4,19 @@
 
 {% block main %}
 
+    <form id="rechercheSortie">
+        <div class="form-group">
+            <label>Site :
+                <select name="sites" size="5" class="form-control">
+                    {%  for site in sites %}
+                        <option value="{{ site.id }}">site.nom</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <button type="submit">Rechercher</button>
+    </form>
+
     <table class="table table-striped table-light">
         <thead>
         <tr>

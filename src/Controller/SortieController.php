@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,14 +15,16 @@ class SortieController extends AbstractController
      * @Route("/sorties/list/{site}", name="sorties")
      * @param SortieRepository $repoSorties
      * @param int $site
+     * @param SiteRepository $repoSites
      * @return Response
      * @throws Exception
      */
-    public function listeSorties(SortieRepository $repoSorties , $site=-1)
+    public function listeSorties(SortieRepository $repoSorties , $site=-1, SiteRepository $repoSites)
     {
         $sorties = $repoSorties->listeSortieParSite($site);
         $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($this->getUser()->getId());
         $nbInscritsParSortie = [];
+        $listeSites = $repoSites->findAll();
 
         foreach ($sorties as $sortie){
             $nbInscritsParSortie[$sortie->getId()] = $repoSorties->nbInscriptions($sortie);
@@ -30,6 +33,7 @@ class SortieController extends AbstractController
         return $this->render('sortie/liste.html.twig', [
             'sorties' => $sorties,
             'site' => $site,
+            'listeSites' => $listeSites,
             'sortiesUtilisateur' => $sortiesUtilisateur,
             'nbInscritsParSortie' => $nbInscritsParSortie,
             'controller_name' => 'SortieController',

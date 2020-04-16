@@ -79,7 +79,7 @@ class UserController extends AbstractController
     public function profile(Request $request, EntityManagerInterface $em){
 
         $user = new User();
-        $profileForm = $this->createForm(profileForm::class, $user);
+        $profileForm = $this->createForm(ProfileFormType::class, $user);
 
         $profileForm->handleRequest($request);
 

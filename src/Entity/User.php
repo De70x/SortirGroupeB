@@ -60,16 +60,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $actif;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="organisateur")
-     */
-    private $sorties;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Sortie", mappedBy="inscriptions")
-     */
-    private $sortiesUtilisateur;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="participants")
      */
     private $site;

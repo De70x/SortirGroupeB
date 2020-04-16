@@ -23,11 +23,6 @@ class Etat
      */
     private $libelle;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="etat")
-     */
-    private $sorties;
-
     public function __construct()
     {
         $this->sorties = new ArrayCollection();

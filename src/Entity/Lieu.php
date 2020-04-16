@@ -39,11 +39,6 @@ class Lieu
     private $longitude;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="Lieu")
-     */
-    private $sorties;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Ville", inversedBy="lieus")
      */
     private $ville;
