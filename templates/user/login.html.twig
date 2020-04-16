@@ -21,6 +21,9 @@
         <div class="row justify-content-center">
             <div class="col-12 col-sm-10 col-md-8 col-lg-4 p-3 m-5">
                 <form name="login_form" method="post">
+                    {% if error %}
+                        <div class="alert alert-danger">Identifiant ou mot de passe incorrect</div>
+                    {% endif %}
                     <div class="form-group">
                         <label class="required" for="username">Pseudo</label>
                         <input type="text" name="_username" id="username" class="form-control" required="required">
