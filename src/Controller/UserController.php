@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Entity\User;
 use App\Form\RegisterType;
-use App\Form\UserFormType;
+use App\Form\ProfileFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,6 +26,8 @@ class UserController extends AbstractController
 
         $error = $authUtils->getLastAuthenticationError();
         $lastUsername = $authUtils->getLastUsername();
+
+
 
         return $this->render('user/login.html.twig', array(
             'last_username' => $lastUsername,
@@ -70,14 +72,24 @@ class UserController extends AbstractController
 
     /**
      * @Route("/profile", name="profile")
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse|Response
      */
-    public function profile(EntityManagerInterface $em){
+    public function profile(Request $request, EntityManagerInterface $em){
 
         $user = new User();
+        $profileForm = $this->createForm(profileForm::class, $user);
+
+        $profileForm->handleRequest($request);
 
 
-        return $this->render("user/profile.html.twig");
+        return $this->render("user/profile.html.twig", [
+            'profileForm' => $profileForm->createView()
+        ]);
     }
+
+
 
 
 
