@@ -15,6 +15,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login
+                csrf_token_generator: security.csrf.token_manager
             remember_me:
                 secret:   '%kernel.secret%'
                 lifetime: 604800
