@@ -4,6 +4,19 @@
 
 {% block main %}
 
+    <form id="rechercheSortie">
+        <div class="form-group">
+            <label>Site :
+                <select name="sites" size="5" class="form-control">
+                    {%  for site in sites %}
+                        <option value="{{ site.id }}">site.nom</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <button type="submit">Rechercher</button>
+    </form>
+
     <table class="table table-striped table-light">
         <thead>
         <tr>
@@ -23,7 +36,7 @@
             <th scope="row">{{ sortie.nom }}</th>
             <td>{{ sortie.dateHeureDebut|date("d/m/Y") }}</td>
             <td>{{ sortie.dateLimiteInscription|date("d/m/Y") }}</td>
-            <td>{{ sortie.nbInscriptionsMax }}</td>
+            <td>{{ nbInscritsParSortie[sortie.id] }} / {{ sortie.nbInscriptionsMax }}</td>
             <td>{{ sortie.etat }}</td>
             <td>
             {% if sortie in sortiesUtilisateur %}

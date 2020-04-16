@@ -2,9 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,7 +28,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Assert\Unique(message="L'identifiant est déjà utilisé")
      */
     private $username;
 
@@ -62,16 +58,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $actif;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="organisateur")
-     */
-    private $sorties;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Sortie", mappedBy="inscriptions")
-     */
-    private $sortiesUtilisateur;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="participants")
      */
     private $site;
@@ -90,8 +76,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     public function __construct()
     {
-        $this->sorties = new ArrayCollection();
-        $this->sortiesOuJeSuisInscrit = new ArrayCollection();
     }
 
     /**
@@ -174,7 +158,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         $this->password = $password;
     }
 
-
     /**
      * @return mixed
      */
@@ -237,76 +220,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     public function setActif($actif): void
     {
         $this->actif = $actif;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getSorties(): ArrayCollection
-    {
-        return $this->sorties;
-    }
-
-    /**
-     * @param ArrayCollection $sorties
-     */
-    public function setSorties(ArrayCollection $sorties): void
-    {
-        $this->sorties = $sorties;
-    }
-
-
-
-
-    public function addSorty(Sortie $sorty): self
-    {
-        if (!$this->sorties->contains($sorty)) {
-            $this->sorties[] = $sorty;
-            $sorty->setOrganisateur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSorty(Sortie $sorty): self
-    {
-        if ($this->sorties->contains($sorty)) {
-            $this->sorties->removeElement($sorty);
-            // set the owning side to null (unless already changed)
-            if ($sorty->getOrganisateur() === $this) {
-                $sorty->setOrganisateur(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Sortie[]
-     */
-    public function getSortiesOuJeSuisInscrit(): Collection
-    {
-        return $this->sortiesOuJeSuisInscrit;
-    }
-
-    public function addSortiesOuJeSuisInscrit(Sortie $sortiesOuJeSuisInscrit): self
-    {
-        if (!$this->sortiesOuJeSuisInscrit->contains($sortiesOuJeSuisInscrit)) {
-            $this->sortiesOuJeSuisInscrit[] = $sortiesOuJeSuisInscrit;
-            $sortiesOuJeSuisInscrit->addEstInscrit($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSortiesOuJeSuisInscrit(Sortie $sortiesOuJeSuisInscrit): self
-    {
-        if ($this->sortiesOuJeSuisInscrit->contains($sortiesOuJeSuisInscrit)) {
-            $this->sortiesOuJeSuisInscrit->removeElement($sortiesOuJeSuisInscrit);
-            $sortiesOuJeSuisInscrit->removeEstInscrit($this);
-        }
-
-        return $this;
     }
 
     public function getSite(): ?Site

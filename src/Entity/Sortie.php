@@ -71,7 +71,7 @@ class Sortie
 
     public function __construct()
     {
-        $this->ListeInscrit = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -168,22 +168,22 @@ class Sortie
      */
     public function getListeInscrit(): Collection
     {
-        return $this->ListeInscrit;
+        return $this->inscriptions;
     }
 
-    public function addEstInscrit(User $estInscrit): self
+    public function addEstInscrit(User $participant): self
     {
-        if (!$this->ListeInscrit->contains($estInscrit)) {
-            $this->ListeInscrit[] = $estInscrit;
+        if (!$this->inscriptions->contains($participant)) {
+            $this->inscriptions[] = $participant;
         }
 
         return $this;
     }
 
-    public function removeEstInscrit(User $estInscrit): self
+    public function removeEstInscrit(User $participant): self
     {
-        if ($this->ListeInscrit->contains($estInscrit)) {
-            $this->ListeInscrit->removeElement($estInscrit);
+        if ($this->inscriptions->contains($participant)) {
+            $this->inscriptions->removeElement($participant);
         }
 
         return $this;
