@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Nouvelle Ville
+{% endblock %}
+
+{% form_theme newVilleForm 'bootstrap_4_layout.html.twig' %}
+
+{% block main %}
+    <style>
+        label {
+            color: #fffffe;
+        }
+    </style>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">Nouvelle ville </h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 m-5 p-3">
+                {{ form_start(newVilleForm) }}
+                {{ form_widget(newVilleForm) }}
+                <br>
+                <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">Ajouter la
+                    ville
+                </button>
+                {{ form_end(newVilleForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -48,6 +48,15 @@ a:hover{
     padding-right: 1em;
 }
 
+form{
+    margin:1%;
+    padding:1%;
+}
+
+.datesLiees{
+    display: flex;
+}
+
 .profile {
     color: #FFFFFF;
     padding: 0px 50px 10px 0px;
