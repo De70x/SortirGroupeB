@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Nouveau lieu
+{% endblock %}
+
+{% form_theme newLieuForm 'bootstrap_4_layout.html.twig' %}
+
+{% block main %}
+    <style>
+        label {
+            color: #fffffe;
+        }
+    </style>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">Nouvelle Sortie </h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 m-5 p-3">
+                {% block form %}
+                    {{ form_start(newLieuForm) }}
+                    {{ form_widget(newLieuForm) }}
+                    <button class="btn " style="background-color: #e53170; color:#fffffe"><a href="#"><i
+                                    class="fal fa-plus"></i></a></button>
+                    <br>
+                    <br>
+                        <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">Enregistrer
+                        </button>
+
+                    {{ form_end(newLieuForm) }}
+                {% endblock %}
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
