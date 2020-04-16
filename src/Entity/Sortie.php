@@ -55,9 +55,9 @@ class Sortie
     private $organisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="sortiesOuJeSuisInscrit")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="sortiesUtilisateur")
      */
-    private $ListeInscrit;
+    private $inscriptions;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="sorties")

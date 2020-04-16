@@ -65,9 +65,9 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $sorties;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Sortie", mappedBy="estInscrit")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Sortie", mappedBy="inscriptions")
      */
-    private $sortiesOuJeSuisInscrit;
+    private $sortiesUtilisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="participants")
