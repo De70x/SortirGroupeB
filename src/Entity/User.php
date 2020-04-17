@@ -27,7 +27,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
     private $username;
 
@@ -43,7 +43,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $telephone;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, unique=true)
      */
     private $mail;
 
@@ -63,7 +63,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $site;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $photo;
 

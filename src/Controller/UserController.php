@@ -2,18 +2,21 @@
 
 namespace App\Controller;
 
-use App\Entity\Participant;
 use App\Entity\User;
 use App\Form\RegisterType;
 use App\Form\ProfileFormType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
 
 class UserController extends AbstractController
 {
@@ -71,20 +74,40 @@ class UserController extends AbstractController
     public function logout(){}
 
     /**
-     * @Route("/Change_profile", name="change_profile")
+     * @Route("/change_profile", name="change_profile")
      * @param Request $request
      * @param EntityManagerInterface $em
      * @return RedirectResponse|Response
      */
-    public function profile(Request $request, EntityManagerInterface $em){
+    public function profile(Request $request, EntityManagerInterface $em, UserRepository $userRepo, SluggerInterface $slugger, UserPasswordEncoderInterface $encoder){
 
-        $user = new User();
+        //$user = $userRepo->find($id);
+        $user = $this->getUser();
         $profileForm = $this->createForm(ProfileFormType::class, $user);
         $user->setAdministrateur(false);
 
         $profileForm->handleRequest($request);
 
         if ($profileForm->isSubmitted() && $profileForm->isValid()) {
+            $userPhoto = $profileForm->get('photoFile')->getData();
+            if ($userPhoto) {
+                $photoFileName = pathinfo($userPhoto->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($photoFileName);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$userPhoto->guessExtension();
+
+                try {
+                    $userPhoto->move(
+                        $this->getParameter('photo_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+
+                }
+                $user->setPhoto($newFilename);
+            }
+            $hashed = $encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($hashed);
+
             $em->persist($user);
             $em->flush();
             $this->addFlash("success", "Votre compte à bien été modifié !");

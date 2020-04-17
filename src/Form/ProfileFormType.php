@@ -51,8 +51,10 @@ class ProfileFormType extends AbstractType
                     return $site->getName();
                 }
             ])
-            ->add('photo', FileType::class, [
-                'mapped' => 'false'
+            ->add('photoFile', FileType::class, [
+                'label' => 'Photo profil utilisateur',
+                'mapped' => false,
+                'required' => false
             ])
         ;
     }
