@@ -23,11 +23,6 @@ class Etat
      */
     private $libelle;
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $clef;
-
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
@@ -49,17 +44,4 @@ class Etat
 
         return $this;
     }
-
-    public function getClef(): ?string
-    {
-        return $this->clef;
-    }
-
-    public function setClef(string $clef): self
-    {
-        $this->clef = $clef;
-
-        return $this;
-    }
-
 }
