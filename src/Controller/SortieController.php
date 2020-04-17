@@ -12,7 +12,8 @@ use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,46 +40,54 @@ class SortieController extends AbstractController
                 'choice_label' => function (Site $site) {
                     return $site->getNom();
                 },
-                'placeholder' => 'Choose an option',
+                'placeholder' => 'Tous les sites',
+                'required' => false
             ])
-            ->add('nomContient')
-            ->add('dateDebut')
-            ->add('dateFin')
-            ->add('organisateur', CheckboxType::class)
-            ->add('inscrit', CheckboxType::class)
-            ->add('pasInscrit', CheckboxType::class)
-            ->add('passees', CheckboxType::class)
+            ->add('nomContient', TextType::class,[
+                'required' => false
+            ])
+            ->add('dateDebut', TextType::class,[
+                'required' => false
+            ])
+            ->add('dateFin', TextType::class,[
+                'required' => false
+            ])
+            ->add('organisateur', CheckboxType::class,[
+                'required' => false
+            ])
+            ->add('inscrit', CheckboxType::class,[
+                'required' => false
+            ])
+            ->add('pasInscrit', CheckboxType::class,[
+                'required' => false
+            ])
+            ->add('passees', CheckboxType::class,[
+                'required' => false
+            ])
+            ->add('idUser', HiddenType::class,[
+                'attr' => ['value' => $this->getUser()->getId()]
+            ])
             ->getForm();
         $rechercheForm->handleRequest($request);
         dump($rechercheForm->getData());
         if ($rechercheForm->isSubmitted() && $rechercheForm->isValid()){
-            $sorties = $repoSorties->findAll();
-            $user=0;
-            if($this->getUser() != null){
-                $user = $this->getUser()->getId();
-            }
-            $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($user);
-            $nbInscritsParSortie = [];
-            $listeSites = $repoSites->findAll();
-
-            foreach ($sorties as $sortie){
-                $nbInscritsParSortie[$sortie->getId()] = $repoSorties->nbInscriptions($sortie);
-            }
+            $sorties = $repoSorties->rechercherSorties($rechercheForm->getData());
         }
         else{
-            // On gère le cas du filtre non renseigné
-            $sorties = $repoSorties->listeSortieParSite($this->getUser()->getSite()->getId());
-            $user=0;
-            if($this->getUser() != null){
-                $user = $this->getUser()->getId();
-            }
-            $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($user);
-            $nbInscritsParSortie = [];
-            $listeSites = $repoSites->findAll();
+            // On gère le cas du filtre non renseigné,
+            $sorties = $repoSorties->listeSortieParSite(-1);
 
-            foreach ($sorties as $sortie){
-                $nbInscritsParSortie[$sortie->getId()] = $repoSorties->nbInscriptions($sortie);
-            }
+        }
+
+        $user=0;
+        if($this->getUser() != null){
+            $user = $this->getUser()->getId();
+        }
+        $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($user);
+        $nbInscritsParSortie = [];
+        $listeSites = $repoSites->findAll();
+        foreach ($sorties as $sortie){
+            $nbInscritsParSortie[$sortie->getId()] = $repoSorties->nbInscriptions($sortie);
         }
 
 

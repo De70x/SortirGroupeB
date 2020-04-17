@@ -65,3 +65,17 @@ form{
     color: 	#000000;
 }
 
+#listeSorties, #rechercheAvancee{
+    width: 90%;
+    margin: auto;
+}
+
+#rechercheAvancee{
+    width: 90%;
+    margin: auto;
+}
+
+.form-check{
+    margin-left: 1%;
+}
+
