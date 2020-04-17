@@ -116,7 +116,6 @@ class SortieRepository extends ServiceEntityRepository
         if ($filtres['dateDebut'] != null) {
             // On formate la date car c'est une chaine de caractère qu'on récupère du formulaire
             $dateDebut = date_create_from_format($formatDates, $filtres['dateDebut']);
-            dump($dateDebut);
             $rechercheAvancee->andWhere('s.dateHeureDebut >= :dateDebut')
                 ->setParameter('dateDebut', $dateDebut);
         }
@@ -124,7 +123,6 @@ class SortieRepository extends ServiceEntityRepository
         if ($filtres['dateFin'] != null) {
             // On formate la date car c'est une chaine de caractère qu'on récupère du formulaire
             $dateFin = date_create_from_format($formatDates, $filtres['dateFin']);
-            dump($dateFin);
             $rechercheAvancee->andWhere('s.dateHeureDebut <= :dateFin')
                 ->setParameter('dateFin', $dateFin);
         }
@@ -157,7 +155,6 @@ class SortieRepository extends ServiceEntityRepository
             }
         }
         $rechercheAvancee->andWhere($rechercheAvancee->expr()->in('s.id', $queryCoches->getDQL()));
-        dump($rechercheAvancee->getDQL());
         return $rechercheAvancee->orderBy('s.dateHeureDebut', 'ASC')->getQuery()->getResult();
     }
 }
