@@ -71,7 +71,7 @@ class UserController extends AbstractController
     public function logout(){}
 
     /**
-     * @Route("/Change_profile", name="change_profile")
+     * @Route("/change_profile", name="change_profile")
      * @param Request $request
      * @param EntityManagerInterface $em
      * @return RedirectResponse|Response
