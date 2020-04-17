@@ -3,68 +3,104 @@
 {% block title %}Liste des sorties{% endblock %}
 
 {% block main %}
-    <form id="rechercheSortie" class="card">
-        <div class="form-group row">
-            <label for="listeSites" class="col-sm-2 col-form-label">Site</label>
-            <div class="col-sm-10">
-                <select id="listeSites" name="site" class="form-control">
-                    {%  for site in listeSites %}
-                        <option value="{{ site.id }}">{{ site.nom }}</option>
-                    {% endfor %}
-                </select>
+
+    <div class="card">
+        {% block form %}
+            {{ form_start(rechercheForm,{ 'attr': {'class': 'card'} }) }}
+            <!-- site -->
+            <div class="form-group row">
+                <label for="form_site" class="col-sm-2 col-form-label">Site</label>
+                <div class="erreur_form">
+                    {{ form_errors(rechercheForm.site) }}
+                </div>
+                <div class="col-sm-10">
+                    {{ form_widget(rechercheForm.site, { 'attr': {'class': 'form-control'} }) }}
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="nomContient" class="col-sm-2 col-form-label">Le nom contient</label>
-            <div class="col-sm-10">
-                <input type="search" class="form-control" id="nomContient" placeholder="recherche">
+            <!-- nom contient -->
+            <div class="form-group row">
+                <label for="nomContient" class="col-sm-2 col-form-label">Le nom contient</label>
+                <div class="erreur_form">
+                    {{ form_errors(rechercheForm.nomContient) }}
+                </div>
+                <div class="col-sm-10">
+                    {{ form_widget(rechercheForm.nomContient, { 'attr': {'class': 'form-control', 'placeholder':'recherche', 'type':'search'} }) }}
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-sm-12">
-                <div class="container datesLiees">
-                    <label for="datetimepickerDebut" class="col-sm-2 col-form-label">Date de début</label>
-                    <div class='col-md-4'>
-                        <div class="form-group">
-                            <div class="input-group date" id="datetimepickerDebut" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepickerDebut"/>
-                                <div class="input-group-append" data-target="#datetimepickerDebut" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <div class="container datesLiees">
+                        <!-- entre début -->
+                        <label for="form_dateDebut" class="col-sm-2 col-form-label">Entre le</label>
+                        <div class='col-md-4'>
+                            <div class="erreur_form">
+                                {{ form_errors(rechercheForm.dateDebut) }}
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group date" id="form_dateDebut" data-target-input="nearest">
+                                    {{ form_widget(rechercheForm.dateDebut, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateDebut'} }) }}
+                                    <div class="input-group-append" data-target="#form_dateDebut" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <label for="datetimepickerFin" class="col-sm-2 col-form-label">Date de fin</label>
-                    <div class='col-md-4'>
-                        <div class="form-group">
-                            <div class="input-group date" id="datetimepickerFin" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepickerFin"/>
-                                <div class="input-group-append" data-target="#datetimepickerFin" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        <label for="form_dateFin" class="col-sm-2 col-form-label">Et le</label>
+                        <div class='col-md-4'>
+                            <div class="erreur_form">
+                                {{ form_errors(rechercheForm.dateFin) }}
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group date" id="form_dateFin" data-target-input="nearest">
+                                    {{ form_widget(rechercheForm.dateFin, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateFin'} }) }}
+                                    <div class="input-group-append" data-target="#form_dateFin" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-check row">
-            <input type="checkbox" class="form-check-input" id="organisateur">
-            <label for="organisateur" class="form-check-label">Sorties dont je suis l'organisateur/trice</label>
-        </div>
-        <div class="form-check row">
-            <input type="checkbox" class="form-check-input" id="inscrit">
-            <label for="inscrit" class="form-check-label">Sorties auxquelles je suis inscrit/e</label>
-        </div>
-        <div class="form-check row">
-            <input type="checkbox" class="form-check-input" id="pasInscrit">
-            <label for="pasInscrit" class="form-check-label">Sorties auxquelles je ne suis pas inscrit/e</label>
-        </div>
-        <div class="form-check row">
-            <input type="checkbox" class="form-check-input" id="passee">
-            <label for="passee" class="form-check-label">Sorties passées</label>
-        </div>
-    </form>
+            <!-- organisateur -->
+            <div class="form-check row">
+                <div class="erreur_form">
+                    {{ form_errors(rechercheForm.organisateur) }}
+                </div>
+                {{ form_widget(rechercheForm.organisateur, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
+                <label for="form_organisateur" class="form-check-label">Sorties dont je suis l'organisateur/trice</label>
+            </div>
+            <!-- inscrit -->
+            <div class="form-check row">
+                <div class="erreur_form">
+                    {{ form_errors(rechercheForm.inscrit) }}
+                </div>
+                {{ form_widget(rechercheForm.inscrit, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
+                <label for="form_inscrit" class="form-check-label">Sorties auxquelles je suis inscrit/e</label>
+            </div>
+            <!-- pas inscrit -->
+            <div class="form-check row">
+                <div class="erreur_form">
+                    {{ form_errors(rechercheForm.pasInscrit) }}
+                </div>
+                {{ form_widget(rechercheForm.pasInscrit, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
+                <label for="form_pasInscrit" class="form-check-label">Sorties auxquelles je ne suis pas inscrit/e</label>
+            </div>
+            <!-- passées -->
+            <div class="form-check row">
+                <div class="erreur_form">
+                    {{ form_errors(rechercheForm.passees) }}
+                </div>
+                {{ form_widget(rechercheForm.passees, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
+                <label for="form_passees" class="form-check-label">Sorties passées</label>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">
+                Rechercher
+            </button>
+            {{ form_end(rechercheForm) }}
+        {% endblock %}
+    </div>
 
     <table class="table table-striped table-light">
         <thead>
