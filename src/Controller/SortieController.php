@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Site;
+use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Form\NewSortieType;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
@@ -109,9 +111,23 @@ class SortieController extends AbstractController
         $newSortieForm = $this->createForm(NewSortieType::class, $sortie);
 
 
+        $newSortieForm->handleRequest($request);
+
+        dump($newSortieForm->getData());
         if ($newSortieForm->isSubmitted() && $newSortieForm->isValid()){
+            $etat = new Etat();
+            $sortie->setEtat($etat);
+
+            if ($newSortieForm->get('publier')->isClicked()){
+                $etat->setLibelle(etat::OUVERTE);
+            }else{
+                $etat->setLibelle(etat::CREEE);
+            }
+            $entityManager->persist($etat);
             $entityManager->persist($sortie);
             $entityManager->flush();
+            $this->addFlash("success", "Votre compte à bien été créé !");
+            return $this->redirectToRoute("nouvelleSortie");
         }
         return $this->render('sortie/nouvelleSortie.html.twig',[
             'newSortieForm'=>$newSortieForm->createView()
