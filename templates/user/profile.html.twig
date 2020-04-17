@@ -44,7 +44,9 @@
                             <td align="left" class="profile">{{ app.user.site }}</td>
                         </tr>
                     </table>
-                    <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">Modifier profil</button>
+                    <form action="{{ path('change_profile') }}" method="post">
+                        <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">Modifier profil</button>
+                    </form>
                 </div>
             </div>
     </div>
