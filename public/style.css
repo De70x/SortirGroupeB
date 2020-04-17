@@ -65,8 +65,9 @@ form{
     color: 	#000000;
 }
 
-#listeSorties, #rechercheAvancee{
+#listeSorties{
     width: 90%;
+    text-align: center;
     margin: auto;
 }
 

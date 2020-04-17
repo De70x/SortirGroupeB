@@ -3,7 +3,7 @@
 {% block title %}Liste des sorties{% endblock %}
 
 {% block main %}
-
+    {% set CREEE = constant('\\Entity\\Etat::CREEE') %}
 
         {% block form %}
             <div id="rechercheAvancee">
@@ -124,14 +124,19 @@
             <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
             <td>{{ sortie.dateLimiteInscription|date("d/m/Y") }}</td>
             <td>{{ nbInscritsParSortie[sortie.id] }} / {{ sortie.nbInscriptionsMax }}</td>
-            <td>{{ sortie.etat }}</td>
+            <td>{{ sortie.etat.libelle }}</td>
             <td>
             {% if sortie in sortiesUtilisateur %}
             X
             {% endif %}
             </td>
             <td>{{ sortie.organisateur.nom }}</td>
-            <td>Actions</td>
+
+            <td>
+                {% if sortie.etat.libelle == CREEE %}
+                    TOTO
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
         </tbody>
