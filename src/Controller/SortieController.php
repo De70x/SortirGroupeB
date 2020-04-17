@@ -42,23 +42,16 @@ class SortieController extends AbstractController
                 'placeholder' => 'Choose an option',
             ])
             ->add('nomContient')
-            ->add('dateDebut', DateType::class, [
-                'widget' => 'single_text',
-                // on retire le picker par defaut de html5
-                'html5' => false,
-            ])
-            ->add('dateFin', DateType::class, [
-                'widget' => 'single_text',
-                'html5' => false,
-            ])
+            ->add('dateDebut')
+            ->add('dateFin')
             ->add('organisateur', CheckboxType::class)
             ->add('inscrit', CheckboxType::class)
             ->add('pasInscrit', CheckboxType::class)
             ->add('passees', CheckboxType::class)
             ->getForm();
         $rechercheForm->handleRequest($request);
+        dump($rechercheForm->getData());
         if ($rechercheForm->isSubmitted() && $rechercheForm->isValid()){
-            dump($rechercheForm->getData());
             $sorties = $repoSorties->findAll();
             $user=0;
             if($this->getUser() != null){

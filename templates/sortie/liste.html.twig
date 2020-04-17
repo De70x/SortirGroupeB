@@ -76,7 +76,7 @@
                     {{ form_errors(rechercheForm.inscrit) }}
                 </div>
                 {{ form_widget(rechercheForm.inscrit, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
-                <label for="form_organisateur" class="form-check-label">Sorties auxquelles je suis inscrit/e</label>
+                <label for="form_inscrit" class="form-check-label">Sorties auxquelles je suis inscrit/e</label>
             </div>
             <!-- pas inscrit -->
             <div class="form-check row">
@@ -92,7 +92,7 @@
                     {{ form_errors(rechercheForm.passees) }}
                 </div>
                 {{ form_widget(rechercheForm.passees, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
-                <label for="form_pasInscrit" class="form-check-label">Sorties passées</label>
+                <label for="form_passees" class="form-check-label">Sorties passées</label>
             </div>
             <br>
             <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">
