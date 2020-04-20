@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
+use App\Entity\Ville;
 use App\Form\NewLieuType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,11 +22,16 @@ class LieuController extends AbstractController
         if($request->isXmlHttpRequest()){
             $nom = $request->get('nom');
             $rue = $request->get('rue');
-            $ville = $request->get('ville');
+            $villeId = $request->get('ville');
+
+            $villeRepo = $entityManager->getRepository(Ville::class);
+            $ville = $villeRepo->findOneBy(array(
+                'id'=>$villeId
+            ));
             $lieu->setNom($nom);
             $lieu->setRue($rue);
             $lieu->setVille($ville);
-            $entityManager->persist($ville);
+            $entityManager->persist($lieu);
             $entityManager->flush();
         }
 
