@@ -11,12 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Etat
 {
-        const CREEE = "Créée";
-        const OUVERTE = "Ouverte";
-        const  CLOTUREE = "Cloturée";
-        const EN_COURS = "Activité en cours";
-        const PASSEE = "Passée" ;
-        const ANNULEE = "Annulée" ;
+    public const CREEE = "Créée";
+    public const OUVERTE = "Ouverte";
+    public const CLOTUREE = "Cloturée";
+    public const EN_COURS = "Activité en cours";
+    public const PASSEE = "Passée";
+    public const ANNULEE = "Annulée";
 
 
     /**
