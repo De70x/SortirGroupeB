@@ -67,7 +67,7 @@
 
                         {{ form_start(newLieuForm) }}
                         {{ form_widget(newLieuForm) }}
-
+                        <div id="updatedVille"></div>
                         <button id="canceladdLieu" name="addLieu" class="btn "
                                 style="background-color: #e53170; color:#fffffe"><i class="far fa-angle-up"></i>
                         </button>
@@ -77,6 +77,7 @@
                         <button id="submitLieu" type="button" class="btn "
                                 style="background-color: #ff8906; color:#fffffe">Enregistrer le nouveau lieu
                         </button>
+
 
                         {{ form_end(newLieuForm) }}
                     </div>
@@ -121,21 +122,34 @@
                                 codePostal: $("#ville_codePostal").val()
                             },
                             function (data) {
-                                alert("success");
-                            }
+                                var i = 0;
+                                var villes = JSON.parse(data);
+                                var select = document.createElement("select")
 
+                                for (i = 0; i < villes.length; i++) {
+                                    var option = document.createElement("option")
+                                    var ville = villes[i];
+                                    option.value = ville.id;
+                                    option.innerText = ville.nom;
+                                    select.appendChild(option);
+                                }
+                                select.setAttribute("id", "new_lieu_ville");
+                                select.setAttribute("class", "form-control");
+                                select.setAttribute("name", "new_lieu[ville]")
+                                $("#new_lieu_ville").replaceWith(select);
+                            }
                         )
-                        $("#new_lieu_ville").reload(true);
+
                     })
 
-                    $("#canceladdVille").on("click",function (e) {
+                    $("#canceladdVille").on("click", function (e) {
                         e.preventDefault();
                         $("#newVilleFormBlock").fadeOut();
                     })
                 })
 
 
-                $("#canceladdLieu").on("click",function (e) {
+                $("#canceladdLieu").on("click", function (e) {
                     e.preventDefault();
                     $("#newItemForm").fadeOut();
                 })
@@ -149,7 +163,21 @@
                             ville: $("#new_lieu_ville").val()
                         },
                         function (data) {
-                            alert("success");
+                            var i = 0;
+                            var lieux = JSON.parse(data);
+                            var select = document.createElement("select")
+
+                            for (i = 0; i < lieux.length; i++) {
+                                var option = document.createElement("option")
+                                var lieu = lieux[i];
+                                option.value = lieu.id;
+                                option.innerText = lieu.nom;
+                                select.appendChild(option);
+                            }
+                            select.setAttribute("id", "new_sortie_lieu");
+                            select.setAttribute("class", "form-control");
+                            select.setAttribute("name", "new_sortie[lieu]")
+                            $("#new_sortie_lieu").replaceWith(select);
                         }
                     )
 

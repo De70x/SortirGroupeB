@@ -7,6 +7,7 @@ use App\Entity\Ville;
 use App\Form\NewLieuType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,6 +15,7 @@ class LieuController extends AbstractController
 {
     /**
      * @Route("/nouveau-lieu", name="nouveauLieu")
+     * @throws \JsonException
      */
     public function nouveauLieu(Request $request, EntityManagerInterface $entityManager)
     {
@@ -33,6 +35,20 @@ class LieuController extends AbstractController
             $lieu->setVille($ville);
             $entityManager->persist($lieu);
             $entityManager->flush();
+
+            $lieuRepo = $entityManager->getRepository(Lieu::class);
+            $lieuContent = $lieuRepo->findAll();
+            $contentArray = [];
+
+            foreach ($lieuContent as $lieu){
+                $id = $lieu->getId();
+                $nom = $lieu->getNom();
+                array_push($contentArray,['id'=>[$id],'nom'=>[$nom]]);
+            }
+
+            $lieux = json_encode($contentArray,JSON_THROW_ON_ERROR, 3);
+            dump($lieux);
+            return new JsonResponse($lieux);
         }
 
 
