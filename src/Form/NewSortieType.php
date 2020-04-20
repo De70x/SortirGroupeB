@@ -49,7 +49,7 @@ class NewSortieType extends AbstractType
                     'id'=> 'publier',
                     'class'=>'btn btn-block',
                     'value'=>'publier',
-                    'style'=>'background-color: #ff8906; color:#fffffe; outline: none; border-color:none'
+                    'style'=>'background-color: #ff8906; color:#fffffe; outline: none; border-color:none',
                 ]
             ])
             ->add('enregistrer', SubmitType::class,[

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Entity\Ville;
+use App\Entity\Lieu;
 use App\Form\NewLieuType;
 use App\Form\NewSortieType;
 use App\Form\VilleType;
@@ -150,8 +151,6 @@ class SortieController extends AbstractController
 
 
         if ($newSortieForm->isSubmitted() && $newSortieForm->isValid()){
-            $etat = new Etat();
-            $sortie->setEtat($etat);
             $organisateur = $this->getUser();
             $sortie->setOrganisateur($organisateur);
 
@@ -164,8 +163,8 @@ class SortieController extends AbstractController
             }
             $entityManager->persist($sortie);
             $entityManager->flush();
-            $this->addFlash("success", "Votre compte à bien été créé !");
-            return $this->redirectToRoute("nouvelleSortie");
+            $this->addFlash("success", "Votre sortie a bien été créée !");
+            return $this->redirectToRoute("sorties");
         }
         return $this->render('sortie/nouvelleSortie.html.twig',[
             'newSortieForm'=>$newSortieForm->createView(),
@@ -184,21 +183,37 @@ class SortieController extends AbstractController
 
         $sortieCourante->addEstInscrit($this->getUser());
         $entityManager->persist($sortieCourante);
+        $entityManager->flush();
 
-        return $this->render('sortie/liste.html.twig',[
-
-        ]);
+        return $this->redirectToRoute("sorties");
     }
 
     /**
      * @Route("/publier-sortie/{id}", name="publierSortie")
      */
-    public function publierSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id){
+    public function publierSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, EtatRepository $repoEtats, $id){
 
-        $repoSorties->find($id);
+        $sortieCourante = $repoSorties->find($id);
 
-        return $this->render('sortie/liste.html.twig',[
+        $sortieCourante->setEtat($repoEtats->findOneBy(array('libelle'=>Etat::OUVERTE)));
+        $entityManager->persist($sortieCourante);
+        $entityManager->flush();
 
-        ]);
+        return $this->redirectToRoute("sorties");
+    }
+
+    /**
+     * @Route("/desister-sortie/{id}", name="desistementSortie")
+     */
+    public function desistementSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id){
+
+        $sortieCourante = $repoSorties->find($id);
+
+        $sortieCourante->removeEstInscrit($this->getUser());
+
+        $entityManager->persist($sortieCourante);
+        $entityManager->flush();
+
+        return $this->redirectToRoute("sorties");
     }
 }

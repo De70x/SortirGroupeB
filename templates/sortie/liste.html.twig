@@ -149,13 +149,13 @@
                                 <button class="btn-sm btn-dark" href="#">Détail</button>
                             {% endif %}
                             {% if sortie.etat.libelle == CREEE and sortie.organisateur.id == app.user.id %}
-                                <button class="btn-sm btn-dark" href="{{ path('publierSortie', {'id':sortie.id}) }}">Publier</button>
+                                <a href="{{ path('publierSortie', {'id':sortie.id}) }}"><button class="btn-sm btn-dark">Publier</button></a>
                             {% endif %}
                             {% if sortie not in sortiesUtilisateur and sortie.etat.libelle == OUVERTE and sortie.organisateur.id != app.user.id %}
-                                <button class="btn-sm btn-dark" href="{{ path('inscriptionSortie', {'id':sortie.id}) }}">S'inscrire</button>
+                                <a href="{{ path('inscriptionSortie', {'id':sortie.id}) }}}}"><button class="btn-sm btn-dark">S'inscrire</button></a>
                             {% endif %}
                             {% if sortie in sortiesUtilisateur and sortie.etat.libelle == OUVERTE %}
-                                <button class="btn-sm btn-dark" href="#">Se désister</button>
+                                <a href="{{ path('desistementSortie', {'id':sortie.id}) }}}}"><button class="btn-sm btn-dark">Se désister</button></a>
                             {% endif %}
 
                         </td>
