@@ -3,10 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
-use App\Entity\Lieu;
 use App\Entity\Sortie;
-use App\Entity\Ville;
 use App\Form\NewSortieType;
+use App\Repository\EtatRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -107,7 +106,7 @@ class SortieController extends AbstractController
      * @Route("/nouvelle-sortie", name="nouvelleSortie")
      *
      */
-    public function nouvelleSortie(Request $request, EntityManagerInterface $entityManager){
+    public function nouvelleSortie(Request $request, EntityManagerInterface $entityManager, EtatRepository $repoEtats){
         $sortie = new Sortie();
         $newSortieForm = $this->createForm(NewSortieType::class, $sortie);
 
@@ -120,11 +119,12 @@ class SortieController extends AbstractController
             $sortie->setEtat($etat);
 
             if ($newSortieForm->get('publier')->isClicked()){
-                $etat->setLibelle(etat::OUVERTE);
+                $etat = $repoEtats->findOneBy(array('libelle' => Etat::OUVERTE));
+                $sortie->setEtat($etat);
             }else{
-                $etat->setLibelle(etat::CREEE);
+                $etat = $repoEtats->findOneBy(array('libelle' => Etat::CREEE));
+                $sortie->setEtat($etat);
             }
-            $entityManager->persist($etat);
             $entityManager->persist($sortie);
             $entityManager->flush();
             $this->addFlash("success", "Votre compte à bien été créé !");
@@ -136,9 +136,25 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/inscription-sortie", name="inscriptionSortie")
+     * @Route("/inscription-sortie/{id}", name="inscriptionSortie")
      */
-    public function inscriptionSortie(Request $request, EntityManagerInterface $entityManager){
+    public function inscriptionSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id){
+        $sortieCourante = $repoSorties->find($id);
+
+        $sortieCourante->addEstInscrit($this->getUser());
+        $entityManager->persist($sortieCourante);
+
+        return $this->render('sortie/liste.html.twig',[
+
+        ]);
+    }
+
+    /**
+     * @Route("/publier-sortie/{id}", name="publierSortie")
+     */
+    public function publierSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id){
+
+        $repoSorties->find($id);
 
         return $this->render('sortie/liste.html.twig',[
 
