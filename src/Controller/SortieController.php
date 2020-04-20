@@ -134,4 +134,14 @@ class SortieController extends AbstractController
             'newSortieForm'=>$newSortieForm->createView()
         ]);
     }
+
+    /**
+     * @Route("/inscription-sortie", name="inscriptionSortie")
+     */
+    public function inscriptionSortie(Request $request, EntityManagerInterface $entityManager){
+
+        return $this->render('sortie/liste.html.twig',[
+
+        ]);
+    }
 }

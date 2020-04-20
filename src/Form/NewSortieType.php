@@ -31,7 +31,7 @@ class NewSortieType extends AbstractType
             ->add('dateLimiteInscription',DateType::class,[
                 'label'=>'Date limite d\'inscription'
             ])
-            ->add('nbInscriptionsMax', TextType::class,[
+            ->add('nbInscriptionsMax', NumberType::class,[
                 'label'=>'Nombre de places'
             ])
             ->add('duree', NumberType::class,[
