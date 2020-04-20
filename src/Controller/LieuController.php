@@ -18,6 +18,18 @@ class LieuController extends AbstractController
     {
         $lieu = new Lieu();
 
+        if($request->isXmlHttpRequest()){
+            $nom = $request->get('nom');
+            $rue = $request->get('rue');
+            $ville = $request->get('ville');
+            $lieu->setNom($nom);
+            $lieu->setRue($rue);
+            $lieu->setVille($ville);
+            $entityManager->persist($ville);
+            $entityManager->flush();
+        }
+
+
         $newLieuForm = $this->createForm(NewLieuType::class, $lieu);
         $newLieuForm->handleRequest($request);
 
