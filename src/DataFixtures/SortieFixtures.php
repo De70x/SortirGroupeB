@@ -30,6 +30,7 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             $sortie->setDateLimiteInscription($dateTemp);
             $sortie->setNbInscriptionsMax(rand(10, 100));
             $sortie->setOrganisateur($this->getReference("user1"));
+            $sortie->setEtat($this->getReference('CREEE'));
 
             $manager->persist($sortie);
         }
@@ -42,7 +43,8 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return array(
-        UserFixtures::class
+        UserFixtures::class,
+        EtatFixtures::class
     );
 
 
