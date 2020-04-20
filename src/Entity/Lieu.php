@@ -39,12 +39,18 @@ class Lieu
     private $longitude;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="lieu", cascade={"persist"})
+     */
+    private $sorties;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Ville", inversedBy="lieus")
      */
     private $ville;
 
     public function __construct()
     {
+        $this->sorties = new  ArrayCollection();
     }
 
     public function getId(): ?int

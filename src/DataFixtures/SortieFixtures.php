@@ -31,7 +31,6 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             $sortie->setNbInscriptionsMax(rand(10, 100));
             $sortie->setOrganisateur($this->getReference("user1"));
 
-
             $manager->persist($sortie);
         }
         $manager->flush();

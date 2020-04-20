@@ -4,16 +4,21 @@
     Nouvelle Sortie
 {% endblock %}
 
-{% form_theme newSortieForm 'bootstrap_4_layout.html.twig' %}
 
+
+{% form_theme newSortieForm 'bootstrap_4_layout.html.twig' %}
+{% form_theme newLieuForm 'bootstrap_4_layout.html.twig' %}
+{% form_theme newVilleForm 'bootstrap_4_layout.html.twig' %}
 {% block main %}
     <style>
         label {
             color: #fffffe;
         }
-        fieldset>legend{
+
+        fieldset > legend {
             color: #fffffe;
         }
+
     </style>
     <div class="container">
         <div class="row justify-content-center">
@@ -21,34 +26,138 @@
                 <h1 class="text-center">Nouvelle Sortie </h1>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6 m-5 p-3">
-                {% block form %}
+        {% block form %}
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 p-3">
+
                     {{ form_start(newSortieForm) }}
-                    {{ form_widget(newSortieForm) }}
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <button class="btn" type="button" style="background: #e53170; color:#fffffe"><a href="{{ path('nouveauLieu') }}"><i class="fal fa-plus"></i></a></button>
-                        </div>
-                        <select class="custom-select" id="inputGroupSelect03" aria-label="Example select with button addon">
-                            <option selected>Choose...</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
+
+                    {{ form_row(newSortieForm.nom) }}
+                    {{ form_row(newSortieForm.dateHeureDebut) }}
+                    {{ form_row(newSortieForm.dateLimiteInscription) }}
+                    {{ form_row(newSortieForm.nbInscriptionsMax) }}
+                    {{ form_row(newSortieForm.duree) }}
+                    {{ form_row(newSortieForm.infosSortie) }}
+                    {{ form_row(newSortieForm.lieu) }}
+
+                    <button id="addLieu" name="addLieu" class="btn " style="background-color: #e53170; color:#fffffe">
+                        Ajouter un lieu
+                    </button>
                     <br>
+                    <br>
+                    <div class=" row d-flex justify-content-center">
+                        <div class="col-12 col-md-6">
+                            {{ form_row(newSortieForm.publier) }}
+                        </div>
+                        <div class="col-12 col-md-6">
+                            {{ form_row(newSortieForm.enregistrer) }}
+                        </div>
+
+                    </div>
                     <div>
-                        <button type="submit" class="btn " style="background-color: #ff8906; color:#fffffe">Enregistrer
+                        <button class="btn btn-block"
+                                style="background-color: #ff8906; color:#fffffe; max-height: inherit"><a
+                                    href="{{ path('home') }}"></a>Annuler
                         </button>
-                        <button type="submit" class="btn " style="background-color: #ff8906; color:#fffffe">Publier la
-                            Sortie
-                        </button>
-                        <button class="btn " style="background-color: #ff8906; color:#fffffe; "> <a style="text-decoration: none" href="{{ path('home') }}">Annuler</a></button>
                     </div>
                     {{ form_end(newSortieForm) }}
-                {% endblock %}
+                </div>
+                <div id="newItemForm" class="col-12 col-md-6 p-3">
+                    <div id="newLieuFormBlock">
+
+                        {{ form_start(newLieuForm) }}
+                        {{ form_widget(newLieuForm) }}
+
+                        <button id="canceladdLieu" name="addLieu" class="btn "
+                                style="background-color: #e53170; color:#fffffe"><i class="far fa-angle-up"></i>
+                        </button>
+                        <button id="addVille" name="addLieu" class="btn "
+                                style="background-color: #e53170; color:#fffffe">Ajouter une Ville
+                        </button>
+                        <button id="submitLieu" type="button" class="btn "
+                                style="background-color: #ff8906; color:#fffffe">Enregistrer le nouveau lieu
+                        </button>
+
+                        {{ form_end(newLieuForm) }}
+                    </div>
+                    <div id="newVilleFormBlock">
+
+                        {{ form_start(newVilleForm) }}
+                        {{ form_widget(newVilleForm) }}
+                        <button id="canceladdVille" name="addLieu" class="btn "
+                                style="background-color: #e53170; color:#fffffe"><i class="far fa-angle-up"></i>
+                        </button>
+                        <button id="submitVille" type="button" class="btn "
+                                style="background-color: #ff8906; color:#fffffe">Enregistrer la Nouvelle Ville
+                        </button>
+
+                        {{ form_end(newVilleForm) }}
+                    </div>
+                </div>
             </div>
-        </div>
+        {% endblock %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#newItemForm").hide();
+
+            $("#addLieu").on("click", function (e) {
+                e.preventDefault();
+                $("#newItemForm").fadeIn();
+                $("#newVilleFormBlock").hide();
+
+                $("#addVille").on("click", function (e) {
+                    e.preventDefault();
+                    $("#newVilleFormBlock").fadeIn();
+                    $("#submitVille").on("click", function () {
+                        $("#newVilleFormBlock").hide();
+                        $.post('{{ path('nouvelleVille') }}',
+                            {
+                                nom: $("#ville_nom").val(),
+                                codePostal: $("#ville_codePostal").val()
+                            },
+                            function (data) {
+                                alert("success");
+                            }
+
+                        )
+                        $("#new_lieu_ville").reload(true);
+                    })
+
+                    $("#canceladdVille").on("click",function (e) {
+                        e.preventDefault();
+                        $("#newVilleFormBlock").fadeOut();
+                    })
+                })
+
+
+                $("#canceladdLieu").on("click",function (e) {
+                    e.preventDefault();
+                    $("#newItemForm").fadeOut();
+                })
+
+                $("#submitLieu").on("click", function () {
+                    $("#newItemForm").fadeOut();
+                    $.post('{{ path('nouveauLieu') }}',
+                        {
+                            nom: $("#new_lieu_nom").val(),
+                            rue: $("#new_lieu_rue").val(),
+                            ville: $("#new_lieu_ville").val()
+                        },
+                        function (data) {
+                            alert("success");
+                        }
+                    )
+
+                })
+            })
+
+
+        })
+
+    </script>
 {% endblock %}

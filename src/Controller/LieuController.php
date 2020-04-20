@@ -17,12 +17,28 @@ class LieuController extends AbstractController
     public function nouveauLieu(Request $request, EntityManagerInterface $entityManager)
     {
         $lieu = new Lieu();
-        $newLieuForm = $this->createForm(NewLieuType::class);
 
+        if($request->isXmlHttpRequest()){
+            $nom = $request->get('nom');
+            $rue = $request->get('rue');
+            $ville = $request->get('ville');
+            $lieu->setNom($nom);
+            $lieu->setRue($rue);
+            $lieu->setVille($ville);
+            $entityManager->persist($ville);
+            $entityManager->flush();
+        }
+
+
+        $newLieuForm = $this->createForm(NewLieuType::class, $lieu);
+        $newLieuForm->handleRequest($request);
 
         if ($newLieuForm->isSubmitted() && $newLieuForm->isValid()){
+           dump($newLieuForm->getData());
             $entityManager->persist($lieu);
             $entityManager->flush();
+            $this->addFlash("success", "Votre lieu à bien été créé !");
+            return $this->redirectToRoute("nouveauLieu");
         }
 
         return $this->render('lieu/nouveauLieu.html.twig', [
