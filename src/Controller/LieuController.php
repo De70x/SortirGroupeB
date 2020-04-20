@@ -18,8 +18,6 @@ class LieuController extends AbstractController
     {
         $lieu = new Lieu();
 
-
-
         $newLieuForm = $this->createForm(NewLieuType::class, $lieu);
         $newLieuForm->handleRequest($request);
 
