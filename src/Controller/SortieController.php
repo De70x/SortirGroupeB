@@ -33,6 +33,7 @@ class SortieController extends AbstractController
     {
         // On crée le formulaire de recherche
         $filtres = array();
+        $userCourant = $this->getUser()->getId() == null ? -1 : $this->getUser()->getId();
         $rechercheForm = $this->createFormBuilder($filtres)
             ->add('site', EntityType::class, [
                 'class' => 'App\Entity\Site',
@@ -67,7 +68,7 @@ class SortieController extends AbstractController
                 'required' => false
             ])
             ->add('idUser', HiddenType::class,[
-                'attr' => ['value' => $this->getUser()->getId()]
+                'attr' => ['value' => $userCourant]
             ])
             ->getForm();
         $rechercheForm->handleRequest($request);

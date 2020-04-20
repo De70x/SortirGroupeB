@@ -129,36 +129,38 @@
         </thead>
         <tbody>
         {% for sortie in sorties %}
-            {% if sortie.etat.libelle != CREEE or sortie.organisateur.id == app.user.id %}
-            <tr>
-                <th scope="row">{{ sortie.nom }}</th>
-                <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
-                <td>{{ sortie.dateLimiteInscription|date("d/m/Y") }}</td>
-                <td>{{ nbInscritsParSortie[sortie.id] }} / {{ sortie.nbInscriptionsMax }}</td>
-                <td>{{ sortie.etat.libelle }}</td>
-                <td>
-                    {% if sortie in sortiesUtilisateur %}
-                        X
-                    {% endif %}
-                </td>
-                <td>{{ sortie.organisateur.nom }}</td>
+            {% if app.user != null %}
+                {% if sortie.etat.libelle != CREEE or sortie.organisateur.id == app.user.id %}
+                    <tr>
+                        <th scope="row">{{ sortie.nom }}</th>
+                        <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
+                        <td>{{ sortie.dateLimiteInscription|date("d/m/Y") }}</td>
+                        <td>{{ nbInscritsParSortie[sortie.id] }} / {{ sortie.nbInscriptionsMax }}</td>
+                        <td>{{ sortie.etat.libelle }}</td>
+                        <td>
+                            {% if sortie in sortiesUtilisateur %}
+                                X
+                            {% endif %}
+                        </td>
+                        <td>{{ sortie.organisateur.nom }}</td>
 
-                <td class="boutonsAction">
-                    {% if sortie.organisateur.id != app.user.id %}
-                        <button class="btn-sm btn-dark" href="#">Détail</button>
-                    {% endif %}
-                    {% if sortie.etat.libelle == CREEE and sortie.organisateur.id == app.user.id %}
-                        <button class="btn-sm btn-dark" href="#">Publier</button>
-                    {% endif %}
-                    {% if sortie not in sortiesUtilisateur and sortie.etat.libelle == OUVERTE and sortie.organisateur.id != app.user.id %}
-                        <button class="btn-sm btn-dark" href="#">S'inscrire</button>
-                    {% endif %}
-                    {% if sortie in sortiesUtilisateur and sortie.etat.libelle == OUVERTE %}
-                        <button class="btn-sm btn-dark" href="#">Se désister</button>
-                    {% endif %}
+                        <td class="boutonsAction">
+                            {% if sortie.organisateur.id != app.user.id %}
+                                <button class="btn-sm btn-dark" href="#">Détail</button>
+                            {% endif %}
+                            {% if sortie.etat.libelle == CREEE and sortie.organisateur.id == app.user.id %}
+                                <button class="btn-sm btn-dark" href="#">Publier</button>
+                            {% endif %}
+                            {% if sortie not in sortiesUtilisateur and sortie.etat.libelle == OUVERTE and sortie.organisateur.id != app.user.id %}
+                                <button class="btn-sm btn-dark" href="#">S'inscrire</button>
+                            {% endif %}
+                            {% if sortie in sortiesUtilisateur and sortie.etat.libelle == OUVERTE %}
+                                <button class="btn-sm btn-dark" href="#">Se désister</button>
+                            {% endif %}
 
-                </td>
-            </tr>
+                        </td>
+                    </tr>
+                {% endif %}
             {% endif %}
         {% endfor %}
         </tbody>
