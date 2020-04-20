@@ -9,18 +9,16 @@ use App\Entity\Lieu;
 use App\Form\NewLieuType;
 use App\Form\NewSortieType;
 use App\Form\VilleType;
-use App\Repository\LieuRepository;
 use App\Repository\EtatRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
-use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use http\Client\Curl\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,7 +77,7 @@ class SortieController extends AbstractController
             ])
             ->getForm();
         $rechercheForm->handleRequest($request);
-        dump($rechercheForm->getData());
+
         if ($rechercheForm->isSubmitted() && $rechercheForm->isValid()){
             $sorties = $repoSorties->rechercherSorties($rechercheForm->getData());
         }
@@ -109,7 +107,6 @@ class SortieController extends AbstractController
             'nbInscritsParSortie' => $nbInscritsParSortie,
             'etatSortie'=>$sortie->getEtat()->getLibelle(),
             'sortieOrganisateur'=>$sortie->getOrganisateur()->getNom(),
-
         ]);
     }
 
@@ -215,5 +212,32 @@ class SortieController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute("sorties");
+    }
+
+    /**
+     * @Route("/annuler-sortie/{id}", name="annulerSortie")
+     */
+    public function annulerSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, EtatRepository $repoEtats, $id){
+
+        $sortieCourante = $repoSorties->find($id);
+        $formAnnulation = $this->createFormBuilder()->add('commentaireAnnulation', TextareaType::class, [
+            'attr' => []
+        ])->getForm();
+
+        $formAnnulation->handleRequest($request);
+
+
+        if ($formAnnulation->isSubmitted() && $formAnnulation->isValid()){
+            $sortieCourante->setEtat($repoEtats->findOneBy(array('libelle'=>Etat::ANNULEE)));
+            $sortieCourante->setInfosSortie($formAnnulation->getData()['commentaireAnnulation']);
+            $entityManager->persist($sortieCourante);
+            $entityManager->flush();
+            return $this->redirectToRoute("sorties");
+        }
+
+        return $this->render('sortie/modaleAnnulation.html.twig',[
+            'formAnnulation' => $formAnnulation->createView(),
+            'sortie' => $sortieCourante,
+        ]);
     }
 }

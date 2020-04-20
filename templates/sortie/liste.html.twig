@@ -131,7 +131,16 @@
         {% for sortie in sorties %}
             {% if app.user != null %}
                 {% if sortie.etat.libelle != CREEE or sortie.organisateur.id == app.user.id %}
-                    <tr>
+                    {% if sortie.etat.libelle == ANNULEE %}
+                        {# ici on met une variable a annulee si la sortie est annulee pour pouvoir faire un affichage particulié#}
+                        {% set annulee = 'annulee' %}
+                    {% endif %}
+                    {% if sortie.etat.libelle != ANNULEE %}
+                        {# si la sortie n'est pas annulée affichage normal#}
+                        {% set annulee = '' %}
+                    {% endif %}
+
+                    <tr class= {{ annulee }}>
                         <th scope="row">{{ sortie.nom }}</th>
                         <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
                         <td>{{ sortie.dateLimiteInscription|date("d/m/Y") }}</td>
@@ -149,13 +158,27 @@
                                 <button class="btn-sm btn-dark" href="#">Détail</button>
                             {% endif %}
                             {% if sortie.etat.libelle == CREEE and sortie.organisateur.id == app.user.id %}
-                                <a href="{{ path('publierSortie', {'id':sortie.id}) }}"><button class="btn-sm btn-dark">Publier</button></a>
+                                <a href="{{ path('publierSortie', {'id':sortie.id}) }}">
+                                    <button class="btn-sm btn-dark">Publier</button>
+                                </a>
+                            {% endif %}
+                            {% if (sortie.etat.libelle == CREEE or sortie.etat.libelle == OUVERTE) and sortie.organisateur.id == app.user.id %}
+                                <a href="#" data-action="{{ path('annulerSortie', {'id':sortie.id}) }}"
+                                   data-toggle="modal" data-target="#confirmer-annulation"
+                                   data-contenu="{{ sortie.nom }}">
+                                    <button class="btn-sm btn-danger">Annuler</button>
+                                </a>
+
                             {% endif %}
                             {% if sortie not in sortiesUtilisateur and sortie.etat.libelle == OUVERTE and sortie.organisateur.id != app.user.id %}
-                                <a href="{{ path('inscriptionSortie', {'id':sortie.id}) }}}}"><button class="btn-sm btn-dark">S'inscrire</button></a>
+                                <a href="{{ path('inscriptionSortie', {'id':sortie.id}) }}}}">
+                                    <button class="btn-sm btn-dark">S'inscrire</button>
+                                </a>
                             {% endif %}
                             {% if sortie in sortiesUtilisateur and sortie.etat.libelle == OUVERTE %}
-                                <a href="{{ path('desistementSortie', {'id':sortie.id}) }}}}"><button class="btn-sm btn-dark">Se désister</button></a>
+                                <a href="{{ path('desistementSortie', {'id':sortie.id}) }}}}">
+                                    <button class="btn-sm btn-dark">Se désister</button>
+                                </a>
                             {% endif %}
 
                         </td>
@@ -165,5 +188,22 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {#Ici, on ajoute la modale de confirmation#}
+    <div class="modal fade" id="confirmer-annulation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script type="text/javascript" src="{{ asset('js/confirmationAnnulation.js') }}"></script>
+    {% endblock %}
 
 {% endblock %}

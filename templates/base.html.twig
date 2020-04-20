@@ -11,7 +11,8 @@
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
               integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
               crossorigin="anonymous"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css"/>
     {% endblock %}
 </head>
 <body>
@@ -25,17 +26,19 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <a class="nav-link font-weight-bold" style="color:#e53170; margin-right: 0.5em">Hello {{ app.user.username }}</a>
-                <button class="btn m-0 p-0 btn-custom" style="background-color: #ff8906; color:#fffffe"><a
-                            class="nav-item nav-link active" href="{{path('nouvelleSortie')}}">Proposer une sortie</a></button>
-                <a class="nav-item nav-link active" href="{{ path('profile') }}">Mon profil</a>
+                    <a class="nav-link font-weight-bold"
+                       style="color:#e53170; margin-right: 0.5em">Hello {{ app.user.username }}</a>
+                    <button class="btn m-0 p-0 btn-custom" style="background-color: #ff8906; color:#fffffe"><a
+                                class="nav-item nav-link active" href="{{ path('nouvelleSortie') }}">Proposer une
+                            sortie</a></button>
+                    <a class="nav-item nav-link active" href="{{ path('profile') }}">Mon profil</a>
                 {% endif %}
                 <a class="nav-item nav-link active" href="{{ path('sorties') }}">Toutes les sorties</a>
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <a class="nav-item nav-link active" href="{{ path('logout') }}">Se deconnecter</a>
+                    <a class="nav-item nav-link active" href="{{ path('logout') }}">Se deconnecter</a>
                 {% else %}
-                <a class="nav-item nav-link active" href="{{ path('register') }}">S'inscrire</a>
-                <a class="nav-item nav-link active" href="{{path('login')}}">Se connecter</a>
+                    <a class="nav-item nav-link active" href="{{ path('register') }}">S'inscrire</a>
+                    <a class="nav-item nav-link active" href="{{ path('login') }}">Se connecter</a>
                 {% endif %}
             </ul>
         </div>
@@ -55,11 +58,14 @@
                 <div class="col-md-4 mt-md-0 mt-3 ">
                     <h5 class="text-uppercase text-center">A propos de Sortir.com</h5>
 
-                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis finibus feugiat. Ut in
+                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
+                        iaculis finibus feugiat. Ut in
                         neque sed ante finibus tempor vitae eu augue.</p>
-                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis finibus feugiat. Ut in
+                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
+                        iaculis finibus feugiat. Ut in
                         neque sed ante finibus tempor vitae eu augue.</p>
-                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis finibus feugiat. Ut in
+                    <p class="text-justify p-2 m-3"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
+                        iaculis finibus feugiat. Ut in
                         neque sed ante finibus tempor vitae eu augue.</p>
 
                 </div>
@@ -68,8 +74,10 @@
                     <h5 class="text-uppercase text-center">Informations Légales</h5>
                     <ul class="list-unstyled">
                         <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">CGU</a></li>
-                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">Mentions Légales</a></li>
-                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">Nous contacter </a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">Mentions Légales</a>
+                        </li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">Nous contacter </a>
+                        </li>
                         <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#">FAQ</a></li>
                     </ul>
                 </div>
@@ -77,34 +85,40 @@
                 <div class="col-md-4 mb-md-0 mb-3">
                     <h5 class="text-uppercase text-center">Nous retrouver</h5>
                     <ul class="list-unstyled">
-                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="https://github.com/De70x/SortirGroupeB"><i class="fab fa-github"></i> GitHub</a></li>
-                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
-                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
-                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none"
+                                                           href="https://github.com/De70x/SortirGroupeB"><i
+                                        class="fab fa-github"></i> GitHub</a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#"><i
+                                        class="fab fa-instagram"></i> Instagram</a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#"><i
+                                        class="fab fa-twitter"></i> Twitter</a></li>
+                        <li class="text-center p-2 m-3"><a style="text-decoration: none" href="#"><i
+                                        class="fab fa-facebook"></i> Facebook</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <!-- Copyright -->
         <hr style="background-color:#fffffe">
-            <div class="text-center py-3">
-                <p>© 2020 Copyright: By le Groupe B</p>
-            </div>
+        <div class="text-center py-3">
+            <p>© 2020 Copyright: By le Groupe B</p>
+        </div>
     </footer>
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
             crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
     <script type="text/javascript" src="{{ asset('js/datepicker.js') }}"></script>
 {% endblock %}
 </body>
