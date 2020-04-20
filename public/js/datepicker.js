@@ -1,7 +1,7 @@
 $(function () {
     moment.locale('fr');
     $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
-        locale: 'fr"',
+        locale: 'fr',
         icons: {
             time: 'far fa-clock dark',
             date: 'far fa-calendar',
