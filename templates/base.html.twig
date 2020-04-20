@@ -33,8 +33,10 @@
                 <a class="nav-item nav-link active" href="{{ path('sorties') }}">Toutes les sorties</a>
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <a class="nav-item nav-link active" href="{{ path('logout') }}">Se deconnecter</a>
-                {% else %}
+                {% endif %}
+                {% if is_granted("ROLE_ADMIN") %}
                 <a class="nav-item nav-link active" href="{{ path('register') }}">S'inscrire</a>
+                {% endif %}
                 <a class="nav-item nav-link active" href="{{path('login')}}">Se connecter</a>
                 {% endif %}
             </ul>
