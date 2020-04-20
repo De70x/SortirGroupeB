@@ -51,6 +51,7 @@ class UserController extends AbstractController
         $registerForm = $this->createForm(RegisterType::class, $user);
         $user->setAdministrateur(false);
 
+
         $registerForm->handleRequest($request);
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
 
@@ -72,6 +73,8 @@ class UserController extends AbstractController
      * @Route("/logout", name="logout")
      */
     public function logout(){}
+
+
 
     /**
      * @Route("/change_profile", name="change_profile")

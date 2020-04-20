@@ -242,6 +242,14 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         return array('ROLE_USER');
     }
 
+    /**
+     * @param mixed $roles
+     */
+    public function setRoles($roles): void
+    {
+        $this->roles = $roles;
+    }
+
 
     /**
      * @inheritDoc
