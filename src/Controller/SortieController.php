@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Site;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Entity\Lieu;
@@ -38,7 +39,7 @@ class SortieController extends AbstractController
     {
         // On crée le formulaire de recherche
         $filtres = array();
-        $userCourant = $this->getUser()->getId() == null ? -1 : $this->getUser()->getId();
+        $userCourant = $this->getUser() == null ? -1 : $this->getUser()->getId();
         $rechercheForm = $this->createFormBuilder($filtres)
             ->add('site', EntityType::class, [
                 'class' => 'App\Entity\Site',
@@ -87,11 +88,7 @@ class SortieController extends AbstractController
 
         }
 
-        $user=0;
-        if($this->getUser() != null){
-            $user = $this->getUser()->getId();
-        }
-        $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($user);
+        $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($userCourant);
         $nbInscritsParSortie = [];
         $listeSites = $repoSites->findAll();
         foreach ($sorties as $sortie){
@@ -105,8 +102,6 @@ class SortieController extends AbstractController
             'listeSites' => $listeSites,
             'sortiesUtilisateur' => $sortiesUtilisateur,
             'nbInscritsParSortie' => $nbInscritsParSortie,
-            'etatSortie'=>$sortie->getEtat()->getLibelle(),
-            'sortieOrganisateur'=>$sortie->getOrganisateur()->getNom(),
         ]);
     }
 

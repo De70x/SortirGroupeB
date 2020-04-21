@@ -20,7 +20,7 @@ class EtatFixtures extends Fixture {
             $etat4 = new Etat();
             $etat5 = new Etat();
             $etat6 = new Etat();
-            $etat7 = new Etat;
+
             $etat->setLibelle(Etat::CREEE);
             $this->setReference('CREEE',$etat);
             $manager->persist($etat);
@@ -37,17 +37,13 @@ class EtatFixtures extends Fixture {
             $this->setReference('ANNULEE',$etat4);
             $manager->persist($etat4);
 
-            $etat5->setLibelle(Etat::CLOTUREE);
-            $this->setReference('CLOTUREE',$etat5);
+            $etat5->setLibelle(Etat::EN_COURS);
+            $this->setReference('EN COURS',$etat6);
             $manager->persist($etat5);
 
-            $etat6->setLibelle(Etat::EN_COURS);
-            $this->setReference('EN COURS',$etat6);
+            $etat6->setLibelle(Etat::PASSEE);
+            $this->setReference('PASSSEE',$etat6);
             $manager->persist($etat6);
-
-            $etat7->setLibelle(Etat::PASSEE);
-            $this->setReference('PASSSEE',$etat7);
-            $manager->persist($etat7);
 
         $manager->flush();
 
