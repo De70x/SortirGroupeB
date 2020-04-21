@@ -91,12 +91,12 @@ class Sortie
         return $this;
     }
 
-    public function getDateHeureDebut(): ?DateTimeInterface
+    public function getDateHeureDebut()
     {
         return $this->dateHeureDebut;
     }
 
-    public function setDateHeureDebut(DateTimeInterface $dateHeureDebut): self
+    public function setDateHeureDebut($dateHeureDebut): self
     {
         $this->dateHeureDebut = $dateHeureDebut;
 
@@ -115,12 +115,12 @@ class Sortie
         return $this;
     }
 
-    public function getDateLimiteInscription(): ?DateTimeInterface
+    public function getDateLimiteInscription()
     {
         return $this->dateLimiteInscription;
     }
 
-    public function setDateLimiteInscription(DateTimeInterface $dateLimiteInscription): self
+    public function setDateLimiteInscription($dateLimiteInscription): self
     {
         $this->dateLimiteInscription = $dateLimiteInscription;
 

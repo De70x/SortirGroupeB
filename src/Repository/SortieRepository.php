@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -9,7 +10,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-
 
 
 /**
@@ -98,63 +98,72 @@ class SortieRepository extends ServiceEntityRepository
      */
     public function rechercherSorties($filtres)
     {
+        // filtre par défaut
+        if (empty($filtres)) {
+            $rechercheAvancee = $this->createQueryBuilder('s')
+                ->andWhere('s.etat != :cree')
+                ->setParameter('cree', Etat::CREEE);
+        } else {
 
-        $formatDates = 'd/m/Y H:i';
-        $rechercheAvancee = $this->createQueryBuilder('s')
-            ->leftJoin('s.inscriptions', 'i');
+            $formatDates = 'd/m/Y H:i';
+            $rechercheAvancee = $this->createQueryBuilder('s')
+                ->leftJoin('s.inscriptions', 'i');
 
-        if ($filtres['site'] != null) {
-            $rechercheAvancee->andWhere('s.id = :idSite')
-                ->setParameter('idSite', $filtres['site']->getId());
-        }
-
-        if ($filtres['nomContient'] != null) {
-            $rechercheAvancee->andWhere('s.nom LIKE :nomContient')
-                ->setParameter('nomContient', '%' . $filtres['nomContient'] . '%');
-        }
-
-        if ($filtres['dateDebut'] != null) {
-            // On formate la date car c'est une chaine de caractère qu'on récupère du formulaire
-            $dateDebut = date_create_from_format($formatDates, $filtres['dateDebut']);
-            $rechercheAvancee->andWhere('s.dateHeureDebut >= :dateDebut')
-                ->setParameter('dateDebut', $dateDebut);
-        }
-
-        if ($filtres['dateFin'] != null) {
-            // On formate la date car c'est une chaine de caractère qu'on récupère du formulaire
-            $dateFin = date_create_from_format($formatDates, $filtres['dateFin']);
-            $rechercheAvancee->andWhere('s.dateHeureDebut <= :dateFin')
-                ->setParameter('dateFin', $dateFin);
-        }
-
-        $queryCoches = $this->createQueryBuilder('sc')
-        ->leftJoin('sc.inscriptions', 'sci');
-
-        // ici on va gérer les coches
-        if ($filtres['idUser'] != null) {
-            if ($filtres['organisateur']) {
-                $queryCoches->orWhere('sc.organisateur = :idOrg');
-                $rechercheAvancee->setParameter('idOrg', $filtres['idUser']);
+            if ($filtres['site'] != null) {
+                $rechercheAvancee
+                    ->leftJoin('s.organisateur', 'org')
+                    ->andWhere('org.site = :idSite')
+                    ->setParameter('idSite', $filtres['site']);
             }
-            if ($filtres['inscrit']) {
-                $queryCoches->orWhere('sci.id = :idUser');
-                $rechercheAvancee->setParameter('idUser', $filtres['idUser']);
-            }
-            if ($filtres['pasInscrit']) {
-                // On passe par une requête intermédiare pour faire le not in
-                $idMesSorties = $this->createQueryBuilder('ms')
-                    ->leftJoin('ms.inscriptions', 'mi')
-                    ->where($queryCoches->expr()->eq('mi.id', $filtres['idUser']));
 
-                $queryCoches->orWhere($queryCoches->expr()->notIn('sc.id', $idMesSorties->getDQL()));
+            if ($filtres['nomContient'] != null) {
+                $rechercheAvancee->andWhere('s.nom LIKE :nomContient')
+                    ->setParameter('nomContient', '%' . $filtres['nomContient'] . '%');
             }
-            if ($filtres['passees']) {
-                $maintenant = new DateTime();
-                $queryCoches->orWhere('sc.dateHeureDebut <= :maintenant');
-                $rechercheAvancee->setParameter('maintenant', $maintenant);
+
+            if ($filtres['dateDebut'] != null) {
+                // On formate la date car c'est une chaine de caractère qu'on récupère du formulaire
+                $dateDebut = date_create_from_format($formatDates, $filtres['dateDebut']);
+                $rechercheAvancee->andWhere('s.dateHeureDebut >= :dateDebut')
+                    ->setParameter('dateDebut', $dateDebut);
             }
+
+            if ($filtres['dateFin'] != null) {
+                // On formate la date car c'est une chaine de caractère qu'on récupère du formulaire
+                $dateFin = date_create_from_format($formatDates, $filtres['dateFin']);
+                $rechercheAvancee->andWhere('s.dateHeureDebut <= :dateFin')
+                    ->setParameter('dateFin', $dateFin);
+            }
+
+            $queryCoches = $this->createQueryBuilder('sc')
+                ->leftJoin('sc.inscriptions', 'sci');
+
+            // ici on va gérer les coches
+            if ($filtres['idUser'] != null) {
+                if ($filtres['organisateur']) {
+                    $queryCoches->orWhere('sc.organisateur = :idOrg');
+                    $rechercheAvancee->setParameter('idOrg', $filtres['idUser']);
+                }
+                if ($filtres['inscrit']) {
+                    $queryCoches->orWhere('sci.id = :idUser');
+                    $rechercheAvancee->setParameter('idUser', $filtres['idUser']);
+                }
+                if ($filtres['pasInscrit']) {
+                    // On passe par une requête intermédiare pour faire le not in
+                    $idMesSorties = $this->createQueryBuilder('ms')
+                        ->leftJoin('ms.inscriptions', 'mi')
+                        ->where($queryCoches->expr()->eq('mi.id', $filtres['idUser']));
+
+                    $queryCoches->orWhere($queryCoches->expr()->notIn('sc.id', $idMesSorties->getDQL()));
+                }
+                if ($filtres['passees']) {
+                    $maintenant = new DateTime();
+                    $queryCoches->orWhere('sc.dateHeureDebut <= :maintenant');
+                    $rechercheAvancee->setParameter('maintenant', $maintenant);
+                }
+            }
+            $rechercheAvancee->andWhere($rechercheAvancee->expr()->in('s.id', $queryCoches->getDQL()));
         }
-        $rechercheAvancee->andWhere($rechercheAvancee->expr()->in('s.id', $queryCoches->getDQL()));
         return $rechercheAvancee->orderBy('s.dateHeureDebut', 'ASC')->getQuery()->getResult();
     }
 }

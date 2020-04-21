@@ -72,6 +72,13 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     private $roles;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $resetToken;
+
+
+
 
 
     public function __construct()
@@ -276,4 +283,28 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         $this->photo = $photo;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getResetToken(): string
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * @param string $resetToken
+     */
+    public function setResetToken(?string $resetToken): void
+    {
+        $this->resetToken = $resetToken;
+    }
+
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return "<a href='#'>".$this->getUsername()."</a>";
+    }
+
+
 }

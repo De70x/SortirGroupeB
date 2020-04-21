@@ -48,7 +48,7 @@ class ProfileFormType extends AbstractType
                     return $siteRepository->createQueryBuilder('site')->orderBy('site.nom', 'ASC');
                 },
                 'choice_label' => function (Site $site) {
-                    return $site->getName();
+                    return $site->getNom();
                 }
             ])
             ->add('photoFile', FileType::class, [

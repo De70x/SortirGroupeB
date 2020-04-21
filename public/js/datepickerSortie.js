@@ -15,14 +15,14 @@ $(function () {
         },
     });
 
-    $('#form_dateDebut').datetimepicker();
-    $('#form_dateFin').datetimepicker({
+    $('#form_dateHeureDebut').datetimepicker();
+    $('#form_dateLimiteInscription').datetimepicker({
         useCurrent: false
     });
-    $("#form_dateDebut").on("change.datetimepicker", function (e) {
-        $('#form_dateFin').datetimepicker('minDate', e.date);
+    $("#form_dateLimiteInscription").on("change.datetimepicker", function (e) {
+        $('#form_dateHeureDebut').datetimepicker('minDate', e.date);
     });
-    $("#form_dateFin").on("change.datetimepicker", function (e) {
-        $('#form_dateDebut').datetimepicker('maxDate', e.date);
+    $("#form_dateHeureDebut").on("change.datetimepicker", function (e) {
+        $('#form_dateLimiteInscription').datetimepicker('maxDate', e.date);
     });
 });

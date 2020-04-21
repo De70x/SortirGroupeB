@@ -14,34 +14,34 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-sm-10 col-md-8 col-lg-6 p-3">
-                <h1 class="text-center">{{ app.user.username }}</h1>
+                <h1 class="text-center">{{ utilisateur|raw }}</h1>
             </div>
         </div>
             <div class="d-flex justify-content-center">
                 <div class="col-sm-4">
-                    <img src="{{ asset('uploads/photo/') ~ app.user.photo }}" class="rounded" alt="#">
+                    <img src="{{ asset('uploads/photo/') ~ utilisateur.photo }}" class="rounded" alt="#">
                 </div>
                 <div class="col-md-8">
                     <table class="table table-borderless">
                         <tr>
                             <td align="right" class="profile">Prénom :</td>
-                            <td align="left" class="profile">{{ app.user.prenom }}</td>
+                            <td align="left" class="profile">{{ utilisateur.prenom }}</td>
                         </tr>
                         <tr>
                             <td align="right" class="profile">Nom :</td>
-                            <td align="left" class="profile">{{ app.user.nom }}</td>
+                            <td align="left" class="profile">{{ utilisateur.nom }}</td>
                         </tr>
                         <tr>
                             <td align="right" class="profile">Téléphone :</td>
-                            <td align="left" class="profile">{{ app.user.telephone }}</td>
+                            <td align="left" class="profile">{{ utilisateur.telephone }}</td>
                         </tr>
                         <tr>
                             <td align="right" class="profile">Email :</td>
-                            <td align="left" class="profile">{{ app.user.mail }}</td>
+                            <td align="left" class="profile">{{ utilisateur.mail }}</td>
                         </tr>
                         <tr>
                             <td align="right" class="profile">Site de rattachement :</td>
-                            <td align="left" class="profile">{{ app.user.site }}</td>
+                            <td align="left" class="profile">{{ utilisateur.site.nom }}</td>
                         </tr>
                     </table>
                     <form action="{{ path('change_profile') }}" method="post">
