@@ -25,10 +25,10 @@ class NewSortieType extends AbstractType
             ->add('nom',TextType::class,[
                 'label'=>'Nom de la sortie'
             ])
-            ->add('dateHeureDebut', DateTimeType::class,[
-                'label'=>'Date et heure de la sortie',
+            ->add('dateHeureDebut', TextType::class,[
+                'label'=>'Date et heure de la sortie'
             ])
-            ->add('dateLimiteInscription',DateType::class,[
+            ->add('dateLimiteInscription', TextType::class,[
                 'label'=>'Date limite d\'inscription'
             ])
             ->add('nbInscriptionsMax', NumberType::class,[

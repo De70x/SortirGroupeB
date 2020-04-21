@@ -122,11 +122,9 @@ class SortieController extends AbstractController
         $newLieuForm = $this->createForm(NewLieuType::class, $lieu);
         $newVilleForm = $this->createForm(VilleType::class, $ville);
 
-
         $newSortieForm->handleRequest($request);
         $newLieuForm->handleRequest($request);
         $newVilleForm->handleRequest($request);
-
 
         if ($newVilleForm->isSubmitted() && $newVilleForm->isValid()){
             $entityManager->persist($ville);
@@ -137,7 +135,6 @@ class SortieController extends AbstractController
             $entityManager->persist($lieu);
             $entityManager->flush();
         }
-
 
         if ($newSortieForm->isSubmitted() && $newSortieForm->isValid()){
             $organisateur = $this->getUser();
@@ -150,6 +147,15 @@ class SortieController extends AbstractController
                 $etat = $repoEtats->findOneBy(array('libelle' => Etat::CREEE));
                 $sortie->setEtat($etat);
             }
+
+            $formatDates = 'd/m/Y H:i';
+
+            $dateSortie = date_create_from_format($formatDates, $newSortieForm->get('dateHeureDebut')->getData());
+            $dateLimite = date_create_from_format($formatDates, $newSortieForm->get('dateLimiteInscription')->getData());
+
+            $sortie->setDateHeureDebut($dateSortie);
+            $sortie->setDateLimiteInscription($dateLimite);
+
             $entityManager->persist($sortie);
             $entityManager->flush();
             $this->addFlash("success", "Votre sortie a bien été créée !");
@@ -195,7 +201,6 @@ class SortieController extends AbstractController
      * @Route("/desister-sortie/{id}", name="desistementSortie")
      */
     public function desistementSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id){
-
         $sortieCourante = $repoSorties->find($id);
 
         $sortieCourante->removeEstInscrit($this->getUser());
@@ -217,7 +222,6 @@ class SortieController extends AbstractController
         ])->getForm();
 
         $formAnnulation->handleRequest($request);
-
 
         if ($formAnnulation->isSubmitted() && $formAnnulation->isValid()){
             $sortieCourante->setEtat($repoEtats->findOneBy(array('libelle'=>Etat::ANNULEE)));

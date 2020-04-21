@@ -130,9 +130,4 @@ class UserController extends AbstractController
 
         return $this->render("user/profile.html.twig");
     }
-
-
-
-
-
 }
