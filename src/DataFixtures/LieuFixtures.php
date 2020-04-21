@@ -31,6 +31,7 @@ class LieuFixtures extends Fixture implements DependentFixtureInterface {
             $lieu->setLatitude(rand(0,25));
             $lieu->setLongitude(rand(0,25));
             $lieu->setVille($this->getReference("ville".rand(1,9)));
+            $this->setReference('lieu'.$i , $lieu);
 
 
 

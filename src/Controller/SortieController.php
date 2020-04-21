@@ -53,50 +53,49 @@ class SortieController extends AbstractController
                 'placeholder' => 'Tous les sites',
                 'required' => false
             ])
-            ->add('nomContient', TextType::class,[
+            ->add('nomContient', TextType::class, [
                 'required' => false
             ])
-            ->add('dateDebut', TextType::class,[
+            ->add('dateDebut', TextType::class, [
                 'required' => false
             ])
-            ->add('dateFin', TextType::class,[
+            ->add('dateFin', TextType::class, [
                 'required' => false
             ])
-            ->add('organisateur', CheckboxType::class,[
+            ->add('organisateur', CheckboxType::class, [
                 'required' => false
             ])
-            ->add('inscrit', CheckboxType::class,[
+            ->add('inscrit', CheckboxType::class, [
                 'required' => false
             ])
-            ->add('pasInscrit', CheckboxType::class,[
+            ->add('pasInscrit', CheckboxType::class, [
                 'required' => false
             ])
-            ->add('passees', CheckboxType::class,[
+            ->add('passees', CheckboxType::class, [
                 'required' => false
             ])
-            ->add('idUser', HiddenType::class,[
+            ->add('idUser', HiddenType::class, [
                 'attr' => ['value' => $userCourant]
             ])
             ->getForm();
         $rechercheForm->handleRequest($request);
         dump($rechercheForm->getData());
-        if ($rechercheForm->isSubmitted() && $rechercheForm->isValid()){
+        if ($rechercheForm->isSubmitted() && $rechercheForm->isValid()) {
             $sorties = $repoSorties->rechercherSorties($rechercheForm->getData());
-        }
-        else{
+        } else {
             // On gère le cas du filtre non renseigné,
             $sorties = $repoSorties->listeSortieParSite(-1);
 
         }
 
-        $user=0;
-        if($this->getUser() != null){
+        $user = 0;
+        if ($this->getUser() != null) {
             $user = $this->getUser()->getId();
         }
         $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($user);
         $nbInscritsParSortie = [];
         $listeSites = $repoSites->findAll();
-        foreach ($sorties as $sortie){
+        foreach ($sorties as $sortie) {
             $nbInscritsParSortie[$sortie->getId()] = $repoSorties->nbInscriptions($sortie);
         }
 
@@ -107,8 +106,8 @@ class SortieController extends AbstractController
             'listeSites' => $listeSites,
             'sortiesUtilisateur' => $sortiesUtilisateur,
             'nbInscritsParSortie' => $nbInscritsParSortie,
-            'etatSortie'=>$sortie->getEtat()->getLibelle(),
-            'sortieOrganisateur'=>$sortie->getOrganisateur()->getNom(),
+            'etatSortie' => $sortie->getEtat()->getLibelle(),
+            'sortieOrganisateur' => $sortie->getOrganisateur()->getNom(),
 
         ]);
     }
@@ -119,10 +118,11 @@ class SortieController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      */
-    public function nouvelleSortie(Request $request, EntityManagerInterface $entityManager, EtatRepository $repoEtats){
+    public function nouvelleSortie(Request $request, EntityManagerInterface $entityManager, EtatRepository $repoEtats)
+    {
         $sortie = new Sortie();
         $lieu = new Lieu();
-        $ville= new Ville();
+        $ville = new Ville();
 
         $repoVille = $entityManager->getRepository(Ville::class);
         $villes = $repoVille->findAll();
@@ -139,25 +139,25 @@ class SortieController extends AbstractController
         $newVilleForm->handleRequest($request);
 
 
-        if ($newVilleForm->isSubmitted() && $newVilleForm->isValid()){
+        if ($newVilleForm->isSubmitted() && $newVilleForm->isValid()) {
             $entityManager->persist($ville);
             $entityManager->flush();
         }
 
-        if($newLieuForm->isSubmitted() && $newLieuForm->isValid()){
+        if ($newLieuForm->isSubmitted() && $newLieuForm->isValid()) {
             $entityManager->persist($lieu);
             $entityManager->flush();
         }
 
 
-        if ($newSortieForm->isSubmitted() && $newSortieForm->isValid()){
+        if ($newSortieForm->isSubmitted() && $newSortieForm->isValid()) {
             $organisateur = $this->getUser();
             $sortie->setOrganisateur($organisateur);
 
-            if ($newSortieForm->get('publier')->isClicked()){
+            if ($newSortieForm->get('publier')->isClicked()) {
                 $etat = $repoEtats->findOneBy(array('libelle' => Etat::OUVERTE));
                 $sortie->setEtat($etat);
-            }else{
+            } else {
                 $etat = $repoEtats->findOneBy(array('libelle' => Etat::CREEE));
                 $sortie->setEtat($etat);
             }
@@ -166,19 +166,20 @@ class SortieController extends AbstractController
             $this->addFlash("success", "Votre sortie a bien été créée !");
             return $this->redirectToRoute("sorties");
         }
-        return $this->render('sortie/nouvelleSortie.html.twig',[
-            'newSortieForm'=>$newSortieForm->createView(),
-            'newLieuForm'=>$newLieuForm->createView(),
-            'newVilleForm'=>$newVilleForm->createView(),
-            'villes'=>$villes,
-            'lieux'=>$lieux
+        return $this->render('sortie/nouvelleSortie.html.twig', [
+            'newSortieForm' => $newSortieForm->createView(),
+            'newLieuForm' => $newLieuForm->createView(),
+            'newVilleForm' => $newVilleForm->createView(),
+            'villes' => $villes,
+            'lieux' => $lieux
         ]);
     }
 
     /**
      * @Route("/inscription-sortie/{id}", name="inscriptionSortie")
      */
-    public function inscriptionSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id){
+    public function inscriptionSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id)
+    {
         $sortieCourante = $repoSorties->find($id);
 
         $sortieCourante->addEstInscrit($this->getUser());
@@ -191,11 +192,12 @@ class SortieController extends AbstractController
     /**
      * @Route("/publier-sortie/{id}", name="publierSortie")
      */
-    public function publierSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, EtatRepository $repoEtats, $id){
+    public function publierSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, EtatRepository $repoEtats, $id)
+    {
 
         $sortieCourante = $repoSorties->find($id);
 
-        $sortieCourante->setEtat($repoEtats->findOneBy(array('libelle'=>Etat::OUVERTE)));
+        $sortieCourante->setEtat($repoEtats->findOneBy(array('libelle' => Etat::OUVERTE)));
         $entityManager->persist($sortieCourante);
         $entityManager->flush();
 
@@ -205,7 +207,8 @@ class SortieController extends AbstractController
     /**
      * @Route("/desister-sortie/{id}", name="desistementSortie")
      */
-    public function desistementSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id){
+    public function desistementSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id)
+    {
 
         $sortieCourante = $repoSorties->find($id);
 
@@ -215,5 +218,18 @@ class SortieController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute("sorties");
+    }
+
+    /**
+     * @Route("/details-sortie/{id}", name="detailsSortie")
+     */
+    public function detailSortie(Request $request,SortieRepository $repoSorties,$id)
+    {
+        $sortieCourante = $repoSorties->find($id);
+
+        return $this->render('sortie/DetailsSortie.html.twig',
+            ['sortie' => $sortieCourante,
+               'repo' => $repoSorties,
+            ]);
     }
 }

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Details sortie
+{% endblock %}
+
+
+{% block main %}
+
+
+    <p> Nom de la sortie : {{ sortie.nom  }}  </p>
+    <p> Date et heure de la sortie : {{ sortie.dateHeureDebut|date("d/m/Y H:i") }}  </p>
+    <p> Date limite d'inscription : {{ sortie.dateLimiteInscription|date("d/m/Y H:i") }} </p>
+    <p> Nombre de place :   {{  sortie.nbInscriptionsMax - repo.nbInscriptions(sortie) }}  / {{ sortie.nbInscriptionsMax }}  </p>
+    <p> Durée :  {{ sortie.duree }}   Minutes</p>
+    <p> Description et info  :  {{ sortie.infosSortie }} </p>
+    <p> Lieu :   {{ sortie.lieu.nom }} </p>
+    <p> Rue :   {{ sortie.lieu.rue }} </p>
+    <p> Ville : {{ sortie.lieu.ville.nom }} </p>
+    <p> Code postal :  {{ sortie.lieu.ville.codePostal }}</p>
+    <p> Latitude : {{ sortie.lieu.latitude }}</p>
+    <p> Latitude :  {{ sortie.lieu.longitude }}</p>
+
+
+   
+
+{% endblock %}
