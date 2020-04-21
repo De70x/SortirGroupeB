@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -98,7 +99,12 @@ class SortieRepository extends ServiceEntityRepository
      */
     public function rechercherSorties($filtres)
     {
-
+        // filtre par défaut
+        if(empty($filtres)){
+            $rechercheAvancee = $this->createQueryBuilder('s')
+                ->andWhere('s.etat != :cree')
+                ->setParameter('cree', Etat::CREEE);
+        }
         $formatDates = 'd/m/Y H:i';
         $rechercheAvancee = $this->createQueryBuilder('s')
             ->leftJoin('s.inscriptions', 'i');

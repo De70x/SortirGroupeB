@@ -37,10 +37,8 @@ class SortieController extends AbstractController
      */
     public function listeSorties(SortieRepository $repoSorties, SiteRepository $repoSites, Request $request)
     {
-        // On crée le formulaire de recherche
-        $filtres = array();
         $userCourant = $this->getUser() == null ? -1 : $this->getUser()->getId();
-        $rechercheForm = $this->createFormBuilder($filtres)
+        $rechercheForm = $this->createFormBuilder(array())
             ->add('site', EntityType::class, [
                 'class' => 'App\Entity\Site',
                 'query_builder' => function (SiteRepository $siteRepository) {
@@ -84,8 +82,7 @@ class SortieController extends AbstractController
         }
         else{
             // On gère le cas du filtre non renseigné,
-            $sorties = $repoSorties->listeSortieParSite(-1);
-
+            $sorties = $repoSorties->rechercherSorties(array());
         }
 
         $sortiesUtilisateur = $repoSorties->listeSortieUtilisateur($userCourant);
