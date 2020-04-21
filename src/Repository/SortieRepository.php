@@ -98,7 +98,6 @@ class SortieRepository extends ServiceEntityRepository
      */
     public function rechercherSorties($filtres)
     {
-        dump($filtres);
         // filtre par défaut
         if (empty($filtres)) {
             $rechercheAvancee = $this->createQueryBuilder('s')
