@@ -124,20 +124,6 @@ class SortieController extends AbstractController
 
 
         $newSortieForm->handleRequest($request);
-        $newLieuForm->handleRequest($request);
-        $newVilleForm->handleRequest($request);
-
-
-        if ($newVilleForm->isSubmitted() && $newVilleForm->isValid()){
-            $entityManager->persist($ville);
-            $entityManager->flush();
-        }
-
-        if($newLieuForm->isSubmitted() && $newLieuForm->isValid()){
-            $entityManager->persist($lieu);
-            $entityManager->flush();
-        }
-
 
         if ($newSortieForm->isSubmitted() && $newSortieForm->isValid()){
             $organisateur = $this->getUser();

@@ -38,6 +38,10 @@ class VilleController extends AbstractController
             $entityManager->persist($ville);
             $entityManager->flush();
 
+            unset($ville);
+            unset($newVilleForm);
+            $ville = new Ville();
+
             $villeRepo = $entityManager->getRepository(Ville::class);
             $villeContent = $villeRepo->findAll();
             $contentArray = [];
@@ -52,16 +56,8 @@ class VilleController extends AbstractController
             dump($villes);
             return new JsonResponse($villes);
 
-
         }
 
-        $newVilleForm->handleRequest($request);
-        if ($newVilleForm->isSubmitted() && $newVilleForm->isValid()) {
-            $entityManager->persist($ville);
-            $entityManager->flush();
-            $this->addFlash("success", "Votre Ville à bien été créé !");
-            return $this->redirectToRoute("nouvelleVille");
-        }
         return $this->render('ville/nouvelleVille.html.twig', [
             'controller_name' => 'VilleController',
             'newVilleForm' => $newVilleForm->createView()
