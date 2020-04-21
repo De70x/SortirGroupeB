@@ -122,6 +122,7 @@ class SortieController extends AbstractController
         $newLieuForm = $this->createForm(NewLieuType::class, $lieu);
         $newVilleForm = $this->createForm(VilleType::class, $ville);
 
+
         $newSortieForm->handleRequest($request);
         $newLieuForm->handleRequest($request);
         $newVilleForm->handleRequest($request);
@@ -148,11 +149,10 @@ class SortieController extends AbstractController
                 $sortie->setEtat($etat);
             }
 
+            // On gère les dates
             $formatDates = 'd/m/Y H:i';
-
             $dateSortie = date_create_from_format($formatDates, $newSortieForm->get('dateHeureDebut')->getData());
             $dateLimite = date_create_from_format($formatDates, $newSortieForm->get('dateLimiteInscription')->getData());
-
             $sortie->setDateHeureDebut($dateSortie);
             $sortie->setDateLimiteInscription($dateLimite);
 
