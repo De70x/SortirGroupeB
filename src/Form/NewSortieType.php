@@ -25,10 +25,10 @@ class NewSortieType extends AbstractType
             ->add('nom',TextType::class,[
                 'label'=>'Nom de la sortie'
             ])
-            ->add('dateHeureDebut', DateTimeType::class,[
-                'label'=>'Date et heure de la sortie',
+            ->add('dateHeureDebut', TextType::class,[
+                'label'=>'Date et heure de la sortie'
             ])
-            ->add('dateLimiteInscription',DateType::class,[
+            ->add('dateLimiteInscription', TextType::class,[
                 'label'=>'Date limite d\'inscription'
             ])
             ->add('nbInscriptionsMax', NumberType::class,[
@@ -49,7 +49,7 @@ class NewSortieType extends AbstractType
                     'id'=> 'publier',
                     'class'=>'btn btn-block',
                     'value'=>'publier',
-                    'style'=>'background-color: #ff8906; color:#fffffe; outline: none; border-color:none'
+                    'style'=>'background-color: #ff8906; color:#fffffe; outline: none; border-color:none',
                 ]
             ])
             ->add('enregistrer', SubmitType::class,[

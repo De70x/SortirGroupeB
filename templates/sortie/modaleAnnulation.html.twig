@@ -1,0 +1,11 @@
+Vous êtes sur le point d'annuler la sortie : <strong>{{ sortie.nom }}</strong>. Cette action est irréversible.
+<!-- Il faut préciser l'action dans le formulaire -->
+{{ form_start(formAnnulation, {'action': path('annulerSortie', { 'id': sortie.id })}) }}
+<div class="form-group">
+    {{ form_label(formAnnulation.commentaireAnnulation, " ") }}
+    {{ form_widget(formAnnulation.commentaireAnnulation, {'attr':{'class':'form-control', 'rows':3, 'placeholder':"Raisons de l'annulation"}}) }}
+</div>
+<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+<button type="submit" class="btn btn-danger">Confirmer l'annulation</button>
+
+{{ form_end(formAnnulation) }}

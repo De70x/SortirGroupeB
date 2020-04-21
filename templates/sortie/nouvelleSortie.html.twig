@@ -33,8 +33,24 @@
                     {{ form_start(newSortieForm) }}
 
                     {{ form_row(newSortieForm.nom) }}
-                    {{ form_row(newSortieForm.dateHeureDebut) }}
-                    {{ form_row(newSortieForm.dateLimiteInscription) }}
+                    <div class="form-group">
+                        <div class="input-group date" id="form_dateHeureDebut" data-target-input="nearest">
+                            {{ form_widget(newSortieForm.dateHeureDebut, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateHeureDebut'} }) }}
+                            <div class="input-group-append" data-target="#form_dateHeureDebut"
+                                 data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group date" id="form_dateLimiteInscription" data-target-input="nearest">
+                            {{ form_widget(newSortieForm.dateLimiteInscription, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateLimiteInscription'} }) }}
+                            <div class="input-group-append" data-target="#form_dateLimiteInscription"
+                                 data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
                     {{ form_row(newSortieForm.nbInscriptionsMax) }}
                     {{ form_row(newSortieForm.duree) }}
                     {{ form_row(newSortieForm.infosSortie) }}
@@ -67,7 +83,7 @@
 
                         {{ form_start(newLieuForm) }}
                         {{ form_widget(newLieuForm) }}
-
+                        <div id="updatedVille"></div>
                         <button id="canceladdLieu" name="addLieu" class="btn "
                                 style="background-color: #e53170; color:#fffffe"><i class="far fa-angle-up"></i>
                         </button>
@@ -77,6 +93,7 @@
                         <button id="submitLieu" type="button" class="btn "
                                 style="background-color: #ff8906; color:#fffffe">Enregistrer le nouveau lieu
                         </button>
+
 
                         {{ form_end(newLieuForm) }}
                     </div>
@@ -100,7 +117,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    {{ parent() }}
     <script>
         $(document).ready(function () {
             $("#newItemForm").hide();
@@ -121,21 +138,35 @@
                                 codePostal: $("#ville_codePostal").val()
                             },
                             function (data) {
-                                alert("success");
-                            }
+                                var i = 0;
+                                var villes = JSON.parse(data);
+                                var select = document.createElement("select")
 
+                                for (i = 0; i < villes.length; i++) {
+                                    var option = document.createElement("option")
+                                    var ville = villes[i];
+                                    option.value = ville.id;
+                                    option.innerText = ville.nom;
+                                    select.appendChild(option);
+                                }
+                                select.setAttribute("id", "new_lieu_ville");
+                                select.setAttribute("class", "form-control");
+                                select.setAttribute("name", "new_lieu[ville]")
+                                $("#new_lieu_ville").replaceWith(select);
+                                $("#newVilleFormBlock").clea();
+                            }
                         )
-                        $("#new_lieu_ville").reload(true);
+
                     })
 
-                    $("#canceladdVille").on("click",function (e) {
+                    $("#canceladdVille").on("click", function (e) {
                         e.preventDefault();
                         $("#newVilleFormBlock").fadeOut();
                     })
                 })
 
 
-                $("#canceladdLieu").on("click",function (e) {
+                $("#canceladdLieu").on("click", function (e) {
                     e.preventDefault();
                     $("#newItemForm").fadeOut();
                 })
@@ -149,7 +180,22 @@
                             ville: $("#new_lieu_ville").val()
                         },
                         function (data) {
-                            alert("success");
+                            var i = 0;
+                            var lieux = JSON.parse(data);
+                            var select = document.createElement("select")
+
+                            for (i = 0; i < lieux.length; i++) {
+                                var option = document.createElement("option")
+                                var lieu = lieux[i];
+                                option.value = lieu.id;
+                                option.innerText = lieu.nom;
+                                select.appendChild(option);
+                            }
+                            select.setAttribute("id", "new_sortie_lieu");
+                            select.setAttribute("class", "form-control");
+                            select.setAttribute("name", "new_sortie[lieu]")
+                            $("#new_sortie_lieu").replaceWith(select);
+                            $("#newLieuFormBlock").clear();
                         }
                     )
 
@@ -160,4 +206,5 @@
         })
 
     </script>
+    <script type="text/javascript" src="{{ asset('js/datepickerSortie.js') }}"></script>
 {% endblock %}

@@ -5,10 +5,11 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     private $encoder;
 
@@ -21,10 +22,12 @@ class UserFixtures extends Fixture
 
         for ($i = 0; $i < 5; $i++) {
             $user = new User();
+            $idSite = rand(0,4);
             $user->setNom("Michel".$i);
             $user->setPrenom("Michel".$i);
             $user->setUsername("peusdo".$i);
             $hashed = $this->encoder->encodePassword($user,'mdp');
+            $user->setSite($this->getReference('site'.$idSite));
             $user->setPassword($hashed);
             $user->setTelephone("0642424242");
             $user->setMail("mail".$i."@michel.com");
@@ -37,6 +40,14 @@ class UserFixtures extends Fixture
         $manager->flush();
     }
 
-
+    /**
+     * @inheritDoc
+     */
+    public function getDependencies()
+    {
+        return array(
+            SiteFixtures::class,
+        );
+    }
 
 }
