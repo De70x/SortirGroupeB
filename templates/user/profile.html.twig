@@ -41,7 +41,7 @@
                         </tr>
                         <tr>
                             <td align="right" class="profile">Site de rattachement :</td>
-                            <td align="left" class="profile">{{ app.user.site }}</td>
+                            <td align="left" class="profile">{{ app.user.site.nom }}</td>
                         </tr>
                     </table>
                     <form action="{{ path('change_profile') }}" method="post">
