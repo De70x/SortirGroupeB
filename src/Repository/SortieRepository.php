@@ -111,8 +111,10 @@ class SortieRepository extends ServiceEntityRepository
                 ->leftJoin('s.inscriptions', 'i');
 
             if ($filtres['site'] != null) {
-                $rechercheAvancee->andWhere('s.id = :idSite')
-                    ->setParameter('idSite', $filtres['site']->getId());
+                $rechercheAvancee
+                    ->leftJoin('s.organisateur', 'org')
+                    ->andWhere('org.site = :idSite')
+                    ->setParameter('idSite', $filtres['site']);
             }
 
             if ($filtres['nomContient'] != null) {
