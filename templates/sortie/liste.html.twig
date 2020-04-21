@@ -157,9 +157,6 @@
                         <td>{{ sortie.organisateur.nom }}</td>
 
                         <td class="boutonsAction">
-                            {% if sortie.organisateur.id != app.user.id %}
-                                <button class="btn-sm btn-dark" href="#">Détail</button>
-                            {% endif %}
                             {% if sortie.etat.libelle == CREEE and sortie.organisateur.id == app.user.id %}
                                 <a href="{{ path('publierSortie', {'id':sortie.id}) }}">
                                     <button class="btn-sm btn-dark">Publier</button>
