@@ -13,7 +13,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -124,15 +126,102 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/profile", name="profile")
+     * @Route("/profile/{id}", name="profile")
      */
-    public function userProfile() {
+    public function userProfile($id, UserRepository $userRepo) {
 
-        return $this->render("user/profile.html.twig");
+        $user = $userRepo->find($id);
+        return $this->render("user/profile.html.twig", ['utilisateur'=>$user]);
+    }
+
+    /**
+     * @Route("/reset_password/{token}", name="reset_password")
+     */
+    public function forgotPassword(Request $request, UserPasswordEncoderInterface $encoder, string $token = "0", EntityManagerInterface $em) {
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->findOneByResetToken($token);
+        if ($request->isMethod('POST')) {
+
+            if ($user === null) {
+                $this->addFlash('danger', 'Token Inconnu');
+                return $this->redirectToRoute('login');
+            }
+
+            $user->setResetToken(null);
+            $user->setPassword($encoder->encodePassword($user, $request->request->get('password')));
+            $em->flush();
+
+            $this->addFlash('notice', 'Mot de passe mis à jour');
+
+            return $this->redirectToRoute('home');
+        }else {
+            return $this->render('user/resetPassword.html.twig', ['token' => $token]);
+        }
+
     }
 
 
 
+    /**
+     * @Route("/forgot_password", name="forgot_password")
+     */
+    public function forgottenPassword(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer, TokenGeneratorInterface $tokenGenerator): Response
+    {
+        $token = $tokenGenerator->generateToken();
+        $url = $this->generateUrl('reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+
+        if ($request->isMethod('POST')) {
+
+            $email = $request->request->get('email');
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $user = $entityManager->getRepository(User::class)->findOneByMail($email);
+
+            if ($user === null) {
+                $this->addFlash('danger', 'Email Inconnu');
+                return $this->render('base.html.twig');
+            }
 
 
+            try{
+                $user->setResetToken($token);
+                $entityManager->persist($user);
+                $entityManager->flush();
+            } catch (\Exception $e) {
+                $this->addFlash('warning', $e->getMessage());
+                return $this->render('base.html.twig');
+            }
+
+
+
+            $message = (new \Swift_Message('Forgot Password'))
+                ->setFrom('test@michel.michel.com')
+                ->setTo($user->getMail())
+                ->setBody(
+                    $this->renderView(
+                        'user/resetPassword2.html.twig',
+                        [
+                            'token'=>$token,
+                            'url'=>$url
+                        ]
+                    ),
+                    'text/html'
+                );
+
+            $mailer->send($message);
+
+            $this->addFlash('notice', 'Mail envoyé');
+
+            return $this->render('base.html.twig');
+        }
+
+        return $this->render('base.html.twig');
+    }
+    /**
+     * @Route("/reset", name="reset")
+     */
+    public function reset() {
+        return $this->render('user/resetPassword2.html.twig', ['token'=>'unechaine', 'url'=>'unechaine2']);
+    }
 }
