@@ -2,8 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Site;
 use App\Entity\User;
+use App\Repository\SiteRepository;
 use phpDocumentor\Reflection\Type;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -30,6 +33,15 @@ class RegisterType extends AbstractType
             ])
             ->add('mail', TextType::class, [
                 'label' => 'Email'
+            ])
+            ->add('site', EntityType::class, [
+                'class' => 'App\Entity\Site',
+                'query_builder' => function (SiteRepository $siteRepository) {
+                    return $siteRepository->createQueryBuilder('site')->orderBy('site.nom', 'ASC');
+                },
+                'choice_label' => function (Site $site) {
+                    return $site->getNom();
+                }
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
