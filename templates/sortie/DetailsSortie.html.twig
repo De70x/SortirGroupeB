@@ -20,8 +20,18 @@
     <p> Code postal :  {{ sortie.lieu.ville.codePostal }}</p>
     <p> Latitude : {{ sortie.lieu.latitude }}</p>
     <p> Latitude :  {{ sortie.lieu.longitude }}</p>
+    <br>
+    <p> Liste des inscrits : </p>
+<table>
+    <th> Liste des inscrits </th>
+{% set inscrits = sortie.listeInscrit %}
+{% for inscrit in inscrits %}
+<tr>
+   <a href="{{path('profile', {id:inscrit.id})  }}"> {{inscrit.nom}} </a>
+</tr>
 
 
 
-
+{% endfor %}
+</table>
 {% endblock %}

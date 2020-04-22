@@ -28,12 +28,10 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             $dateTemp = clone $sortie->getDateHeureDebut();
             $dateTemp->sub(new DateInterval('P10D'));
             $sortie->setDateLimiteInscription($dateTemp);
-            $sortie->setOrganisateur($this->getReference("user1"));
-            $sortie->setEtat($this->getReference('CREEE'));
-            $sortie->setLieu($this->getReference('lieu2'));
+            $sortie->setNbInscriptionsMax(rand(10, 100));
             $idOrg = rand(0, 4);
             $sortie->setOrganisateur($this->getReference("user" . $idOrg));
-
+            $sortie->setLieu($this->getReference("lieu1"));
             $idEtat = rand(1,6);
             $sortie->setEtat($this->getReference('Etat'.$idEtat));
 
@@ -48,12 +46,9 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return array(
-
-        UserFixtures::class,
-        EtatFixtures::class,
-        LieuFixtures::class,
-    );
-
-
+            UserFixtures::class,
+            EtatFixtures::class,
+            LieuFixtures::class,
+        );
     }
 }
