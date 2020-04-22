@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class SortieController extends AbstractController
 {
@@ -176,9 +177,20 @@ class SortieController extends AbstractController
     public function inscriptionSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id){
         $sortieCourante = $repoSorties->find($id);
 
-        $sortieCourante->addEstInscrit($this->getUser());
-        $entityManager->persist($sortieCourante);
-        $entityManager->flush();
+        $maintenant = new \DateTime();
+        if($sortieCourante->getListeInscrit()->count() < $sortieCourante->getNbInscriptionsMax() && $maintenant<$sortieCourante->getDateLimiteInscription()) {
+            $sortieCourante->addEstInscrit($this->getUser());
+            $entityManager->persist($sortieCourante);
+            $entityManager->flush();
+        }
+        else{
+            if($sortieCourante->getListeInscrit()->count() == $sortieCourante->getNbInscriptionsMax()) {
+                $this->addFlash('error', "Nombre maximum d'inscrits atteint");
+            }
+            if($maintenant>=$sortieCourante->getDateLimiteInscription()) {
+                $this->addFlash('error', "Date limite d'inscription dépassée");
+            }
+        }
 
         return $this->redirectToRoute("sorties");
     }

@@ -156,6 +156,12 @@
         <hr style="background: #e53170">
         <br>
 
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         <table class="table table-striped" id="listeSorties">
             <thead>
             <tr>
