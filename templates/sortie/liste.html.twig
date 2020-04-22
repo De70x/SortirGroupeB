@@ -20,6 +20,9 @@
             color: #fffffe;
             border:none;
         }
+        .annulee{
+            color: red !important;
+        }
     </style>
     {% set CREEE = constant('App\\Entity\\Etat::CREEE') %}
     {% set OUVERTE = constant('App\\Entity\\Etat::OUVERTE') %}
@@ -179,12 +182,12 @@
                             {% set annulee = '' %}
                         {% endif %}
 
-                        <tr class= {{ annulee }}>
+                        <tr>
                             <th scope="row">{{ sortie.nom }}</th>
                             <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
                             <td>{{ sortie.dateLimiteInscription|date("d/m/Y H:i") }}</td>
                             <td>{{ nbInscritsParSortie[sortie.id] }} / {{ sortie.nbInscriptionsMax }}</td>
-                            <td>{{ sortie.etat.libelle }}</td>
+                            <td class= {{ annulee }}>{{ sortie.etat.libelle }}</td>
                             <td>
                                 {% if sortie in sortiesUtilisateur %}
                                     <i class="fal fa-beer"></i>

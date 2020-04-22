@@ -98,11 +98,14 @@ class SortieRepository extends ServiceEntityRepository
      */
     public function rechercherSorties($filtres)
     {
+        $maintenant = new DateTime();
         // filtre par défaut
         if (empty($filtres)) {
             $rechercheAvancee = $this->createQueryBuilder('s')
                 ->andWhere('s.etat != :cree')
-                ->setParameter('cree', Etat::CREEE);
+                ->andWhere('s.dateHeureDebut >= :maintenant')
+                ->setParameter('cree', Etat::CREEE)
+                ->setParameter('maintenant', $maintenant);
         } else {
 
             $formatDates = 'd/m/Y H:i';
@@ -157,7 +160,6 @@ class SortieRepository extends ServiceEntityRepository
                     $queryCoches->orWhere($queryCoches->expr()->notIn('sc.id', $idMesSorties->getDQL()));
                 }
                 if ($filtres['passees']) {
-                    $maintenant = new DateTime();
                     $queryCoches->orWhere('sc.dateHeureDebut <= :maintenant');
                     $rechercheAvancee->setParameter('maintenant', $maintenant);
                 }
