@@ -3,207 +3,252 @@
 {% block title %}Liste des sorties{% endblock %}
 
 {% block main %}
-
+    <style>
+        .card {
+            background: transparent;
+            color: #fffffe;
+        }
+        table.table.table-striped>thead>tr>th{
+            color: #fffffe;
+            border:none;
+        }
+        table.table.table-striped>tbody>tr>th{
+            color: #fffffe;
+            border:none;
+        }
+        table.table.table-striped>tbody>tr>td{
+            color: #fffffe;
+            border:none;
+        }
+        .annulee{
+            color: red !important;
+        }
+    </style>
     {% set CREEE = constant('App\\Entity\\Etat::CREEE') %}
     {% set OUVERTE = constant('App\\Entity\\Etat::OUVERTE') %}
     {% set CLOTUREE = constant('App\\Entity\\Etat::CLOTUREE') %}
     {% set EN_COURS = constant('App\\Entity\\Etat::EN_COURS') %}
     {% set PASSEE = constant('App\\Entity\\Etat::PASSEE') %}
     {% set ANNULEE = constant('App\\Entity\\Etat::ANNULEE') %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">Trouver une Sortie </h1>
+            </div>
+        </div>
+        {% block form %}
+            <div id="rechercheAvancee">
+                {{ form_start(rechercheForm,{ 'attr': {'class': 'card'} }) }}
+                <!-- site -->
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2  col-form-label">
+                        <label for="form_site">Site</label>
+                    </div>
+                    <div class="erreur_form">
+                        {{ form_errors(rechercheForm.site) }}
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        {{ form_widget(rechercheForm.site, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+                <!-- nom contient -->
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 col-form-label">
+                        <label for="nomContient">Le nom contient</label>
+                    </div>
+                    <div class="erreur_form">
+                        {{ form_errors(rechercheForm.nomContient) }}
+                    </div>
+                    <div class="col-sm-10">
+                        {{ form_widget(rechercheForm.nomContient, { 'attr': {'class': 'form-control', 'placeholder':'recherche', 'type':'search'} }) }}
+                    </div>
+                </div>
 
-    {% block form %}
-        <div id="rechercheAvancee">
-            {{ form_start(rechercheForm,{ 'attr': {'class': 'card'} }) }}
-            <!-- site -->
-            <div class="form-group row">
-                <label for="form_site" class="col-sm-2 col-form-label">Site</label>
-                <div class="erreur_form">
-                    {{ form_errors(rechercheForm.site) }}
-                </div>
-                <div class="col-sm-10">
-                    {{ form_widget(rechercheForm.site, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <!-- nom contient -->
-            <div class="form-group row">
-                <label for="nomContient" class="col-sm-2 col-form-label">Le nom contient</label>
-                <div class="erreur_form">
-                    {{ form_errors(rechercheForm.nomContient) }}
-                </div>
-                <div class="col-sm-10">
-                    {{ form_widget(rechercheForm.nomContient, { 'attr': {'class': 'form-control', 'placeholder':'recherche', 'type':'search'} }) }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-12">
-                    <div class="container datesLiees">
-                        <!-- entre début -->
-                        <label for="form_dateDebut" class="col-sm-2 col-form-label">Entre le</label>
-                        <div class='col-md-4'>
+                <div class="datesLiees form-group row">
+                    <!-- entre début -->
+                    <div class="col-12 col-md-6">
+                        <div class=" col-12 col-md-6 col-form-label" style="padding-left: 0">
+                            <label for="form_dateDebut">Entre le</label>
+                        </div>
+                        <div>
                             <div class="erreur_form">
                                 {{ form_errors(rechercheForm.dateDebut) }}
                             </div>
-                            <div class="form-group">
-                                <div class="input-group date" id="form_dateDebut" data-target-input="nearest">
-                                    {{ form_widget(rechercheForm.dateDebut, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateDebut'} }) }}
-                                    <div class="input-group-append" data-target="#form_dateDebut"
-                                         data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
+                            <div class="input-group date" id="form_dateDebut" data-target-input="nearest">
+                                {{ form_widget(rechercheForm.dateDebut, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateDebut'} }) }}
+                                <div class="input-group-append" data-target="#form_dateDebut"
+                                     data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
                         </div>
-                        <label for="form_dateFin" class="col-sm-2 col-form-label">Et le</label>
-                        <div class='col-md-4'>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="col-12 col-sm-2 col-form-label" style="padding-left: 0">
+                            <label for="form_dateFin">Et le</label>
+                        </div>
+
+                        <div>
                             <div class="erreur_form">
                                 {{ form_errors(rechercheForm.dateFin) }}
                             </div>
-                            <div class="form-group">
-                                <div class="input-group date" id="form_dateFin" data-target-input="nearest">
-                                    {{ form_widget(rechercheForm.dateFin, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateFin'} }) }}
-                                    <div class="input-group-append" data-target="#form_dateFin"
-                                         data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
+
+                            <div class="input-group date" id="form_dateFin" data-target-input="nearest">
+                                {{ form_widget(rechercheForm.dateFin, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateFin'} }) }}
+                                <div class="input-group-append" data-target="#form_dateFin"
+                                     data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- organisateur -->
-            <div class="form-check row">
-                <div class="erreur_form">
-                    {{ form_errors(rechercheForm.organisateur) }}
+                <div class="row">
+                    <div class="col-12 col-sm-7 col-md-6" >
+                        <!-- organisateur -->
+                        <div class="form-check row">
+                            <div class="erreur_form">
+                                {{ form_errors(rechercheForm.organisateur) }}
+                            </div>
+                            {{ form_widget(rechercheForm.organisateur, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
+                            <label for="form_organisateur" class="form-check-label">Sorties dont je suis
+                                l'organisateur/trice</label>
+                        </div>
+                        <!-- inscrit -->
+                        <div class="form-check row">
+                            <div class="erreur_form">
+                                {{ form_errors(rechercheForm.inscrit) }}
+                            </div>
+                            {{ form_widget(rechercheForm.inscrit, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
+                            <label for="form_inscrit" class="form-check-label">Sorties auxquelles je suis
+                                inscrit/e</label>
+                        </div>
+                        <!-- pas inscrit -->
+                        <div class="form-check row">
+                            <div class="erreur_form">
+                                {{ form_errors(rechercheForm.pasInscrit) }}
+                            </div>
+                            {{ form_widget(rechercheForm.pasInscrit, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
+                            <label for="form_pasInscrit" class="form-check-label">Sorties auxquelles je ne suis pas
+                                inscrit/e</label>
+                        </div>
+                        <!-- passées -->
+                        <div class="form-check row">
+                            <div class="erreur_form">
+                                {{ form_errors(rechercheForm.passees) }}
+                            </div>
+                            {{ form_widget(rechercheForm.passees, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
+                            <label for="form_passees" class="form-check-label">Sorties passées</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-12 col-sm-5 col-md-6 d-flex align-items-end">
+                        <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">
+                            Rechercher
+                        </button>
+                    </div>
+                    {{ form_end(rechercheForm) }}
                 </div>
-                {{ form_widget(rechercheForm.organisateur, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
-                <label for="form_organisateur" class="form-check-label">Sorties dont je suis
-                    l'organisateur/trice</label>
             </div>
-            <!-- inscrit -->
-            <div class="form-check row">
-                <div class="erreur_form">
-                    {{ form_errors(rechercheForm.inscrit) }}
-                </div>
-                {{ form_widget(rechercheForm.inscrit, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
-                <label for="form_inscrit" class="form-check-label">Sorties auxquelles je suis inscrit/e</label>
+        {% endblock %}
+
+        <br>
+        <hr style="background: #e53170">
+        <br>
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
             </div>
-            <!-- pas inscrit -->
-            <div class="form-check row">
-                <div class="erreur_form">
-                    {{ form_errors(rechercheForm.pasInscrit) }}
-                </div>
-                {{ form_widget(rechercheForm.pasInscrit, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
-                <label for="form_pasInscrit" class="form-check-label">Sorties auxquelles je ne suis pas
-                    inscrit/e</label>
-            </div>
-            <!-- passées -->
-            <div class="form-check row">
-                <div class="erreur_form">
-                    {{ form_errors(rechercheForm.passees) }}
-                </div>
-                {{ form_widget(rechercheForm.passees, { 'attr': {'class': 'form-check-input', 'type':'checkbox'} }) }}
-                <label for="form_passees" class="form-check-label">Sorties passées</label>
-            </div>
-            <br>
-            <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">
-                Rechercher
-            </button>
-            {{ form_end(rechercheForm) }}
-        </div>
-    {% endblock %}
-
-
-    <table class="table table-striped table-light" id="listeSorties">
-        <thead>
-        <tr>
-            <th scope="col">Nom de la sortie</th>
-            <th scope="col">Date de la sortie</th>
-            <th scope="col">Clôture</th>
-            <th scope="col">Inscrits / Places</th>
-            <th scope="col">Etat</th>
-            <th scope="col">Inscrit ?</th>
-            <th scope="col">Organisateur</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for sortie in sorties %}
-            {% if app.user != null %}
-                {% if sortie.etat.libelle != CREEE or sortie.organisateur.id == app.user.id %}
-                    <tr>
-                        <th scope="row"><a href="{{ path('detailsSortie' , {'id':sortie.id}) }}">{{ sortie.nom }}</a></th>
-
-                    {% if sortie.etat.libelle == ANNULEE %}
-                        {# ici on met une variable a annulee si la sortie est annulee pour pouvoir faire un affichage particulié#}
-                        {% set annulee = 'annulee' %}
-                    {% endif %}
-                    {% if sortie.etat.libelle != ANNULEE %}
-                        {# si la sortie n'est pas annulée affichage normal#}
-                        {% set annulee = '' %}
-                    {% endif %}
-
-                    <tr class= {{ annulee }}>
-                        <th scope="row">{{ sortie.nom }}</th>
-                        <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
-                        <td>{{ sortie.dateLimiteInscription|date("d/m/Y H:i") }}</td>
-                        <td>{{ nbInscritsParSortie[sortie.id] }} / {{ sortie.nbInscriptionsMax }}</td>
-                        <td>{{ sortie.etat.libelle }}</td>
-                        <td>
-                            {% if sortie in sortiesUtilisateur %}
-                                X
-                            {% endif %}
-                        </td>
-                        <td>{{ sortie.organisateur.nom }}</td>
-
-                        <td class="boutonsAction">
-                            {% if sortie.etat.libelle == CREEE and sortie.organisateur.id == app.user.id %}
-                                <a href="{{ path('publierSortie', {'id':sortie.id}) }}">
-                                    <button class="btn-sm btn-dark">Publier</button>
-                                </a>
-                            {% endif %}
-                            {% if (sortie.etat.libelle == CREEE or sortie.etat.libelle == OUVERTE) and sortie.organisateur.id == app.user.id %}
-                                <a href="#" data-action="{{ path('annulerSortie', {'id':sortie.id}) }}"
-                                   data-toggle="modal" data-target="#confirmer-annulation"
-                                   data-contenu="{{ sortie.nom }}">
-                                    <button class="btn-sm btn-danger">Annuler</button>
-                                </a>
-
-                            {% endif %}
-                            {% if sortie not in sortiesUtilisateur and sortie.etat.libelle == OUVERTE and sortie.organisateur.id != app.user.id %}
-                                <a href="{{ path('inscriptionSortie', {'id':sortie.id}) }}}}">
-                                    <button class="btn-sm btn-dark">S'inscrire</button>
-                                </a>
-                            {% endif %}
-                            {% if sortie in sortiesUtilisateur and sortie.etat.libelle == OUVERTE %}
-                                <a href="{{ path('desistementSortie', {'id':sortie.id}) }}}}">
-                                    <button class="btn-sm btn-dark">Se désister</button>
-                                </a>
-                            {% endif %}
-
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endif %}
         {% endfor %}
-        </tbody>
-    </table>
 
-    {#Ici, on ajoute la modale de confirmation#}
-    <div class="modal fade" id="confirmer-annulation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
+        <table class="table table-striped" id="listeSorties">
+            <thead>
+            <tr>
+                <th scope="col">Nom de la sortie</th>
+                <th scope="col">Date de la sortie</th>
+                <th scope="col">Clôture</th>
+                <th scope="col">Inscrits / Places</th>
+                <th scope="col">Etat</th>
+                <th scope="col">Inscrit ?</th>
+                <th scope="col">Organisateur</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sortie in sorties %}
+                {% if app.user != null %}
+                    {% if sortie.etat.libelle != CREEE or sortie.organisateur.id == app.user.id %}
+                        {% if sortie.etat.libelle == ANNULEE %}
+                            {# ici on met une variable a annulee si la sortie est annulee pour pouvoir faire un affichage particulié#}
+                            {% set annulee = 'annulee' %}
+                        {% endif %}
+                        {% if sortie.etat.libelle != ANNULEE %}
+                            {# si la sortie n'est pas annulée affichage normal#}
+                            {% set annulee = '' %}
+                        {% endif %}
 
+                        <tr>
+                            <th scope="row">{{ sortie.nom }}</th>
+                            <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
+                            <td>{{ sortie.dateLimiteInscription|date("d/m/Y H:i") }}</td>
+                            <td>{{ nbInscritsParSortie[sortie.id] }} / {{ sortie.nbInscriptionsMax }}</td>
+                            <td class= {{ annulee }}>{{ sortie.etat.libelle }}</td>
+                            <td>
+                                {% if sortie in sortiesUtilisateur %}
+                                    <i class="fal fa-beer"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ sortie.organisateur.username }}</td>
+
+                            <td class="boutonsAction">
+                                {% if sortie.etat.libelle == CREEE and sortie.organisateur.id == app.user.id %}
+                                    <a href="{{ path('publierSortie', {'id':sortie.id}) }}">
+                                        <button name="publier" value="publier" class="btn-sm" style="background: #fffffe; color: #0f0e17; border:none"><i class="fas fa-paper-plane"></i></button>
+                                    </a>
+                                {% endif %}
+                                {% if (sortie.etat.libelle == CREEE or sortie.etat.libelle == OUVERTE) and sortie.organisateur.id == app.user.id %}
+                                    <a href="#" data-action="{{ path('annulerSortie', {'id':sortie.id}) }}"
+                                       data-toggle="modal" data-target="#confirmer-annulation"
+                                       data-contenu="{{ sortie.nom }}">
+                                        <button name="annuler" value="annuler" class="btn-sm" style="background: #fffffe; color: #0f0e17; border:none"><i class="fas fa-trash-alt"></i></button>
+                                    </a>
+
+                                {% endif %}
+                                {% if sortie not in sortiesUtilisateur and sortie.etat.libelle == OUVERTE and sortie.organisateur.id != app.user.id %}
+                                    <a href="{{ path('inscriptionSortie', {'id':sortie.id}) }}">
+                                        <button name="s-inscrire" value="s'inscrire" class="btn-sm shadow" style="color: #fffffe; background: #23bf5d; border: none;"><i class="fal fa-beer"></i></button>
+                                    </a>
+                                {% endif %}
+                                {% if sortie in sortiesUtilisateur and sortie.etat.libelle == OUVERTE %}
+                                    <a href="{{ path('desistementSortie', {'id':sortie.id}) }}">
+                                        <button name="se-desister" value="se-desister" class="btn-sm shadow" style="color: #fffffe; background: #C82829; border: none ;padding-left: 16%; padding-right: 16%"><i class="fal fa-times"></i></button>
+                                    </a>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {#Ici, on ajoute la modale de confirmation#}
+        <div class="modal fade" id="confirmer-annulation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
                 </div>
             </div>
         </div>
+
+        {% block javascripts %}
+            {{ parent() }}
+            <script type="text/javascript" src="{{ asset('js/confirmationAnnulation.js') }}"></script>
+        {% endblock %}
     </div>
-
-    {% block javascripts %}
-        {{ parent() }}
-        <script type="text/javascript" src="{{ asset('js/confirmationAnnulation.js') }}"></script>
-    {% endblock %}
-
 {% endblock %}

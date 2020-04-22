@@ -177,9 +177,20 @@ class SortieController extends AbstractController
     {
         $sortieCourante = $repoSorties->find($id);
 
-        $sortieCourante->addEstInscrit($this->getUser());
-        $entityManager->persist($sortieCourante);
-        $entityManager->flush();
+        $maintenant = new \DateTime();
+        if($sortieCourante->getListeInscrit()->count() < $sortieCourante->getNbInscriptionsMax() && $maintenant<$sortieCourante->getDateLimiteInscription()) {
+            $sortieCourante->addEstInscrit($this->getUser());
+            $entityManager->persist($sortieCourante);
+            $entityManager->flush();
+        }
+        else{
+            if($sortieCourante->getListeInscrit()->count() == $sortieCourante->getNbInscriptionsMax()) {
+                $this->addFlash('error', "Nombre maximum d'inscrits atteint");
+            }
+            if($maintenant>=$sortieCourante->getDateLimiteInscription()) {
+                $this->addFlash('error', "Date limite d'inscription dépassée");
+            }
+        }
 
         return $this->redirectToRoute("sorties");
     }
