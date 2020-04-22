@@ -189,7 +189,7 @@
                         {% endif %}
 
                         <tr>
-                            <th scope="row">{{ sortie.nom }}</th>
+                            <th scope="row"><a href="{{ path('detailsSortie' , {id:sortie.id}) }}"> {{ sortie.nom }} </a></th>
                             <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
                             <td>{{ sortie.dateLimiteInscription|date("d/m/Y H:i") }}</td>
                             <td>{{ nbInscritsParSortie[sortie.id] }} / {{ sortie.nbInscriptionsMax }}</td>
