@@ -5,50 +5,60 @@
 {% endblock %}
 
 {% block main %}
-<style>
-    label{
-        color:#fffffe;
-    }
-</style>
+    <style>
+        label {
+            color: #fffffe;
+        }
+    </style>
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6 p-3">
+            <div class="col-0 col-sm-12 p-3">
                 <h1 class="text-center">{{ utilisateur|raw }}</h1>
             </div>
         </div>
-            <div class="d-flex justify-content-center">
-                <div class="col-sm-4">
-                    <img src="{{ asset('uploads/photo/') ~ utilisateur.photo }}" class="rounded" alt="#">
-                </div>
-                <div class="col-md-8">
-                    <table class="table table-borderless">
-                        <tr>
-                            <td align="right" class="profile">Prénom :</td>
-                            <td align="left" class="profile">{{ utilisateur.prenom }}</td>
-                        </tr>
-                        <tr>
-                            <td align="right" class="profile">Nom :</td>
-                            <td align="left" class="profile">{{ utilisateur.nom }}</td>
-                        </tr>
-                        <tr>
-                            <td align="right" class="profile">Téléphone :</td>
-                            <td align="left" class="profile">{{ utilisateur.telephone }}</td>
-                        </tr>
-                        <tr>
-                            <td align="right" class="profile">Email :</td>
-                            <td align="left" class="profile">{{ utilisateur.mail }}</td>
-                        </tr>
-                        <tr>
-                            <td align="right" class="profile">Site de rattachement :</td>
-                            <td align="left" class="profile">{{ utilisateur.site.nom }}</td>
-                        </tr>
-                    </table>
-                    <form action="{{ path('change_profile') }}" method="post">
-                        <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">Modifier profil</button>
-                    </form>
-                </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 col-sm-5 col-md-3 col-lg-3 d-flex justify-content-center">
+                <img src="{{ asset('uploads/photo/') ~ utilisateur.photo }}" class="img-thumbnail" alt=""
+                     style="min-height:3em ;min-width:3em; max-width: 12em; max-height: 12em; background: transparent; border:none">
             </div>
+            <div class="col-12 col-sm-7 col-md-7 col-lg-6">
+                <div class="row ">
+                    <div class="profile col-6 col-sm-5 col-md-4" align="right">Prénom :</div>
+                    <div class="profile col-6 col-sm-7 col-md-8">{{ utilisateur.prenom }}</div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="profile col-6 col-sm-5 col-md-4" align="right">Nom :</div>
+                    <div class="profile col-6 col-sm-7 col-md-8">{{ utilisateur.nom }}</div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="profile col-6 col-sm-5 col-md-4" align="right">Téléphone :</div>
+                    <div class="profile col-6 col-sm-7 col-md-8">{{ utilisateur.telephone }}</div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="profile col-6 col-sm-5 col-md-4" align="right">Email :</div>
+                    <div class="profile col-6 col-sm-7 col-md-8">{{ utilisateur.mail }}</div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="profile col-6 col-sm-5 col-md-4" align="right">Rataché au site :</div>
+                    <div class="profile col-6 col-sm-7 col-md-8">{{ utilisateur.site.nom }}</div>
+                </div>
+                <br>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 col-sm-10 col-md-10 col-lg-4">
+                <form action="{{ path('change_profile') }}" method="post">
+                    <button type="submit" class="btn btn-block" style="background-color: #ff8906; color:#fffffe">
+                        Modifier profil
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
