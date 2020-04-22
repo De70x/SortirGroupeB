@@ -116,7 +116,9 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
             $this->addFlash("success", "Votre compte à bien été modifié !");
-            return $this->redirectToRoute("profile");
+            return $this->redirectToRoute("profile", [
+                'id' => $user->getId(),
+            ]);
         }
 
 

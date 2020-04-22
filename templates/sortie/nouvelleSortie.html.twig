@@ -34,6 +34,9 @@
 
                     {{ form_row(newSortieForm.nom) }}
                     <div class="form-group">
+                        <div>
+                            <label for="form_dateHeureDebut">Date de la sortie</label>
+                        </div>
                         <div class="input-group date" id="form_dateHeureDebut" data-target-input="nearest">
                             {{ form_widget(newSortieForm.dateHeureDebut, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateHeureDebut'} }) }}
                             <div class="input-group-append" data-target="#form_dateHeureDebut"
@@ -43,6 +46,9 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <div>
+                            <label for="form_dateLimiteInscription">Date limite d'inscription</label>
+                        </div>
                         <div class="input-group date" id="form_dateLimiteInscription" data-target-input="nearest">
                             {{ form_widget(newSortieForm.dateLimiteInscription, { 'attr': {'class': 'form-control datetimepicker-input', 'data-target':'#form_dateLimiteInscription'} }) }}
                             <div class="input-group-append" data-target="#form_dateLimiteInscription"
@@ -153,7 +159,7 @@
                                 select.setAttribute("class", "form-control");
                                 select.setAttribute("name", "new_lieu[ville]")
                                 $("#new_lieu_ville").replaceWith(select);
-                                $("#newVilleFormBlock").clea();
+                                $("#newVilleFormBlock").clear();
                             }
                         )
 
