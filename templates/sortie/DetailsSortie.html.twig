@@ -11,8 +11,8 @@
     <p> Nom de la sortie : {{ sortie.nom  }}  </p>
     <p> Date et heure de la sortie : {{ sortie.dateHeureDebut|date("d/m/Y H:i") }}  </p>
     <p> Date limite d'inscription : {{ sortie.dateLimiteInscription|date("d/m/Y H:i") }} </p>
-    <p> Nombre de place :   {{  sortie.nbInscriptionsMax - repo.nbInscriptions(sortie) }}  / {{ sortie.nbInscriptionsMax }}  </p>
-    <p> Durée :  {{ sortie.duree }}   Minutes</p>
+    <p> Nombre de place restantes :   {{  sortie.nbInscriptionsMax - repo.nbInscriptions(sortie) }}  / {{ sortie.nbInscriptionsMax }}  </p>
+    <p> Durée :  {{ sortie.duree }}   Minutes.</p>
     <p> Description et info  :  {{ sortie.infosSortie }} </p>
     <p> Lieu :   {{ sortie.lieu.nom }} </p>
     <p> Rue :   {{ sortie.lieu.rue }} </p>
@@ -23,7 +23,14 @@
     <br>
     <p> Liste des inscrits : </p>
 <table>
-    <th> Liste des inscrits </th>
+    <thead>
+        <th> Liste des inscrits </th>
+
+   <tr>
+      <a  href={{ path('profile',{id:sortie.organisateur.id} ) }} > {{ sortie.organisateur.nom }} (Organisateur)   </a>
+   </tr>
+    </thead>
+    <tbody></tbody>
 {% set inscrits = sortie.listeInscrit %}
 {% for inscrit in inscrits %}
 <tr>
@@ -33,5 +40,6 @@
 
 
 {% endfor %}
+    </tbody>
 </table>
 {% endblock %}
