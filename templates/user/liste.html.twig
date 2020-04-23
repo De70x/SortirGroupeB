@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des utilisateurs{% endblock %}
+{% block title %}Admin - Liste des utilisateurs{% endblock %}
 
 {% block main %}
     <style>
@@ -27,17 +27,50 @@
         .inactif {
             color: red !important;
         }
+
+        ul.nav.nav-tabs {
+            border-color: #e53170;
+        }
+
+        ul.nav.nav-tabs > li.active > a.nav-link.active {
+            color: #fffffe;
+            background: #0f0e17;
+            border-color: #e53170;
+        }
+
+        ul.nav.nav-tabs > li > a {
+            color: #fffffe;
+        }
+
+        ul.nav.nav-tabs > li > a:hover {
+            border-color: #e53170;
+        }
     </style>
 
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
-                <h1 class="text-center">Liste des utilisateurs</h1>
+                <h1 class="text-center">Panneau d'administration - Gestion des utilisateurs </h1>
             </div>
         </div>
-
-        <br>
-        <hr style="background: #e53170">
+        <div class="panel with-nav-tabs">
+            <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a class="nav-link active" href="{{ path('listeUtilisateurs') }}">Utilisateurs</a>
+                    </li>
+                    <li class="active">
+                        <a class="nav-link" href="#adminSorties" data-toggle="tab">Sorties</a>
+                    </li>
+                    <li class="active">
+                        <a class="nav-link" href="#adminLieux" data-toggle="tab">lieux</a>
+                    </li>
+                    <li class="active">
+                        <a class="nav-link" href="{{ path('listeVilles') }}" >Villes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <br>
 
         {% for message in app.flashes('error') %}
@@ -54,13 +87,13 @@
         <table class="table table-striped" id="listeUtilisateurs">
             <thead>
             <tr>
-                <th scope="col">Nom de l'utilisateur</th>
-                <th scope="col">Prénom de l'utilisateur</th>
-                <th scope="col">Pseudonyme</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Pseudo</th>
                 <th scope="col">Téléphone</th>
                 <th scope="col">Mail</th>
-                <th scope="col">Administrateur ?</th>
-                <th scope="col">Actif ?</th>
+                <th scope="col">Administrateur</th>
+                <th scope="col">Actif</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -68,9 +101,9 @@
             {% if is_granted('ROLE_ADMIN') %}
                 {% for utilisateur in utilisateurs %}
                     <tr>
-                        <th scope="row"><a
+                        <td scope="row"><a
                                     href="{{ path('profile' , {id:utilisateur.id}) }}"> {{ utilisateur.nom }} </a>
-                        </th>
+                        </td>
                         <td>{{ utilisateur.prenom }}</td>
                         <td>{{ utilisateur.username }}</td>
                         <td>{{ utilisateur.telephone }}</td>
@@ -92,13 +125,13 @@
                         <td class="boutonsAction">
                             <a href="{{ path('toggleUtilisateur', {'id':utilisateur.id}) }}">
                                 {% if not utilisateur.actif %}
-                                    <button name="publier" value="publier" class="btn-sm"
-                                            style="background: #fffffe; color: #0f0e17; border:none"><i
+                                    <button name="reveiller" value="reveiller" class="btn-sm"
+                                            style="background: #fffffe; color: #0f0e17; border:none; padding-left: 6%; padding-right: 6%">
+                                        <i
                                                 class="fas fa-bells"></i></button>
-
                                 {% endif %}
                                 {% if utilisateur.actif %}
-                                    <button name="publier" value="publier" class="btn-sm"
+                                    <button name="desactiver" value="desactiver" class="btn-sm"
                                             style="background: #fffffe; color: #0f0e17; border:none"><i
                                                 class="fas fa-snooze"></i></button>
                                 {% endif %}
@@ -138,6 +171,14 @@
             </div>
         </div>
 
+        {# Bouton ajout new user #}
+        <div class="row d-flex justify-content-end">
+            <div class="col-12 col-md-4">
+                <button class="btn btn-block" style="background-color: #ff8906; color:#fffffe; ">
+                    <a  href="{{ path('register') }}" style="text-decoration: none">Ajouter un utilisateur</a>
+                </button>
+            </div>
+        </div>
         {% block javascripts %}
             {{ parent() }}
             <script type="text/javascript" src="{{ asset('js/confirmationSuppression.js') }}"></script>

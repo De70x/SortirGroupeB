@@ -6,80 +6,51 @@
 {% endblock %}
 
 {% block main %}
-    <style>
-        ul.nav.nav-tabs {
-            border-color: #e53170;
-        }
+<style>
+    ul.nav.nav-tabs {
+        border-color: #e53170;
+    }
 
-        ul.nav.nav-tabs > li.active > a.nav-link.active {
-            color: #fffffe;
-            background: #0f0e17;
-            border-color: #e53170;
-        }
+    ul.nav.nav-tabs > li.active > a.nav-link.active {
+        color: #fffffe;
+        background: #0f0e17;
+        border-color: #e53170;
+    }
 
-        ul.nav.nav-tabs > li > a {
-            color: #fffffe;
-        }
+    ul.nav.nav-tabs > li > a {
+        color: #fffffe;
+    }
 
-        ul.nav.nav-tabs > li > a:hover {
-            border-color: #e53170;
-        }
-    </style>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
-                <h1 class="text-center">Panneau d'administration </h1>
-            </div>
+    ul.nav.nav-tabs > li > a:hover {
+        border-color: #e53170;
+    }
+</style>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+            <h1 class="text-center">Panneau d'administration </h1>
         </div>
-        <div class="panel with-nav-tabs">
-            <div class="panel-heading">
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a class="nav-link" href="#adminUser" data-toggle="tab">Utilisateurs</a>
-                    </li>
-                    <li class="active">
-                        <a class="nav-link" href="#adminSorties" data-toggle="tab">Sorties</a>
-                    </li>
-                    <li class="active">
-                        <a class="nav-link" href="#adminLieux" data-toggle="tab">lieux</a>
-                    </li>
-                    <li class="active">
-                        <a class="nav-link " href="#adminVilles" data-toggle="tab">Villes</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="panel-body">
-                <div class="tab-content">
-                    <div class="tab-pane fade in active" id="adminUser">
-
-                        <br>
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th scope="col">#id</th>
-                                <th scope="col">Pseudo</th>
-                                <th scope="col">Nom</th>
-                                <th scope="col">Prénom</th>
-                                <th scope="col">Mail</th>
-                                <th scope="col">Téléphone</th>
-                                <th scope="col">Administrateur</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                            </thead>
-
-                        </table>
-
-
-                    </div>
-                    <div class="tab-pane fade" id="adminSorties">Default 2</div>
-                    <div class="tab-pane fade" id="adminLieux">Default 3</div>
-                    <div class="tab-pane fade" id="adminVilles">Default 4</div>
-                </div>
-            </div>
-        </div>
-
     </div>
-{% endblock %}
+    <div class="panel with-nav-tabs">
+        <div class="panel-heading">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a class="nav-link" href="{{ path('listeUtilisateurs') }}">Utilisateurs</a>
+                </li>
+                <li class="active">
+                    <a class="nav-link" href="#adminSorties" data-toggle="tab">Sorties</a>
+                </li>
+                <li class="active">
+                    <a class="nav-link" href="#adminLieux" data-toggle="tab">lieux</a>
+                </li>
+                <li class="active">
+                    <a class="nav-link" href="{{ path('listeVilles') }}">Villes</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+    {% endblock %}
 
 
 

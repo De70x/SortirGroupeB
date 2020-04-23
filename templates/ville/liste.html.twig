@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Admin - Liste des villes
+{% endblock %}
+
+{% block main %}
+    <style>
+        .card {
+            background: transparent;
+            color: #fffffe;
+        }
+
+        table.table.table-striped > thead > tr > th {
+            color: #fffffe;
+            border: none;
+        }
+
+        table.table.table-striped > tbody > tr > th {
+            color: #fffffe;
+            border: none;
+        }
+
+        table.table.table-striped > tbody > tr > td {
+            color: #fffffe;
+            border: none;
+        }
+
+        .inactif {
+            color: red !important;
+        }
+
+        ul.nav.nav-tabs {
+            border-color: #e53170;
+        }
+
+        ul.nav.nav-tabs > li.active > a.nav-link.active {
+            color: #fffffe;
+            background: #0f0e17;
+            border-color: #e53170;
+        }
+
+        ul.nav.nav-tabs > li > a {
+            color: #fffffe;
+        }
+
+        ul.nav.nav-tabs > li > a:hover {
+            border-color: #e53170;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">Panneau d'administration - Gestion des villes </h1>
+            </div>
+        </div>
+        <div class="panel with-nav-tabs">
+            <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a class="nav-link" href="{{ path('listeUtilisateurs') }}">Utilisateurs</a>
+                    </li>
+                    <li class="active">
+                        <a class="nav-link" href="#adminSorties" data-toggle="tab">Sorties</a>
+                    </li>
+                    <li class="active">
+                        <a class="nav-link" href="#adminLieux" data-toggle="tab">lieux</a>
+                    </li>
+                    <li class="active">
+                        <a class="nav-link active" href="{{ path('listeVilles') }}">Villes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <br>
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <table class="table table-striped" id="listeUtilisateurs">
+            <thead>
+            <tr>
+                <th scope="col"># id</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Code Postale</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ville in villes %}
+                <tr>
+                    <td>{{ ville.id }}</td>
+                    <td>{{ ville.nom }}</td>
+                    <td>{{ ville.codePostal }}</td>
+                    <td>
+                        <a href="#" data-href="{{ path('supprimerVille', {'id':ville.id}) }}"
+                           data-toggle="modal" data-target="#confirmer-suppression-ville"
+                           data-contenu="{{ ville.nom }}">
+                            <button name="supprimer" value="supprimer" class="btn-sm"
+                                    style="background: #fffffe; color: #0f0e17; border:none"><i
+                                        class="fas fa-trash-alt"></i></button>
+                        </a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {#modal de confirmation de la suppression#}
+        <div class="modal fade" id="confirmer-suppression-ville" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Confirmation de suppression
+                    </div>
+                    <div class="modal-body">
+                        Etes-vous certain de vouloir supprimer la ville ? Vous risquez de supprimer les Lieux et les sorties qui lui sont associés.
+                        <div class="ville"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                        <a class="btn btn-danger btn-ok" style="color: #fffffe">Confirmer la suppression</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% block javascripts %}
+            {{ parent() }}
+            <script type="text/javascript" src="{{ asset('js/confirmationSuppression.js') }}"></script>
+        {% endblock %}
+    </div>
+{% endblock %}
+

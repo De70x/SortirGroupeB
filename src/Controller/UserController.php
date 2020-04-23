@@ -42,7 +42,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/admin/register", name="register")
+     * @Route("/admin/utilisateurs/register", name="register")
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param UserPasswordEncoderInterface $encoder
@@ -64,8 +64,8 @@ class UserController extends AbstractController
 
             $em->persist($user);
             $em->flush();
-            $this->addFlash("success", "Votre compte à bien été créé !");
-            return $this->redirectToRoute("home");
+            $this->addFlash("success", "le compte a bien été créé !");
+            return $this->redirectToRoute("listeUtilisateurs");
 
         }
         return $this->render('user/register.html.twig', [
@@ -79,7 +79,7 @@ class UserController extends AbstractController
     public function logout(){}
 
     /**
-     * @Route("/utilisateurs/liste", name="listeUtilisateurs")
+     * @Route("admin/utilisateurs/liste", name="listeUtilisateurs")
      * @param UserRepository $userRepo
      * @return Response
      */
@@ -91,7 +91,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/utilisateurs/toggle/{id}", name="toggleUtilisateur")
+     * @Route("admin/utilisateurs/toggle/{id}", name="toggleUtilisateur")
      * @param $id
      * @param UserRepository $userRepo
      * @param EntityManagerInterface $em
@@ -112,9 +112,10 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/utilisateurs/supprimer/{id}", name="supprimerUtilisateur")
+     * @Route("admin/utilisateurs/supprimer/{id}", name="supprimerUtilisateur")
      * @param $id
      * @param UserRepository $userRepo
+     * @param SortieRepository $sortieRepo
      * @param EntityManagerInterface $em
      * @return Response
      */
