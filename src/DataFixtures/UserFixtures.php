@@ -20,7 +20,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i == 0; $i < 5; $i++) {
             $user = new User();
             $idSite = rand(0, 4);
             $user->setNom("Michel" . $i);
