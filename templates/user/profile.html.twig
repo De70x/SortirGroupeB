@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ app.user.username }}
+    {{ utilisateur.username }}
 {% endblock %}
 
 {% block main %}
@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-0 col-sm-12 p-3">
-                <h1 class="text-center">{{ utilisateur|raw }}</h1>
+                <h1 class="text-center">{{ utilisateur.username }}</h1>
             </div>
         </div>
         <div class="row d-flex justify-content-center">
