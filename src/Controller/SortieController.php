@@ -38,6 +38,7 @@ class SortieController extends AbstractController
     public function listeSorties(SortieRepository $repoSorties, SiteRepository $repoSites, Request $request)
     {
         $userCourant = $this->getUser() == null ? -1 : $this->getUser()->getId();
+        $filtre = [];
         $rechercheForm = $this->createFormBuilder(array())
             ->add('site', EntityType::class, [
                 'class' => 'App\Entity\Site',
@@ -76,9 +77,10 @@ class SortieController extends AbstractController
             ])
             ->getForm();
         $rechercheForm->handleRequest($request);
+        $filtre = $rechercheForm->getData();
 
-        if ($rechercheForm->isSubmitted() && $rechercheForm->isValid()) {
-            $sorties = $repoSorties->rechercherSorties($rechercheForm->getData());
+        if ($rechercheForm->isSubmitted() && $rechercheForm->isValid() || !empty($filtre)) {
+            $sorties = $repoSorties->rechercherSorties($filtre);
         } else {
             // On gère le cas du filtre non renseigné,
             $sorties = $repoSorties->rechercherSorties(array());
@@ -98,6 +100,7 @@ class SortieController extends AbstractController
             'listeSites' => $listeSites,
             'sortiesUtilisateur' => $sortiesUtilisateur,
             'nbInscritsParSortie' => $nbInscritsParSortie,
+            'filtre' => $filtre,
         ]);
     }
 
