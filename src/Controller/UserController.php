@@ -137,9 +137,7 @@ class UserController extends AbstractController
 
         $users = $userRepo->findAll();
 
-        return $this->render('user/liste.html.twig', [
-            'utilisateurs' => $users,
-        ]);
+        return $this->redirectToRoute('listeUtilisateurs');
     }
 
 

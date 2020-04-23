@@ -275,4 +275,27 @@ class SortieController extends AbstractController
                 'repo' => $repoSorties,
             ]);
     }
+
+    /**
+     * @Route("admin/sorties/liste", name="listeSortieAdmin")
+     */
+    public function listeSortie(SortieRepository $sortieRepo)
+    {
+        $sorties = $sortieRepo->findAll();
+        return $this->render('sortie/listeAdmin.html.twig', [
+            'sorties' => $sorties,
+        ]);
+    }
+
+    /**
+     * @Route("admin/lieux/supprimer/{id}", name="supprimerLieu")
+     *
+     */
+    public function supprimerSorties($id, SortieRepository $sortieRepo, EntityManagerInterface $em)
+    {
+        $sorties = $sortieRepo->findAll();
+
+        return $this->redirectToRoute('listeSortieAdmin');
+
+    }
 }

@@ -66,7 +66,7 @@ class VilleController extends AbstractController
             $entityManager->persist($ville);
             $entityManager->flush();
             $this->addFlash("success", "la ville a bien été créé !");
-            return $this->redirectToRoute("listeUtilisateurs");
+            return $this->redirectToRoute("listeVilles");
 
         }
 
@@ -121,9 +121,7 @@ class VilleController extends AbstractController
 
         $villes = $villeRepo->findAll();
 
-        return $this->render('ville/liste.html.twig', [
-            'villes' => $villes,
-        ]);
+        return $this->redirectToRoute('listeVilles');
 
     }
 }
