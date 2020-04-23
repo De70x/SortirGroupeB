@@ -20,7 +20,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
 
-        for ($i == 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $user = new User();
             $idSite = rand(0, 4);
             $user->setNom("Michel" . $i);
@@ -31,7 +31,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setPassword($hashed);
             $user->setTelephone("0642424242");
             $user->setMail("mail" . $i . "@michel.com");
-            if ($i = 0) {
+            if ($i == 0) {
                 $user->setAdministrateur(true);
             } else {
 
