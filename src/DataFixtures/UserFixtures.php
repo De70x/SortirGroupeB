@@ -31,7 +31,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setPassword($hashed);
             $user->setTelephone("0642424242");
             $user->setMail("mail" . $i . "@michel.com");
-            if ($i = 0) {
+            if ($i == 0) {
                 $user->setAdministrateur(true);
             } else {
 
