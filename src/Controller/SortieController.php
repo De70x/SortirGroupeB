@@ -233,7 +233,7 @@ class SortieController extends AbstractController
      */
     public function annulerSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, EtatRepository $repoEtats, $id)
     {
-
+        $maintenant = new \DateTime();
         $sortieCourante = $repoSorties->find($id);
         $formAnnulation = $this->createFormBuilder()->add('commentaireAnnulation', TextareaType::class, [
             'attr' => []
@@ -241,7 +241,7 @@ class SortieController extends AbstractController
 
         $formAnnulation->handleRequest($request);
 
-        if ($formAnnulation->isSubmitted() && $formAnnulation->isValid()) {
+        if ($formAnnulation->isSubmitted() && $formAnnulation->isValid() && $maintenant < $sortieCourante->getDateHeureDebut()) {
             $sortieCourante->setEtat($repoEtats->findOneBy(array('libelle' => Etat::ANNULEE)));
             $sortieCourante->setInfosSortie($formAnnulation->getData()['commentaireAnnulation']);
             $entityManager->persist($sortieCourante);

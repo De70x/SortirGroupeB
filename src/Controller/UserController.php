@@ -77,6 +77,58 @@ class UserController extends AbstractController
      */
     public function logout(){}
 
+    /**
+     * @Route("/utilisateurs/liste", name="listeUtilisateurs")
+     * @param UserRepository $userRepo
+     * @return Response
+     */
+    public function listeUtilisateurs(UserRepository $userRepo){
+        $users = $userRepo->findAll();
+        return $this->render('user/liste.html.twig', [
+            'utilisateurs' => $users,
+        ]);
+    }
+
+    /**
+     * @Route("/utilisateurs/toggle/{id}", name="toggleUtilisateur")
+     * @param $id
+     * @param UserRepository $userRepo
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function toggleUtilisateur($id, UserRepository $userRepo, EntityManagerInterface $em){
+        $user = $userRepo->find($id);
+
+        $user->setActif(!$user->getActif());
+        $em->persist($user);
+        $em->flush();
+
+        $users = $userRepo->findAll();
+
+        return $this->render('user/liste.html.twig', [
+            'utilisateurs' => $users,
+        ]);
+    }
+
+    /**
+     * @Route("/utilisateurs/supprimer/{id}", name="supprimerUtilisateur")
+     * @param $id
+     * @param UserRepository $userRepo
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function supprimerUtilisateur($id, UserRepository $userRepo, EntityManagerInterface $em){
+        $user = $userRepo->find($id);
+
+        $em->remove($user);
+        $em->flush();
+
+        $users = $userRepo->findAll();
+
+        return $this->render('user/liste.html.twig', [
+            'utilisateurs' => $users,
+        ]);
+    }
 
 
     /**

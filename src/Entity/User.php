@@ -306,6 +306,4 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         // TODO: Implement __toString() method.
         return "<a href='#'>".$this->getUsername()."</a>";
     }
-
-
 }

@@ -37,8 +37,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
             $user->setAdministrateur(false);
             }
+            $user->setRoles('');
             $this->addReference('user'.$i,$user);
-
 
             $manager->persist($user);
         }
