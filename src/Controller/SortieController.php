@@ -230,6 +230,13 @@ class SortieController extends AbstractController
 
     /**
      * @Route("/annuler-sortie/{id}", name="annulerSortie")
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param SortieRepository $repoSorties
+     * @param EtatRepository $repoEtats
+     * @param $id
+     * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function annulerSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, EtatRepository $repoEtats, $id)
     {

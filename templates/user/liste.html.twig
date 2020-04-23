@@ -104,7 +104,7 @@
                                 {% endif %}
                             </a>
 
-                            <a href="#" data-action="{{ path('supprimerUtilisateur', {'id':utilisateur.id}) }}"
+                            <a href="#" data-href="{{ path('supprimerUtilisateur', {'id':utilisateur.id}) }}"
                                data-toggle="modal" data-target="#confirmer-suppression"
                                data-contenu="{{ utilisateur.username }}">
                                 <button name="supprimer" value="supprimer" class="btn-sm"
@@ -123,8 +123,16 @@
              aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        Confirmation de suppression
+                    </div>
                     <div class="modal-body">
-
+                        Etes-vous certain de vouloir supprimer l'utilisateur :
+                        <div class="pseudo"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                        <a class="btn btn-danger btn-ok">Confirmer la suppression</a>
                     </div>
                 </div>
             </div>

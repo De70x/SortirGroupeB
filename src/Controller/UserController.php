@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegisterType;
 use App\Form\ProfileFormType;
+use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -117,11 +118,21 @@ class UserController extends AbstractController
      * @param EntityManagerInterface $em
      * @return Response
      */
-    public function supprimerUtilisateur($id, UserRepository $userRepo, EntityManagerInterface $em){
+    public function supprimerUtilisateur($id, UserRepository $userRepo, SortieRepository $sortieRepo, EntityManagerInterface $em){
         $user = $userRepo->find($id);
+        $sorties = $sortieRepo->findByOrganisateur($id);
 
-        $em->remove($user);
-        $em->flush();
+        if($id != $this->getUser()->getId()) {
+            foreach ($sorties as $sortie) {
+                $em->remove($sortie);
+            }
+
+            $em->remove($user);
+            $em->flush();
+        }
+        else{
+            $this->addFlash('error', 'Vous ne pouvez pas vous supprimer vous-même !');
+        }
 
         $users = $userRepo->findAll();
 
