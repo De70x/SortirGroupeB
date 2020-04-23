@@ -6,40 +6,93 @@
 
 
 {% block main %}
+    <style>
+        table.table.table-striped>thead>tr>th{
+            border:none;
+            color : #fffffe;
+        }
+        table.table.table-striped>tbody>tr>th{
+            border:none;
+            color : #fffffe;
+        }
+        table.table.table-striped>tbody>tr>td{
+            border:none;
+            color : #fffffe;
+        }
+    </style>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">{{ sortie.nom }}</h1>
+            </div>
+        </div>
+        <br>
+        <div class="row justify-content-center">
+           <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="col-12 col-md-3" scope="col">Intitulé :</th>
+                        <th class="col-12 col-md-3" scope="col">{{ sortie.nom }}</th>
+                    </tr>
+                </thead>
+               <tbody>
+                    <tr>
+                        <th scope="row">Date et heure de la sortie :</th>
+                        <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date limite d'inscription :</th>
+                        <td>{{ sortie.dateLimiteInscription|date("d/m/Y H:i") }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Nombre de place restantes :</th>
+                        <td>{{ sortie.nbInscriptionsMax - repo.nbInscriptions(sortie) }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Durée :</th>
+                        <td>{{ sortie.duree }} minutes</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description et info :</th>
+                        <td>{{ sortie.infosSortie }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Lieu :</th>
+                        <td>{{ sortie.lieu.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Rue :</th>
+                        <td>{{ sortie.lieu.rue }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Ville :</th>
+                        <td>{{ sortie.lieu.ville.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Code postal :</th>
+                        <td>{{ sortie.lieu.ville.codePostal }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Coordonées GPS</th>
+                        <td>{{ sortie.lieu.latitude }} - {{ sortie.lieu.longitude }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Liste des inscrits :</th>
+                        <td>
+                            <a href={{ path('profile',{id:sortie.organisateur.id} ) }}> {{ sortie.organisateur.username }}
+                                (Organisateur) </a>
+                            <br>
+                            {% set inscrits = sortie.listeInscrit %}
+                            {% for inscrit in inscrits %}
+                                <a href="{{ path('profile', {id:inscrit.id}) }}"> {{ inscrit.username }} </a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+               </tbody>
+           </table>
+
+        </div>
+    </div>
 
 
-    <p> Nom de la sortie : {{ sortie.nom  }}  </p>
-    <p> Date et heure de la sortie : {{ sortie.dateHeureDebut|date("d/m/Y H:i") }}  </p>
-    <p> Date limite d'inscription : {{ sortie.dateLimiteInscription|date("d/m/Y H:i") }} </p>
-    <p> Nombre de place restantes :   {{  sortie.nbInscriptionsMax - repo.nbInscriptions(sortie) }}  / {{ sortie.nbInscriptionsMax }}  </p>
-    <p> Durée :  {{ sortie.duree }}   Minutes.</p>
-    <p> Description et info  :  {{ sortie.infosSortie }} </p>
-    <p> Lieu :   {{ sortie.lieu.nom }} </p>
-    <p> Rue :   {{ sortie.lieu.rue }} </p>
-    <p> Ville : {{ sortie.lieu.ville.nom }} </p>
-    <p> Code postal :  {{ sortie.lieu.ville.codePostal }}</p>
-    <p> Latitude : {{ sortie.lieu.latitude }}</p>
-    <p> Latitude :  {{ sortie.lieu.longitude }}</p>
-    <br>
-    <p> Liste des inscrits : </p>
-<table>
-    <thead>
-        <th> Liste des inscrits </th>
-
-   <tr>
-      <a  href={{ path('profile',{id:sortie.organisateur.id} ) }} > {{ sortie.organisateur.nom }} (Organisateur)   </a>
-   </tr>
-    </thead>
-    <tbody></tbody>
-{% set inscrits = sortie.listeInscrit %}
-{% for inscrit in inscrits %}
-<tr>
-   <a href="{{path('profile', {id:inscrit.id})  }}"> {{inscrit.nom}} </a>
-</tr>
-
-
-
-{% endfor %}
-    </tbody>
-</table>
 {% endblock %}
