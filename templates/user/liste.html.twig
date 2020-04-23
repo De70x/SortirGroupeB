@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block main %}
+    <style>
+        .card {
+            background: transparent;
+            color: #fffffe;
+        }
+
+        table.table.table-striped > thead > tr > th {
+            color: #fffffe;
+            border: none;
+        }
+
+        table.table.table-striped > tbody > tr > th {
+            color: #fffffe;
+            border: none;
+        }
+
+        table.table.table-striped > tbody > tr > td {
+            color: #fffffe;
+            border: none;
+        }
+
+        .inactif {
+            color: red !important;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">Liste des utilisateurs</h1>
+            </div>
+        </div>
+
+        <br>
+        <hr style="background: #e53170">
+        <br>
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <table class="table table-striped" id="listeUtilisateurs">
+            <thead>
+            <tr>
+                <th scope="col">Nom de l'utilisateur</th>
+                <th scope="col">Prénom de l'utilisateur</th>
+                <th scope="col">Pseudonyme</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">Mail</th>
+                <th scope="col">Administrateur ?</th>
+                <th scope="col">Actif ?</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if is_granted('ROLE_ADMIN') %}
+                {% for utilisateur in utilisateurs %}
+                    <tr>
+                        <th scope="row"><a
+                                    href="{{ path('profile' , {id:utilisateur.id}) }}"> {{ utilisateur.nom }} </a>
+                        </th>
+                        <td>{{ utilisateur.prenom }}</td>
+                        <td>{{ utilisateur.username }}</td>
+                        <td>{{ utilisateur.telephone }}</td>
+                        <td>{{ utilisateur.mail }}</td>
+                        {% if utilisateur.administrateur %}
+                            <td style="color: green"><i class="fal fa-check"></i></td>
+                        {% endif %}
+                        {% if not utilisateur.administrateur %}
+                            <td style="color: red"><i class="fal fa-times"></i></td>
+                        {% endif %}
+
+                        {% if utilisateur.actif %}
+                            <td style="color: green"><i class="fal fa-check"></i></td>
+                        {% endif %}
+                        {% if not utilisateur.actif %}
+                            <td style="color: red"><i class="fal fa-times"></i></td>
+                        {% endif %}
+
+                        <td class="boutonsAction">
+                            <a href="{{ path('toggleUtilisateur', {'id':utilisateur.id}) }}">
+                                {% if not utilisateur.actif %}
+                                    <button name="publier" value="publier" class="btn-sm"
+                                            style="background: #fffffe; color: #0f0e17; border:none"><i
+                                                class="fas fa-bells"></i></button>
+
+                                {% endif %}
+                                {% if utilisateur.actif %}
+                                    <button name="publier" value="publier" class="btn-sm"
+                                            style="background: #fffffe; color: #0f0e17; border:none"><i
+                                                class="fas fa-snooze"></i></button>
+                                {% endif %}
+                            </a>
+
+                            <a href="#" data-action="{{ path('supprimerUtilisateur', {'id':utilisateur.id}) }}"
+                               data-toggle="modal" data-target="#confirmer-suppression"
+                               data-contenu="{{ utilisateur.username }}">
+                                <button name="supprimer" value="supprimer" class="btn-sm"
+                                        style="background: #fffffe; color: #0f0e17; border:none"><i
+                                            class="fas fa-trash-alt"></i></button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+
+        {#Ici, on ajoute la modale de confirmation#}
+        <div class="modal fade" id="confirmer-suppression" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% block javascripts %}
+            {{ parent() }}
+            <script type="text/javascript" src="{{ asset('js/confirmationSuppression.js') }}"></script>
+        {% endblock %}
+    </div>
+{% endblock %}
