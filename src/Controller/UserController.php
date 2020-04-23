@@ -52,6 +52,7 @@ class UserController extends AbstractController
         $user = new User();
         $registerForm = $this->createForm(RegisterType::class, $user);
         $user->setAdministrateur(false);
+        $user->setRoles(['ROLE_USER']);
 
 
         $registerForm->handleRequest($request);
