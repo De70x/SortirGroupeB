@@ -199,7 +199,7 @@
                                     <i class="fal fa-beer"></i>
                                 {% endif %}
                             </td>
-                            <td><a href="{{ path('profile',{id:sortie.organisateur.id} ) }}">  {{ sortie.organisateur.username }} </a></td>
+                            <td>{{ sortie.organisateur.username }}</td>
 
                             <td class="boutonsAction">
                                 {% if sortie.etat.libelle == CREEE and sortie.organisateur.id == app.user.id %}
