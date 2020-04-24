@@ -62,11 +62,13 @@ class SortieRepository extends ServiceEntityRepository
     {
         $maintenant = new DateTime();
         $etatCreeId = $this->etatRepo->findOneBy(array('libelle' => Etat::CREEE))->getId();
+        $etatOuverteId = $this->etatRepo->findOneBy(array('libelle' => Etat::OUVERTE))->getId();
         return $this->createQueryBuilder('s')
             ->andWhere('s.dateHeureDebut > :maintenant')
-            ->andWhere('s.etat != :creee')
+            ->andWhere('s.etat = :creee')
+            ->orWhere('s.etat = :ouverte')
             ->orderBy('s.dateHeureDebut', 'ASC')
-            ->setParameters(array('maintenant' => $maintenant, 'creee' => $etatCreeId))
+            ->setParameters(array('maintenant' => $maintenant, 'creee' => $etatCreeId, 'ouverte' => $etatOuverteId))
             ->getQuery()
             ->getResult();
     }
