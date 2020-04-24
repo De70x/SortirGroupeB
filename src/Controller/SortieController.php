@@ -123,6 +123,7 @@ class SortieController extends AbstractController
         $action = "";
 
         if($id == -1){
+            $action = self::CREATION;
             $sortie = new Sortie();
             $lieu = new Lieu();
             $ville = new Ville();
@@ -188,10 +189,8 @@ class SortieController extends AbstractController
 
             $entityManager->persist($sortie);
 
-            dump($sortie->getEtat());
-            dump($sortie->getEtat() === $etatOuverte);
 
-            if($sortie->getEtat() === $etatOuverte && $action == self::MODIFICATION)
+            if($sortie->getEtat() === $etatOuverte)
             {
                 $sortieRepository->gererEvenements($action, $sortie->getId());
             }

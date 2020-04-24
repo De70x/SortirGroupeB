@@ -216,32 +216,49 @@ class SortieRepository extends ServiceEntityRepository
             $dqlEventHeureDebut =
                 "CREATE EVENT IF NOT EXISTS event_heure_debut".$idSortie.
                 " ON SCHEDULE AT '".$heureDebut."' DO ".
-                " UPDATE sortie set etat_id = ".$etatEnCoursId. " where id = ".$idSortie;
+                " UPDATE sortie set etat_id = :etatEnCoursId where id = :idSortie";
             $dqlEventArchivage =
                 "CREATE EVENT IF NOT EXISTS event_archivage".$idSortie.
                 " ON SCHEDULE AT '".$heureDebut."' + INTERVAL 1 MONTH DO ".
-                " UPDATE sortie set etat_id = ".$etatArchiveeId. " where id = ".$idSortie;
+                " UPDATE sortie set etat_id = :etatArchiveId where id = :idSortie";
+
+            $stmtHeureDebut = $this->getEntityManager()->getConnection()->prepare($dqlEventHeureDebut);
+            $stmtHeureDebut->bindParam('etatEnCoursId', $etatEnCoursId);
+            $stmtHeureDebut->bindParam('idSortie', $idSortie);
+
+            $stmtArchivage = $this->getEntityManager()->getConnection()->prepare($dqlEventArchivage);
+            $stmtArchivage->bindParam('etatArchiveId', $etatArchiveId);
+            $stmtArchivage->bindParam('idSortie', $idSortie);
         }
 
         if($action == SortieController::MODIFICATION)
         {
             $dqlEventHeureDebut =
-                "ALTER EVENT event_heure_debut".$idSortie.
+                "ALTER EVENT IF EXISTS event_heure_debut".$idSortie.
                 " ON SCHEDULE AT '".$heureDebut."' DO ".
-                " UPDATE sortie set etat_id = ".$etatEnCoursId. " where id = ".$idSortie;
+                " UPDATE sortie set etat_id = :etatEnCoursId where id = :idSortie";
             $dqlEventArchivage =
-                "ALTER EVENT event_archivage".$idSortie.
+                "ALTER EVENT IF EXISTS event_archivage".$idSortie.
                 " ON SCHEDULE AT '".$heureDebut."' + INTERVAL 1 MONTH DO ".
-                " UPDATE sortie set etat_id = ".$etatArchiveeId. " where id = ".$idSortie;
+                " UPDATE sortie set etat_id = :etatArchiveId where id = :idSortie";
+
+            $stmtHeureDebut = $this->getEntityManager()->getConnection()->prepare($dqlEventHeureDebut);
+            $stmtHeureDebut->bindParam('etatEnCoursId', $etatEnCoursId);
+            $stmtHeureDebut->bindParam('idSortie', $idSortie);
+
+            $stmtArchivage = $this->getEntityManager()->getConnection()->prepare($dqlEventArchivage);
+            $stmtArchivage->bindParam('etatArchiveId', $etatArchiveId);
+            $stmtArchivage->bindParam('idSortie', $idSortie);
         }
 
         if($action == SortieController::ANNULATION)
         {
             $dqlEventHeureDebut =
-                "DROP EVENT event_heure_debut".$idSortie;
+                "DROP EVENT IF EXISTS event_heure_debut".$idSortie;
             $dqlEventArchivage =
-                "DROP EVENT event_archivage".$idSortie;
+                "DROP EVENT IF EXISTS event_archivage".$idSortie;
         }
+
 
         $this->getEntityManager()->getConnection()->prepare($dqlEventHeureDebut)->execute();
         $this->getEntityManager()->getConnection()->prepare($dqlEventArchivage)->execute();
