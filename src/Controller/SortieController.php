@@ -13,6 +13,7 @@ use App\Form\VilleType;
 use App\Repository\EtatRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -28,6 +29,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SortieController extends AbstractController
 {
+
+    public const CREATION = "creation";
+    public const MODIFICATION = "modification";
+    public const ANNULATION = "annulation";
+
     /**
      * @Route("/sorties/list", name="sorties")
      * @param SortieRepository $repoSorties
@@ -105,16 +111,32 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/nouvelle-sortie", name="nouvelleSortie")
+     * @Route("/nouvelle-sortie/{id}", name="nouvelleSortie")
      * @param Request $request
      * @param EntityManagerInterface $entityManager
+     * @param EtatRepository $repoEtats
      * @return RedirectResponse|Response
+     * @throws DBALException
      */
-    public function nouvelleSortie(Request $request, EntityManagerInterface $entityManager, EtatRepository $repoEtats)
+    public function nouvelleSortie(Request $request, EntityManagerInterface $entityManager, EtatRepository $repoEtats, $id, SortieRepository $sortieRepository)
     {
-        $sortie = new Sortie();
-        $lieu = new Lieu();
-        $ville = new Ville();
+        $action = "";
+
+        if($id == -1){
+            $sortie = new Sortie();
+            $lieu = new Lieu();
+            $ville = new Ville();
+        }
+        else{
+            $action = self::MODIFICATION;
+            $formatDates = 'd/m/Y H:i';
+            $sortie = $sortieRepository->find($id);
+            $sortie->setDateLimiteInscription(date_format($sortie->getDateLimiteInscription(), $formatDates));
+            $sortie->setDateHeureDebut(date_format($sortie->getDateHeureDebut(), $formatDates));
+            $lieu = $sortie->getLieu();
+            $ville = $lieu->getVille();
+        }
+
 
         $repoVille = $entityManager->getRepository(Ville::class);
         $villes = $repoVille->findAll();
@@ -143,24 +165,39 @@ class SortieController extends AbstractController
         if ($newSortieForm->isSubmitted() && $newSortieForm->isValid()) {
             $organisateur = $this->getUser();
             $sortie->setOrganisateur($organisateur);
+            $etatOuverte = $repoEtats->findOneBy(array('libelle' => Etat::OUVERTE));
+            $etatCreee = $repoEtats->findOneBy(array('libelle' => Etat::CREEE));
 
             if ($newSortieForm->get('publier')->isClicked()) {
-                $etat = $repoEtats->findOneBy(array('libelle' => Etat::OUVERTE));
-                $sortie->setEtat($etat);
+                $sortie->setEtat($etatOuverte);
             } else {
-                $etat = $repoEtats->findOneBy(array('libelle' => Etat::CREEE));
-                $sortie->setEtat($etat);
+                // On vérifie simplement que la sortie n'est pas déjà publié quand on la modifie
+                if($sortie->getEtat() !== $etatOuverte)
+                {
+                    $sortie->setEtat($etatCreee);
+                }
             }
 
             // On gère les dates
             $formatDates = 'd/m/Y H:i';
+
             $dateSortie = date_create_from_format($formatDates, $newSortieForm->get('dateHeureDebut')->getData());
             $dateLimite = date_create_from_format($formatDates, $newSortieForm->get('dateLimiteInscription')->getData());
             $sortie->setDateHeureDebut($dateSortie);
             $sortie->setDateLimiteInscription($dateLimite);
 
             $entityManager->persist($sortie);
+
+            dump($sortie->getEtat());
+            dump($sortie->getEtat() === $etatOuverte);
+
+            if($sortie->getEtat() === $etatOuverte && $action == self::MODIFICATION)
+            {
+                $sortieRepository->gererEvenements($action, $sortie->getId());
+            }
+
             $entityManager->flush();
+
             $this->addFlash("success", "Votre sortie a bien été créée !");
             return $this->redirectToRoute("sorties");
         }
@@ -175,6 +212,12 @@ class SortieController extends AbstractController
 
     /**
      * @Route("/inscription-sortie/{id}", name="inscriptionSortie")
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param SortieRepository $repoSorties
+     * @param $id
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function inscriptionSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, $id)
     {
@@ -200,6 +243,7 @@ class SortieController extends AbstractController
 
     /**
      * @Route("/publier-sortie/{id}", name="publierSortie")
+     * @throws DBALException
      */
     public function publierSortie(Request $request, EntityManagerInterface $entityManager, SortieRepository $repoSorties, EtatRepository $repoEtats, $id)
     {
@@ -208,6 +252,10 @@ class SortieController extends AbstractController
 
         $sortieCourante->setEtat($repoEtats->findOneBy(array('libelle' => Etat::OUVERTE)));
         $entityManager->persist($sortieCourante);
+
+        // On crée l'événement associé
+        $repoSorties->gererEvenements(self::CREATION, $sortieCourante->getId());
+
         $entityManager->flush();
 
         return $this->redirectToRoute("sorties");
@@ -252,6 +300,7 @@ class SortieController extends AbstractController
             $sortieCourante->setEtat($repoEtats->findOneBy(array('libelle' => Etat::ANNULEE)));
             $sortieCourante->setInfosSortie($formAnnulation->getData()['commentaireAnnulation']);
             $entityManager->persist($sortieCourante);
+            $repoSorties->gererEvenements(self::ANNULATION, $sortieCourante->getId());
             $entityManager->flush();
             return $this->redirectToRoute("sorties");
         }
@@ -273,6 +322,7 @@ class SortieController extends AbstractController
         return $this->render('sortie/DetailsSortie.html.twig',
             ['sortie' => $sortieCourante,
                 'repo' => $repoSorties,
+                'maintenant' => new \DateTime(),
             ]);
     }
 
@@ -281,7 +331,7 @@ class SortieController extends AbstractController
      */
     public function listeSortie(SortieRepository $sortieRepo)
     {
-        $sorties = $sortieRepo->findAll();
+        $sorties = $sortieRepo->sortiesAnnulable();
         return $this->render('sortie/listeAdmin.html.twig', [
             'sorties' => $sorties,
         ]);
@@ -293,9 +343,10 @@ class SortieController extends AbstractController
      */
     public function supprimerSorties($id, SortieRepository $sortieRepo, EntityManagerInterface $em)
     {
-        $sorties = $sortieRepo->findAll();
+        $sorties = $sortieRepo->sortiesAnnulable();
 
         return $this->redirectToRoute('listeSortieAdmin');
 
     }
+
 }

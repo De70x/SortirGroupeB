@@ -29,7 +29,7 @@
                     <a class="nav-link font-weight-bold"
                        style="color:#e53170; margin-right: 0.5em">Hello {{ app.user.username }}</a>
                     <button class="btn m-0 p-0 btn-custom" style="background-color: #ff8906; color:#fffffe"><a
-                                class="nav-item nav-link active" href="{{ path('nouvelleSortie') }}">Proposer une
+                                class="nav-item nav-link active" href="{{ path('nouvelleSortie', {'id':-1}) }}">Proposer une
                             sortie</a></button>
                     <a class="nav-item nav-link active" href="{{ path('profile', {"id":app.user.id}) }}">Mon profil</a>
                 {% endif %}
