@@ -337,16 +337,4 @@ class SortieController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("admin/lieux/supprimer/{id}", name="supprimerLieu")
-     *
-     */
-    public function supprimerSorties($id, SortieRepository $sortieRepo, EntityManagerInterface $em)
-    {
-        $sorties = $sortieRepo->sortiesAnnulable();
-
-        return $this->redirectToRoute('listeSortieAdmin');
-
-    }
-
 }
