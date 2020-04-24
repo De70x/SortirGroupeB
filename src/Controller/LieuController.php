@@ -58,7 +58,14 @@ class LieuController extends AbstractController
             dump($lieux);
             return new JsonResponse($lieux);
         }
+        $newLieuForm->handleRequest($request);
 
+        if ($newLieuForm->isSubmitted() && $newLieuForm->isValid()) {
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+            $this->addFlash("success", "le lieu a bien été créé !");
+            return $this->redirectToRoute("listeLieux");
+        }
         return $this->render('lieu/nouveauLieu.html.twig', [
             'controller_name' => 'LieuController',
             'newLieuForm'=>$newLieuForm->createView()
