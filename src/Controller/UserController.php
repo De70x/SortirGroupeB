@@ -278,10 +278,10 @@ class UserController extends AbstractController
 
             $this->addFlash('notice', 'Mail envoyé');
 
-            return $this->render('base.html.twig');
+            return $this->render('user/forgotPassword.html.twig');
         }
 
-        return $this->render('base.html.twig');
+        return $this->render('user/forgotPassword.html.twig');
     }
     /**
      * @Route("/reset", name="reset")
