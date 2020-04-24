@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Admin - Liste des sorties
+{% endblock %}
+
+{% block main %}
+    <style>
+        .card {
+            background: transparent;
+            color: #fffffe;
+        }
+
+        table.table.table-striped > thead > tr > th {
+            color: #fffffe;
+            border: none;
+        }
+
+        table.table.table-striped > tbody > tr > th {
+            color: #fffffe;
+            border: none;
+        }
+
+        table.table.table-striped > tbody > tr > td {
+            color: #fffffe;
+            border: none;
+        }
+
+        .inactif {
+            color: red !important;
+        }
+
+        ul.nav.nav-tabs {
+            border-color: #e53170;
+        }
+
+        ul.nav.nav-tabs > li.active > a.nav-link.active {
+            color: #fffffe;
+            background: #0f0e17;
+            border-color: #e53170;
+        }
+
+        ul.nav.nav-tabs > li > a {
+            color: #fffffe;
+        }
+
+        ul.nav.nav-tabs > li > a:hover {
+            border-color: #e53170;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm- 10 col-md-8 col-lg-6 p-3">
+                <h1 class="text-center">Panneau d'administration - Gestion des sorties </h1>
+            </div>
+        </div>
+        <div class="panel with-nav-tabs">
+            <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a class="nav-link" href="{{ path('listeUtilisateurs') }}">Utilisateurs</a>
+                    </li>
+                    <li class="active">
+                        <a class="nav-link active" href="{{ path('listeSortieAdmin') }}">Sorties</a>
+                    </li>
+                    <li class="active">
+                        <a class="nav-link " href="{{ path('listeLieux') }}">lieux</a>
+                    </li>
+                    <li class="active">
+                        <a class="nav-link" href="{{ path('listeVilles') }}">Villes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <br>
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+

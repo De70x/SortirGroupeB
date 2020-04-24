@@ -2,10 +2,12 @@
 
 namespace App\Repository;
 
+use App\Controller\SortieController;
 use App\Entity\Etat;
 use App\Entity\Sortie;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,9 +22,12 @@ use Exception;
  */
 class SortieRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $etatRepo;
+
+    public function __construct(ManagerRegistry $registry, EtatRepository $etatRepo)
     {
         parent::__construct($registry, Sortie::class);
+        $this->etatRepo = $etatRepo;
     }
 
     /**
@@ -51,6 +56,19 @@ class SortieRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult();
         }
+    }
+
+    public function sortiesAnnulable()
+    {
+        $maintenant = new DateTime();
+        $etatCreeId = $this->etatRepo->findOneBy(array('libelle' => Etat::CREEE))->getId();
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.dateHeureDebut > :maintenant')
+            ->andWhere('s.etat != :creee')
+            ->orderBy('s.dateHeureDebut', 'ASC')
+            ->setParameters(array('maintenant' => $maintenant, 'creee' => $etatCreeId))
+            ->getQuery()
+            ->getResult();
     }
 
     public function listeSortieUtilisateur($userId)
@@ -167,5 +185,63 @@ class SortieRepository extends ServiceEntityRepository
             $rechercheAvancee->andWhere($rechercheAvancee->expr()->in('s.id', $queryCoches->getDQL()));
         }
         return $rechercheAvancee->orderBy('s.dateHeureDebut', 'ASC')->getQuery()->getResult();
+    }
+
+    /**
+     * @param $action
+     * @param $idSortie
+     * Cette fonction a pour but de créer ou modifier des événements pour la base de données.
+     * On crée/modifie deux événements, un pour le passage à en cours et un pour le passage
+     * à archivée.
+     * @throws DBALException
+     */
+    public function gererEvenements($action, $idSortie)
+    {
+        $sortie = $this->find($idSortie);
+
+        $formatDate = "Y-m-d H:i.s";
+
+        $etatEnCoursId = $this->etatRepo->findOneBy(array('libelle' => Etat::EN_COURS))->getId();
+        $etatArchiveeId = $this->etatRepo->findOneBy(array('libelle' => Etat::PASSEE))->getId();
+
+        $heureDebut = date_format($sortie->getDateHeureDebut(), $formatDate);
+
+        $dqlEventHeureDebut = "";
+        $dqlEventArchivage = "";
+
+        if($action == SortieController::CREATION)
+        {
+            $dqlEventHeureDebut =
+                "CREATE EVENT IF NOT EXISTS event_heure_debut".$idSortie.
+                " ON SCHEDULE AT '".$heureDebut."' DO ".
+                " UPDATE sortie set etat_id = ".$etatEnCoursId. " where id = ".$idSortie;
+            $dqlEventArchivage =
+                "CREATE EVENT IF NOT EXISTS event_archivage".$idSortie.
+                " ON SCHEDULE AT '".$heureDebut."' + INTERVAL 1 MONTH DO ".
+                " UPDATE sortie set etat_id = ".$etatArchiveeId. " where id = ".$idSortie;
+        }
+
+        if($action == SortieController::MODIFICATION)
+        {
+            $dqlEventHeureDebut =
+                "ALTER EVENT event_heure_debut".$idSortie.
+                " ON SCHEDULE AT '".$heureDebut."' DO ".
+                " UPDATE sortie set etat_id = ".$etatEnCoursId. " where id = ".$idSortie;
+            $dqlEventArchivage =
+                "ALTER EVENT event_archivage".$idSortie.
+                " ON SCHEDULE AT '".$heureDebut."' + INTERVAL 1 MONTH DO ".
+                " UPDATE sortie set etat_id = ".$etatArchiveeId. " where id = ".$idSortie;
+        }
+
+        if($action == SortieController::ANNULATION)
+        {
+            $dqlEventHeureDebut =
+                "DROP EVENT event_heure_debut".$idSortie;
+            $dqlEventArchivage =
+                "DROP EVENT event_archivage".$idSortie;
+        }
+
+        $this->getEntityManager()->getConnection()->prepare($dqlEventHeureDebut)->execute();
+        $this->getEntityManager()->getConnection()->prepare($dqlEventArchivage)->execute();
     }
 }

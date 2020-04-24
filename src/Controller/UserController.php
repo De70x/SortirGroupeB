@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegisterType;
 use App\Form\ProfileFormType;
+use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,7 +42,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/admin/register", name="register")
+     * @Route("/admin/utilisateurs/register", name="register")
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param UserPasswordEncoderInterface $encoder
@@ -63,8 +64,8 @@ class UserController extends AbstractController
 
             $em->persist($user);
             $em->flush();
-            $this->addFlash("success", "Votre compte à bien été créé !");
-            return $this->redirectToRoute("home");
+            $this->addFlash("success", "le compte a bien été créé !");
+            return $this->redirectToRoute("listeUtilisateurs");
 
         }
         return $this->render('user/register.html.twig', [
@@ -78,7 +79,7 @@ class UserController extends AbstractController
     public function logout(){}
 
     /**
-     * @Route("/utilisateurs/liste", name="listeUtilisateurs")
+     * @Route("admin/utilisateurs/liste", name="listeUtilisateurs")
      * @param UserRepository $userRepo
      * @return Response
      */
@@ -90,7 +91,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/utilisateurs/toggle/{id}", name="toggleUtilisateur")
+     * @Route("admin/utilisateurs/toggle/{id}", name="toggleUtilisateur")
      * @param $id
      * @param UserRepository $userRepo
      * @param EntityManagerInterface $em
@@ -111,23 +112,32 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/utilisateurs/supprimer/{id}", name="supprimerUtilisateur")
+     * @Route("admin/utilisateurs/supprimer/{id}", name="supprimerUtilisateur")
      * @param $id
      * @param UserRepository $userRepo
+     * @param SortieRepository $sortieRepo
      * @param EntityManagerInterface $em
      * @return Response
      */
-    public function supprimerUtilisateur($id, UserRepository $userRepo, EntityManagerInterface $em){
+    public function supprimerUtilisateur($id, UserRepository $userRepo, SortieRepository $sortieRepo, EntityManagerInterface $em){
         $user = $userRepo->find($id);
+        $sorties = $sortieRepo->findByOrganisateur($id);
 
-        $em->remove($user);
-        $em->flush();
+        if($id != $this->getUser()->getId()) {
+            foreach ($sorties as $sortie) {
+                $em->remove($sortie);
+            }
+
+            $em->remove($user);
+            $em->flush();
+        }
+        else{
+            $this->addFlash('error', 'Vous ne pouvez pas vous supprimer vous-même !');
+        }
 
         $users = $userRepo->findAll();
 
-        return $this->render('user/liste.html.twig', [
-            'utilisateurs' => $users,
-        ]);
+        return $this->redirectToRoute('listeUtilisateurs');
     }
 
 

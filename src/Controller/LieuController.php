@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Form\NewLieuType;
+use App\Repository\LieuRepository;
+use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -60,4 +62,31 @@ class LieuController extends AbstractController
             'newLieuForm'=>$newLieuForm->createView()
         ]);
     }
+
+    /**
+     * @Route("admin/lieux/liste", name="listeLieux")
+     */
+    public function listeLieu(LieuRepository $lieuRepo)
+    {
+        $lieux = $lieuRepo->findAll();
+        return $this->render('lieu/liste.html.twig', [
+            'Lieux' => $lieux,
+        ]);
+    }
+
+    /**
+     * @Route("admin/lieux/supprimer/{id}", name="supprimerLieu")
+     *
+     */
+    public function supprimerLieu($id, LieuRepository $lieuRepo, SortieRepository $sortieRepo, EntityManagerInterface $em)
+    {
+        $lieux = $lieuRepo->findAll();
+
+        return $this->redirectToRoute('listeLieux');
+
+    }
+
+
+
+
 }

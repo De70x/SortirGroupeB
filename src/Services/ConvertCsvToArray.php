@@ -1,5 +1,5 @@
 <?php
-namespace App\src\Services;
+namespace App\Services;
 
 class ConvertCsvToArray {
 
