@@ -85,6 +85,59 @@
                 {{ message }}
             </div>
         {% endfor %}
+
+        <table class="table table-striped" id="listeSorties">
+            <thead>
+            <tr>
+                <th scope="col">Nom de la sortie</th>
+                <th scope="col">Date de la sortie</th>
+                <th scope="col">Clôture</th>
+                <th scope="col">Inscrits / Places</th>
+                <th scope="col">Etat</th>
+                <th scope="col">Organisateur</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set CREEE = constant('App\\Entity\\Etat::CREEE') %}
+            {% set ANNULEE = constant('App\\Entity\\Etat::ANNULEE') %}
+            {% set OUVERTE = constant('App\\Entity\\Etat::OUVERTE') %}
+
+            {% for sortie in sorties %}
+                {% if app.user != null %}
+                    {% if sortie.etat.libelle != CREEE or sortie.organisateur.id == app.user.id %}
+                        {% if sortie.etat.libelle == ANNULEE %}
+                            {# ici on met une variable a annulee si la sortie est annulee pour pouvoir faire un affichage particulié#}
+                            {% set annulee = 'annulee' %}
+                        {% endif %}
+                        {% if sortie.etat.libelle != ANNULEE %}
+                            {# si la sortie n'est pas annulée affichage normal#}
+                            {% set annulee = '' %}
+                        {% endif %}
+
+                        <tr>
+                            <th scope="row"><a href="{{ path('detailsSortie' , {id:sortie.id}) }}"> {{ sortie.nom }} </a></th>
+                            <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</td>
+                            <td>{{ sortie.dateLimiteInscription|date("d/m/Y H:i") }}</td>
+                            <td>{{ nbInscritsParSortie[sortie.id] }} / {{ sortie.nbInscriptionsMax }}</td>
+                            <td class= {{ annulee }}>{{ sortie.etat.libelle }}</td>
+                            <td><a href="{{ path('profile',{id:sortie.organisateur.id} ) }}">  {{ sortie.organisateur.username }} </a></td>
+                            <td class="boutonsAction">
+                                {% if (sortie.etat.libelle == CREEE or sortie.etat.libelle == OUVERTE) %}
+                                    <a href="#" data-action="{{ path('annulerSortie', {'id':sortie.id}) }}"
+                                       data-toggle="modal" data-target="#confirmer-annulation"
+                                       data-contenu="{{ sortie.nom }}">
+                                        <button name="annuler" value="annuler" class="btn-sm" style="background: #fffffe; color: #0f0e17; border:none"><i class="fas fa-trash-alt"></i></button>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+
     </div>
 {% endblock %}
 

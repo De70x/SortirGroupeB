@@ -332,8 +332,13 @@ class SortieController extends AbstractController
     public function listeSortie(SortieRepository $sortieRepo)
     {
         $sorties = $sortieRepo->sortiesAnnulable();
+        $nbInscritsParSortie = [];
+        foreach ($sorties as $sortie) {
+            $nbInscritsParSortie[$sortie->getId()] = $sortieRepo->nbInscriptions($sortie);
+        }
         return $this->render('sortie/listeAdmin.html.twig', [
             'sorties' => $sorties,
+            'nbInscritsParSortie' => $nbInscritsParSortie,
         ]);
     }
 
