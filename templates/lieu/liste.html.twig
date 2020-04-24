@@ -85,6 +85,75 @@
                 {{ message }}
             </div>
         {% endfor %}
+
+        <table class="table table-striped" id="listeUtilisateurs">
+            <thead>
+            <tr>
+                <th scope="col"># id</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Ville</th>
+                <th scope="col">Code Postal</th>
+                <th scope="col">Action</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for lieu in Lieux %}
+                <tr>
+                    <td>{{ lieu.id }}</td>
+                    <td>{{ lieu.nom }}</td>
+                    <td>{{ lieu.rue }}</td>
+                    <td>{{ lieu.ville.nom }}</td>
+                    <td>{{ lieu.ville.codePostal }}</td>
+                    <td>
+                        <a href="#" data-href="{{ path('supprimerLieu', {'id':lieu.id}) }}"
+                           data-toggle="modal" data-target="#confirmer-suppression-lieu"
+                           data-contenu="{{ lieu.nom }}">
+                            <button name="supprimer" value="supprimer" class="btn-sm"
+                                    style="background: #fffffe; color: #0f0e17; border:none"><i
+                                        class="fas fa-trash-alt"></i></button>
+                        </a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {#modal de confirmation de la suppression#}
+        <div class="modal fade" id="confirmer-suppression-lieu" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Confirmation de suppression
+                    </div>
+                    <div class="modal-body">
+                        Etes-vous certain de vouloir supprimer le lieu ? Vous risquez de supprimer les
+                        sorties qui lui sont associées.
+                        <div class="lieu"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                        <a class="btn btn-danger btn-ok" style="color: #fffffe">Confirmer la suppression</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Bouton ajout new Lieu #}
+        <div class="row d-flex justify-content-end">
+            <div class="col-12 col-md-4">
+                <button class="btn btn-block" style="background-color: #ff8906; color:#fffffe; ">
+                    <a href="{{ path('nouveauLieu') }}" style="text-decoration: none">Ajouter un lieu</a>
+                </button>
+            </div>
+        </div>
+        {% block javascripts %}
+            {{ parent() }}
+            <script type="text/javascript" src="{{ asset('js/confirmationSuppression.js') }}"></script>
+        {% endblock %}
+
     </div>
 {% endblock %}
 

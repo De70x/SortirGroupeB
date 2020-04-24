@@ -10,7 +10,9 @@ use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LieuController extends AbstractController
@@ -65,6 +67,8 @@ class LieuController extends AbstractController
 
     /**
      * @Route("admin/lieux/liste", name="listeLieux")
+     * @param LieuRepository $lieuRepo
+     * @return Response
      */
     public function listeLieu(LieuRepository $lieuRepo)
     {
@@ -76,11 +80,27 @@ class LieuController extends AbstractController
 
     /**
      * @Route("admin/lieux/supprimer/{id}", name="supprimerLieu")
-     *
+     * @param $id
+     * @param LieuRepository $lieuRepo
+     * @param SortieRepository $sortieRepo
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse
      */
     public function supprimerLieu($id, LieuRepository $lieuRepo, SortieRepository $sortieRepo, EntityManagerInterface $em)
     {
-        $lieux = $lieuRepo->findAll();
+
+        $lieu = $lieuRepo->find($id);
+        $sorties = $sortieRepo->findByLieu($lieu);
+
+        if ($sorties != null) {
+            foreach ($sorties as $sortie) {
+                $em->remove($sortie);
+            }
+        }
+
+        $em->remove($lieu);
+        $em->flush();
+
 
         return $this->redirectToRoute('listeLieux');
 
